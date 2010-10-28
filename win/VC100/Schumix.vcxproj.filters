@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Default">
+      <UniqueIdentifier>{7a1f2c53-904d-4a19-92af-d5745603875c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Calculator">
+      <UniqueIdentifier>{b9f18bcd-5925-448f-9e4f-d6fee8e8cb99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Crypt">
+      <UniqueIdentifier>{00182b3b-fad2-4381-8e89-91373a7ac02a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{b7873d4f-400f-4512-8523-e64f92aba370}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Socket">
+      <UniqueIdentifier>{92e1a2d0-33dd-44d9-ad63-b85d36ca3a87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Threading">
+      <UniqueIdentifier>{aec554e1-c0b2-427d-baf1-71dc23523535}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logging">
+      <UniqueIdentifier>{de6bddea-a6db-45df-974d-3ff3e8e68224}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{b044c0c7-51eb-4e41-aee5-ef9fef7c40be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IRC">
+      <UniqueIdentifier>{19c1c703-69ff-49ed-9b18-63ed418f07db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MySQL">
+      <UniqueIdentifier>{482af5f3-ffdb-4b10-a3fc-1e3dc4e12544}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Repos">
+      <UniqueIdentifier>{c2bf959a-4f9d-4a13-9135-a14ce1f855f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Repos\Git">
+      <UniqueIdentifier>{3b64689c-3877-447b-82fd-071eb3dbebd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Repos\Hg">
+      <UniqueIdentifier>{0d141cc8-21c0-4fa9-bb89-0c7429c2b23e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Repos\SVN">
+      <UniqueIdentifier>{05a5451f-84b0-461f-aba5-9dccf2d781f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Directory">
+      <UniqueIdentifier>{1fd10796-73c0-4985-83d1-d94b5e92ab75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Console">
+      <UniqueIdentifier>{4012c77c-8775-4770-9e6b-c25c04cf9860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc">
+      <UniqueIdentifier>{5e55b26c-cee7-4038-98e7-695bcfc269b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc\utf8">
+      <UniqueIdentifier>{19ab1308-a8fc-4076-ac99-e279a6cbf2a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vezerlo">
+      <UniqueIdentifier>{7145549b-d889-4ed6-a65c-9ec18b44e994}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\StdAfx.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Calc.h">
+      <Filter>Calculator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\CalcLexer.h">
+      <Filter>Calculator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TokenQueue.h">
+      <Filter>Calculator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\VarVector.h">
+      <Filter>Calculator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\DefaultConfig.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\SchumixConfig.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\IRCSession.h">
+      <Filter>IRC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Replies.h">
+      <Filter>IRC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\GitInfo.h">
+      <Filter>Repos\Git</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HgInfo.h">
+      <Filter>Repos\Hg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\SvnInfo.h">
+      <Filter>Repos\SVN</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Platforms.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\SharedPointer.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Singleton.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\WinAPIExtensions.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Cast.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Common.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Config\Config.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Auth\MD5.h">
+      <Filter>Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Auth\Sha1.h">
+      <Filter>Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Console.h">
+      <Filter>Console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\targetver.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\dirent.h">
+      <Filter>Directory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Log.h">
+      <Filter>Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\utf8\checked.h">
+      <Filter>Misc\utf8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\utf8\core.h">
+      <Filter>Misc\utf8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\utf8\unchecked.h">
+      <Filter>Misc\utf8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\utf8.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Database\Field.h">
+      <Filter>MySQL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Database\MySQLConnection.h">
+      <Filter>MySQL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Database\QueryResult.h">
+      <Filter>MySQL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Network\SimpleSocket.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Network\SocketMgr.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Network\SocketOps.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Threading\Guard.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Threading\Lock.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Threading\Mutex.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Threading\Thread.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Threading.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\svn_revision.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Vezerlo.h">
+      <Filter>Vezerlo</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\StdAfx.cpp">
+      <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Schumix.cpp" />
+    <ClCompile Include="..\..\src\CalcLexer.cpp">
+      <Filter>Calculator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Calkulator.cpp">
+      <Filter>Calculator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TokenQueue.cpp">
+      <Filter>Calculator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\VarVector.cpp">
+      <Filter>Calculator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\DefaultConfig.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IRCSession.cpp">
+      <Filter>IRC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\GitInfo.cpp">
+      <Filter>Repos\Git</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HgInfo.cpp">
+      <Filter>Repos\Hg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SvnInfo.cpp">
+      <Filter>Repos\SVN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Console.cpp">
+      <Filter>Console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ConsoleCommands.cpp">
+      <Filter>Console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MessageHandler.cpp">
+      <Filter>IRC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Funkciok.cpp">
+      <Filter>IRC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\AdminFunkciok.cpp">
+      <Filter>IRC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\OperatorFunkciok.cpp">
+      <Filter>IRC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shared\Config\Config.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shared\Auth\MD5.cpp">
+      <Filter>Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shared\Auth\Sha1.cpp">
+      <Filter>Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shared\Database\MySQLConnection.cpp">
+      <Filter>MySQL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shared\Database\QueryResult.cpp">
+      <Filter>MySQL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shared\Network\SimpleSocket.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shared\Network\SocketMgr.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shared\Network\SocketOpsLinux.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shared\Network\SocketOpsWin32.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SchumixFunkciok.cpp">
+      <Filter>IRC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Vezerlo.cpp">
+      <Filter>Vezerlo</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

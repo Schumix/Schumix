@@ -1,0 +1,11 @@
+BuildLog.htm
+svn_revision.h
+*.exe
+*.lib
+*.exp
+*.pdb
+*.ncb
+*.suo
+*.obj
+*.idb
+*.user
