@@ -124,7 +124,7 @@ CREATE TABLE `svninfo` (
 -- ----------------------------
 -- Records 
 -- ----------------------------
-INSERT INTO `svninfo` VALUES ('1', 'Schumix', 'https://www.assembla.com/spaces/schumix/stream.rss', 'assembla', '0', '', '', ',#schumix');
+INSERT INTO `svninfo` VALUES ('1', 'Schumix', 'https://www.assembla.com/spaces/schumixbot/stream.rss', 'assembla', '0', '', '', ',#schumix');
 
 DROP TABLE IF EXISTS `sznap`;
 CREATE TABLE `sznap` (

@@ -1,1 +1,0 @@
-ALTER TABLE `adminok` ADD `flag` int(10) NOT NULL DEFAULT '0' after `ip`;
