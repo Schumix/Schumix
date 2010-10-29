@@ -504,13 +504,13 @@ string Vezerlo::htmldecode(string c)
 				escaped.append(res[i]);
 				continue;
 			}
-			/*else if(res[i].substr(0, 5) == "#225;")
+			else if(res[i].substr(0, 5) == "#337;")
 			{
 				res[i].erase(0, 5);
 				escaped.append("õ");
 				escaped.append(res[i]);
 				continue;
-			}*/
+			}
 			else if(res[i].substr(0, 5) == "#250;")
 			{
 				res[i].erase(0, 5);
@@ -525,13 +525,13 @@ string Vezerlo::htmldecode(string c)
 				escaped.append(res[i]);
 				continue;
 			}
-			/*else if(res[i].substr(0, 5) == "#225;")
+			else if(res[i].substr(0, 5) == "#369;")
 			{
 				res[i].erase(0, 5);
 				escaped.append("û");
 				escaped.append(res[i]);
 				continue;
-			}*/
+			}
 			if(res[i].substr(0, 5) == "#193;")	// Nagybetük
 			{
 				res[i].erase(0, 5);
@@ -567,13 +567,13 @@ string Vezerlo::htmldecode(string c)
 				escaped.append(res[i]);
 				continue;
 			}
-			/*else if(res[i].substr(0, 5) == "#225;")
+			else if(res[i].substr(0, 5) == "#336;")
 			{
 				res[i].erase(0, 5);
 				escaped.append("Õ");
 				escaped.append(res[i]);
 				continue;
-			}*/
+			}
 			else if(res[i].substr(0, 5) == "#218;")
 			{
 				res[i].erase(0, 5);
@@ -588,13 +588,13 @@ string Vezerlo::htmldecode(string c)
 				escaped.append(res[i]);
 				continue;
 			}
-			/*else if(res[i].substr(0, 5) == "#225;")
+			else if(res[i].substr(0, 5) == "#368;")
 			{
 				res[i].erase(0, 5);
 				escaped.append("Û");
 				escaped.append(res[i]);
 				continue;
-			}*/
+			}
 			else if(res[i].substr(0, 5) == "#180;")	// Egyéb karakterek
 			{
 				res[i].erase(0, 5);
@@ -602,6 +602,13 @@ string Vezerlo::htmldecode(string c)
 				escaped.append(res[i]);
 				continue;
 			}
+			/*else if(res[i].substr(0, 5) == "#180;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("'");
+				escaped.append(res[i]);
+				continue;
+			}*/
 			else
 			{
 				if(Elsoresz == 1)
@@ -618,7 +625,13 @@ string Vezerlo::htmldecode(string c)
 			}
 		}
 	}
+
 	res.clear();
+
+	if(escaped.substr(0, 1) == "&")
+		return escaped.erase(0, 1);
+	else
+		return escaped;
 
 	return escaped;
 }
