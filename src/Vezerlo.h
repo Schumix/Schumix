@@ -43,6 +43,7 @@ public:
 #endif
 
 	string urlencode(const string &c);
+	string htmldecode(string c);
 	void split(string str, string delim, vector<string>& results);
 
 protected:

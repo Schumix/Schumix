@@ -65,6 +65,12 @@ void IRCSession::Teszt(IRCMessage& recvData)
 				cout << matched.c_str();
 			}
 		}*/
+
+		string adat = sVezerlo.htmldecode("asddd &#225;asddfs&#225; fsdghdgh").c_str();
+
+		printf("%s\n", adat.c_str());
+		printf("%s\n", sVezerlo.htmldecode("asddd asddfs fsdghdgh").c_str());
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s", adat.c_str());
 	}
 	else
 	{

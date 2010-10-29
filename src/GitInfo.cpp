@@ -449,8 +449,10 @@ void GitInfo::Kiiras(uint32 id)
 
 		for(int y = 1; y < resChannel; y++)
 		{
+			string kiiras = sVezerlo.htmldecode(title);
+
 			sIRCSession.SendChatMessage(PRIVMSG, reschannel[y].c_str(), "3%s 7%s Revision: 10%s by %s", nev[id].c_str(), tipus[id].c_str(), rev.substr(0, 7).c_str(), author.c_str());
-			sIRCSession.SendChatMessage(PRIVMSG, reschannel[y].c_str(), "3%s Info: %s", nev[id].c_str(), title.c_str());
+			sIRCSession.SendChatMessage(PRIVMSG, reschannel[y].c_str(), "3%s Info: %s", nev[id].c_str(), kiiras.c_str());
 
 			Sleep(1000);
 		}

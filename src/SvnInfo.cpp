@@ -468,10 +468,10 @@ void SvnInfo::Kiiras(uint32 id)
 			if(oldal[id] == "arcemu" || oldal[id] == "assembla")
 			{
 				uint8 szokoz = title.find(':');
-				string adat = title.substr(szokoz+1);
+				string kiiras = sVezerlo.htmldecode(title.substr(szokoz+1));
 
 				sIRCSession.SendChatMessage(PRIVMSG, reschannel[y].c_str(), "3%s Revision: 10%i by %s", nev[id].c_str(), rev, author.c_str());
-				sIRCSession.SendChatMessage(PRIVMSG, reschannel[y].c_str(), "3%s Info:%s", nev[id].c_str(), adat.c_str());
+				sIRCSession.SendChatMessage(PRIVMSG, reschannel[y].c_str(), "3%s Info:%s", nev[id].c_str(), kiiras.c_str());
 			}
 			else
 			{
@@ -490,8 +490,10 @@ void SvnInfo::Kiiras(uint32 id)
 				for(int x = 4; x < resAdat; x++)
 					alomany += " " + res[x];
 
+				string kiiras = sVezerlo.htmldecode(alomany.substr(1));
+
 				sIRCSession.SendChatMessage(PRIVMSG, reschannel[y].c_str(), "3%s Revision: 10%i by %s", nev[id].c_str(), rev, author.c_str());
-				sIRCSession.SendChatMessage(PRIVMSG, reschannel[y].c_str(), "3%s Info: %s", nev[id].c_str(), alomany.substr(1).c_str());
+				sIRCSession.SendChatMessage(PRIVMSG, reschannel[y].c_str(), "3%s Info: %s", nev[id].c_str(), kiiras.c_str());
 
 				res.clear();
 			}

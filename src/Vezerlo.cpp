@@ -428,6 +428,7 @@ string Vezerlo::char2hex(char dec)
 {
     char dig1 = (dec & 0xF0) >> 4;
     char dig2 = (dec & 0x0F);
+
     if(0 <= dig1 && dig1 <= 9)
 		dig1 += 48;    //0,48inascii
     if(10 <= dig1 && dig1 <= 15)
@@ -441,6 +442,185 @@ string Vezerlo::char2hex(char dec)
     r.append(&dig1, 1);
     r.append(&dig2, 1);
     return r;
+}
+
+string Vezerlo::htmldecode(string c)
+{
+	string escaped = "";
+
+	vector<string> res(1);
+	split(c, "&", res);
+
+	int max = res.size();
+
+	if(max < 2)
+	{
+		res.clear();
+		return c;
+	}
+
+	int hossz;
+	string betu;
+	int Elsoresz;
+
+	for(int i = 1; i < max; i++)
+	{
+		if(i < max)
+		{
+			hossz = res[i].length();
+
+			if(res[i].substr(0, 5) == "#225;")	// Kisbetük
+			{
+				res[i].erase(0, 5);
+				escaped.append("á");
+				escaped.append(res[i]);
+				continue;
+			}
+			else if(res[i].substr(0, 5) == "#233;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("é");
+				escaped.append(res[i]);
+				continue;
+			}
+			else if(res[i].substr(0, 5) == "#237;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("í");
+				escaped.append(res[i]);
+				continue;
+			}
+			else if(res[i].substr(0, 5) == "#243;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("ó");
+				escaped.append(res[i]);
+				continue;
+			}
+			else if(res[i].substr(0, 5) == "#246;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("ö");
+				escaped.append(res[i]);
+				continue;
+			}
+			/*else if(res[i].substr(0, 5) == "#225;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("õ");
+				escaped.append(res[i]);
+				continue;
+			}*/
+			else if(res[i].substr(0, 5) == "#250;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("ú");
+				escaped.append(res[i]);
+				continue;
+			}
+			else if(res[i].substr(0, 5) == "#252;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("ü");
+				escaped.append(res[i]);
+				continue;
+			}
+			/*else if(res[i].substr(0, 5) == "#225;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("û");
+				escaped.append(res[i]);
+				continue;
+			}*/
+			if(res[i].substr(0, 5) == "#193;")	// Nagybetük
+			{
+				res[i].erase(0, 5);
+				escaped.append("Á");
+				escaped.append(res[i]);
+				continue;
+			}
+			else if(res[i].substr(0, 5) == "#201;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("É");
+				escaped.append(res[i]);
+				continue;
+			}
+			else if(res[i].substr(0, 5) == "#205;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("Í");
+				escaped.append(res[i]);
+				continue;
+			}
+			else if(res[i].substr(0, 5) == "#211;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("Ó");
+				escaped.append(res[i]);
+				continue;
+			}
+			else if(res[i].substr(0, 5) == "#214;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("Ö");
+				escaped.append(res[i]);
+				continue;
+			}
+			/*else if(res[i].substr(0, 5) == "#225;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("Õ");
+				escaped.append(res[i]);
+				continue;
+			}*/
+			else if(res[i].substr(0, 5) == "#218;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("Ú");
+				escaped.append(res[i]);
+				continue;
+			}
+			else if(res[i].substr(0, 5) == "#220;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("Ü");
+				escaped.append(res[i]);
+				continue;
+			}
+			/*else if(res[i].substr(0, 5) == "#225;")
+			{
+				res[i].erase(0, 5);
+				escaped.append("Û");
+				escaped.append(res[i]);
+				continue;
+			}*/
+			else if(res[i].substr(0, 5) == "#180;")	// Egyéb karakterek
+			{
+				res[i].erase(0, 5);
+				escaped.append("´");
+				escaped.append(res[i]);
+				continue;
+			}
+			else
+			{
+				if(Elsoresz == 1)
+				{
+					escaped.append(res[i]);
+					Elsoresz == NULL;
+					continue;
+				}
+				else
+				{
+					escaped.append("&");
+					escaped.append(res[i]);
+				}
+			}
+		}
+	}
+	res.clear();
+
+	return escaped;
 }
 
 string Vezerlo::Reload(string nev)
