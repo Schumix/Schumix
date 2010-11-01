@@ -28,7 +28,7 @@ int main()
 	printf("A program leallitasahoz hasznald a <Ctrl+C> parancsot vagy <kikapcs>\n\n");
 	Log.Color(TNORMAL);
 	printf("Keszitette Megax, Twl, Valroft es Scymex http://megaxx.info\n");
-	printf("Built at %s on %s by %s@%s Revision: %u\n", BUILD_TIME, BUILD_DATE, BUILD_USER, BUILD_HOST, BUILD_REVISION);
+	printf("Keszulesi ido: %s %s Revision: %u\n", REVISION_DATE, REVISION_TIME, REVISION_ID);
 	printf("==============================================================================\n");
 	printf("\n");
 	Log.Notice("Schumix", "Rendszer indul...\n");

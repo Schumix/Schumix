@@ -50,7 +50,7 @@
 // create a wrapper to support existing code
 #define PLATFORM_UNIX PLATFORM_LINUX
 
-#if PLATFORM == PLATFORM_WIN32
+#if PLATFORM == PLATFORM_WINDOWS
 #	define PLATFORM_TEXT "Win32"
 #elif PLATFORM == PLATFORM_UNIX || PLATFORM == PLATFORM_APPLE
 #	ifdef HAVE_DARWIN
@@ -67,7 +67,7 @@
 #	endif
 #endif
 
-#if PLATFORM == PLATFORM_WIN32 && _MSC_VER >= 1600 || PLATFORM == PLATFORM_LINUX
+#if PLATFORM == PLATFORM_WINDOWS && _MSC_VER >= 1600 || PLATFORM == PLATFORM_LINUX
 #include <cstdint>
 #endif
 
@@ -136,8 +136,5 @@ typedef uint64_t uint64;
 #define SI64FMTD "%lld"
 #define Sleep(ms) usleep(ms*1000)
 #endif
-
-#define BUILD_TIME __TIME__
-#define BUILD_DATE __DATE__
 
 #endif

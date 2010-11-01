@@ -40,16 +40,25 @@
 using namespace std;
 using std::string;
 
+#include "shared/Common.h"
+
+#if PLATFORM == PLATFORM_WINDOWS
+#include "../dep/VC/include/boost/thread.hpp"
+#include "../dep/VC/include/boost/thread/mutex.hpp"
+#include "../dep/VC/include/boost/pool/detail/guard.hpp"
+#include "../dep/VC/include/boost/regex.hpp"
+#include "../dep/VC/include/boost/shared_ptr.hpp"
+#include "../dep/VC/include/boost/shared_array.hpp"
+#include "../dep/VC/include/boost/enable_shared_from_this.hpp"
+#else
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/pool/detail/guard.hpp>
-
 #include <boost/regex.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/enable_shared_from_this.hpp>
-
-#include "shared/Common.h"
+#endif
 
 #if PLATFORM == PLATFORM_WINDOWS
 #include <tchar.h>
@@ -84,7 +93,7 @@ inline uint32 getMSTime()
 }
 #endif
 
-#if PLATFORM == PLATFORM_WIN32
+#if PLATFORM == PLATFORM_WINDOWS
 #include "../dep/VC/include/curl/curl.h"
 #include "../dep/VC/include/mysql/mysql.h"
 #else
@@ -95,7 +104,7 @@ inline uint32 getMSTime()
 #include "shared/Threading.h"
 #include "shared/Log.h"
 extern CLog Log;
-#include "shared/svn_revision.h"
+#include "shared/revision.h"
 #include "shared/SharedPointer.h"
 #include "shared/Cast.h"
 #include "shared/Singleton.h"

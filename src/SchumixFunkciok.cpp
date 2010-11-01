@@ -51,7 +51,7 @@ void IRCSession::Schumix(IRCMessage& recvData)
 		if(iras == "info")
 		{
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Verzió: 10%s", revision);
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Revision: 10%u", BUILD_REVISION);
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Revision: 10%u", REVISION_ID);
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Platform: %s", PLATFORM_TEXT);
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Programnyelv: c++");
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Uptime: %s", sVezerlo.GetUptimeString().c_str());

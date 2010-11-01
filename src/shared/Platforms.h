@@ -25,6 +25,5 @@
 #define PLATFORM_LINUX 1
 #define PLATFORM_MAC 2
 #define PLATFORM_OTHER 3
-#define PLATFORM_COUNT
 
 #endif
