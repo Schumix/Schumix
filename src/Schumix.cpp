@@ -21,14 +21,17 @@
 #include "StdAfx.h"
 CLog Log;
 
+#define BUILD_TIME __TIME__
+#define BUILD_DATE __DATE__
+
 int main()
 {
 	Log.Color(TBLUE);
 	printf("Schumix Verzio: %s\n", revision);
 	printf("A program leallitasahoz hasznald a <Ctrl+C> parancsot vagy <kikapcs>\n\n");
 	Log.Color(TNORMAL);
+	printf("Keszulesi ido: %s %s\n", BUILD_DATE, BUILD_TIME);
 	printf("Keszitette Megax, Twl, Valroft es Scymex http://megaxx.info\n");
-	printf("Keszulesi ido: %s %s Revision: %u\n", REVISION_DATE, REVISION_TIME, REVISION_ID);
 	printf("==============================================================================\n");
 	printf("\n");
 	Log.Notice("Schumix", "Rendszer indul...\n");

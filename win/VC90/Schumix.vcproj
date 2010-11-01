@@ -29,11 +29,6 @@
 			ManagedExtensions="0"
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
-				Description="Extracting SVN revision..."
-				CommandLine="&quot;..\..\src\shared\genrevision.exe&quot;"
-			/>
-			<Tool
 				Name="VCCustomBuildTool"
 			/>
 			<Tool
@@ -107,6 +102,80 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Release|Win32"
+			OutputDirectory=".\..\..\bin\Release"
+			IntermediateDirectory="$(ConfigurationName)_$(TargetName)"
+			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				RuntimeLibrary="0"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="ws2_32.lib libeay32.lib libmysql.lib msvcrt.lib libcmt.lib libcurl.lib libcurldll.lib psapi.lib"
+				OutputFile="$(OutDir)/Schumix.exe"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="../../dep/VC/lib/VC90/"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
 			Name="Debug|x64"
 			OutputDirectory=".\..\..\bin\Debug_x64"
 			IntermediateDirectory="$(ConfigurationName)_$(TargetName)"
@@ -115,11 +184,6 @@
 			CharacterSet="2"
 			ManagedExtensions="0"
 			>
-			<Tool
-				Name="VCPreBuildEventTool"
-				Description="Extracting SVN revision..."
-				CommandLine="&quot;..\..\src\shared\genrevision.exe&quot;"
-			/>
 			<Tool
 				Name="VCCustomBuildTool"
 			/>
@@ -194,85 +258,6 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
-			OutputDirectory=".\..\..\bin\Release"
-			IntermediateDirectory="$(ConfigurationName)_$(TargetName)"
-			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-				Description="Extracting SVN revision..."
-				CommandLine="cd ..\..\src\shared\&#x0D;&#x0A;genrevision.exe&#x0D;&#x0A;"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				RuntimeLibrary="0"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="ws2_32.lib libeay32.lib libmysql.lib msvcrt.lib libcmt.lib libcurl.lib libcurldll.lib psapi.lib"
-				OutputFile="$(OutDir)/Schumix.exe"
-				LinkIncremental="1"
-				AdditionalLibraryDirectories="../../dep/VC/lib/VC90/"
-				GenerateDebugInformation="true"
-				SubSystem="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
 			Name="Release|x64"
 			OutputDirectory=".\..\..\bin\Release_x64"
 			IntermediateDirectory="$(ConfigurationName)_$(TargetName)"
@@ -280,11 +265,6 @@
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			>
-			<Tool
-				Name="VCPreBuildEventTool"
-				Description="Extracting SVN revision..."
-				CommandLine="cd ..\..\src\shared\&#x0D;&#x0A;genrevision.exe&#x0D;&#x0A;"
-			/>
 			<Tool
 				Name="VCCustomBuildTool"
 			/>
@@ -363,10 +343,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\OperatorFunkciok.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\Funkciok.cpp"
 				>
 			</File>
@@ -380,6 +356,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\MessageHandler.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\OperatorFunkciok.cpp"
 				>
 			</File>
 			<File
@@ -562,7 +542,6 @@
 				RelativePath="..\..\src\shared\Auth\Sha1.cpp"
 				>
 			</File>
-
 			<File
 				RelativePath="..\..\src\shared\Auth\Sha1.h"
 				>
@@ -645,10 +624,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\shared\Singleton.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\shared\svn_revision.h"
 				>
 			</File>
 			<File

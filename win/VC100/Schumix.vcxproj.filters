@@ -184,9 +184,6 @@
     <ClInclude Include="..\..\src\shared\Threading.h">
       <Filter>Threading</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\svn_revision.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Vezerlo.h">
       <Filter>Vezerlo</Filter>
     </ClInclude>

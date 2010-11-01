@@ -4,7 +4,6 @@
 
 echo "\nSchumix Auto Builder by Megax.";
 echo "Program segitsegevel konyeden fordithato a kod.\n";
-chmod +x ./extract_svn_revision.sh && ./extract_svn_revision.sh
 if(ls | grep bin); then
 	echo "bin mappa mar letezik\n";
 else
