@@ -211,7 +211,7 @@ bool Console::ConsoleCommands(char* adat)
 			Log.Notice("Console", "Admin lista: admin lista");
 			Log.Notice("Console", "Hozzaadas: admin add <admin neve>");
 			Log.Notice("Console", "Eltavolitas: admin del <admin neve>");
-			Log.Notice("Console", "Rang: admin rang <admin neve> <új rang pl operator: 0, administrator: 1>");
+			Log.Notice("Console", "Rang: admin rang <admin neve> <uj rang pl operator: 0, administrator: 1>");
 			Log.Notice("Console", "Info: admin info <admin neve>");
 		}
 		else if(res[2] == INFO)
@@ -338,7 +338,7 @@ bool Console::ConsoleCommands(char* adat)
 
 		if(res[2] == Help)
 		{
-			Log.Notice("Console", "Alparancsok használata:");
+			Log.Notice("Console", "Alparancsok hasznalata:");
 			Log.Notice("Console", "Reload: reload <nev>");
 		}
 		else if(res[2] == INFO)
