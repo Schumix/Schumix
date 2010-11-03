@@ -329,8 +329,10 @@ void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 		if(cmd == "kikapcs") // id 37
 			Kikapcsolas(recvData);
 	}
+#ifdef _DEBUG_MOD
 	else
 		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", PARANCSOK);
+#endif
 }
 
 void IRCSession::HandlePing(IRCMessage& recvData)

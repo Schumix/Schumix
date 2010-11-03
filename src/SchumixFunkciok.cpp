@@ -179,17 +179,16 @@ void IRCSession::HJoin(IRCMessage& recvData)
 				SendChatMessage(PRIVMSG, channel.c_str(), "%s %s", Koszones.c_str(), recvData.source_nick.c_str());
 		}
 	}
+#ifdef _DEBUG_MOD
 	else
 		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", KOSZONES);
+#endif
 }
 
 void IRCSession::HLeft(IRCMessage& recvData)
 {
-	if(FSelect(KOSZONES) == bekapcsol)
+	if(FSelect(KOSZONES) == bekapcsol && FSelectChannel(KOSZONES, recvData.target) == bekapcsol)
 	{
-		if(FSelectChannel(KOSZONES, recvData.target) != bekapcsol)
-			return;
-
 		string elkoszones;
 
 		switch(rand()%2)
@@ -207,17 +206,16 @@ void IRCSession::HLeft(IRCMessage& recvData)
 		else
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s %s", elkoszones.c_str(), recvData.source_nick.c_str());
 	}
+#ifdef _DEBUG_MOD
 	else
 		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", KOSZONES);
+#endif
 }
 
 void IRCSession::HQuit(IRCMessage& recvData)
 {
-/*	if(FSelect(KOSZONES) == bekapcsol)
+/*	if(FSelect(KOSZONES) == bekapcsol && FSelectChannel(KOSZONES, recvData.target) == bekapcsol)
 	{
-		if(FSelectChannel(KOSZONES, recvData.target) != bekapcsol)
-			return;
-
 		string elkoszones;
 
 		switch(rand()%2)
@@ -235,8 +233,10 @@ void IRCSession::HQuit(IRCMessage& recvData)
 		else
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s %s", elkoszones.c_str(), recvData.source_nick.c_str());
 	}
+#ifdef _DEBUG_MOD
 	else
-		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", KOSZONES);*/
+		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", KOSZONES);
+#endif*/
 }
 
 void IRCSession::ReJoin(IRCMessage& recvData)
@@ -288,8 +288,10 @@ void IRCSession::ReJoin(IRCMessage& recvData)
 			res.clear();
 		}
 	}
+#ifdef _DEBUG_MOD
 	else
 		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", REJOIN);
+#endif
 }
 
 string IRCSession::FSelect(string nev)
@@ -344,11 +346,8 @@ string IRCSession::FSelectChannel(string nev, string channel)
 
 void IRCSession::HLUzenet(IRCMessage& recvData)
 {
-	if(FSelect(HL) == bekapcsol)
+	if(FSelect(HL) == bekapcsol && FSelectChannel(HL, recvData.target) == bekapcsol)
 	{
-		if(FSelectChannel(HL, recvData.target) != bekapcsol)
-			return;
-
 		vector<string> res(1);
 		sVezerlo.split(recvData.args, " ", res);
 		int resAdat = res.size();
@@ -372,6 +371,10 @@ void IRCSession::HLUzenet(IRCMessage& recvData)
 
 		res.clear();
 	}
+#ifdef _DEBUG_MOD
+	else
+		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", HL);
+#endif
 }
 
 void IRCSession::SvnArcemu(int rev, string channel)

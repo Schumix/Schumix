@@ -21,11 +21,8 @@
 
 void IRCSession::Logfajl(IRCMessage& recvData)
 {
-	if(FSelect(LOG) == bekapcsol)
+	if(FSelect(LOG) == bekapcsol FSelectChannel(LOG, recvData.target) == bekapcsol)
 	{
-		if(FSelectChannel(LOG, recvData.target) != bekapcsol)
-			return;
-
 		char* log = new char[5000];
 		snprintf(log, 5000, "[%i. %i. %i. %i:%i] <%s> %s\n", sVezerlo.Ev(), sVezerlo.Honap(), sVezerlo.Nap(), sVezerlo.Ora(), sVezerlo.Perc(), recvData.source_nick.c_str(), recvData.args.c_str());
 
@@ -45,8 +42,10 @@ void IRCSession::Logfajl(IRCMessage& recvData)
 		delete[] log;
 		delete[] fajl;
 	}
+#ifdef _DEBUG_MOD
 	else
 		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", LOG);
+#endif
 }
 
 static uint8 Honapok[12] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };

@@ -21,16 +21,6 @@
 #ifndef _SINGLETON_H
 #define _SINGLETON_H
 
-// Should be placed in the appropriate .cpp file somewhere
-#define initialiseSingleton(type) \
-	template <> type* Singleton <type> :: mSingleton = NULL
-
-// To be used as a replacement for initialiseSingleton( )
-// Creates a file-scoped Singleton object, to be retrieved with getSingleton
-#define createFileSingleton(type) \
-	initialiseSingleton(type); \
-	type the##type
-
 template <class type> class Singleton
 {
 public:
@@ -54,5 +44,11 @@ protected:
 	static type* mSingleton;
 };
 
-#endif
+// Should be placed in the appropriate .cpp file somewhere
+#define initialiseSingleton(type) template <> type* Singleton <type> :: mSingleton = NULL
 
+// To be used as a replacement for initialiseSingleton()
+// Creates a file-scoped Singleton object, to be retrieved with getSingleton
+#define createFileSingleton(type) initialiseSingleton(type); type the##type
+
+#endif
