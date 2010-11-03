@@ -2,13 +2,39 @@
 Schumix forditása Windows alatt
 ===============================
 
-1. Elsõ dolgunk a szükséges forditás elõkészítése. Ehez a szukseges mappába kell mennünk. A VC mappában taláható két mappa.
-Az include mappa tartalmát másoljuk át a C:\Program Files\Microsoft Visual Studio 9.0\VC\include mappába.
-A lib mappában található egy lib.rar. Azt kikel csomagolni és a tartalmát átkell másolni a C:\Program Files\Microsoft Visual Studio 9.0\VC\lib mappába.
-Találunk még egy DLL Files mappát is. Ott a dll.rar-t kikel csomagolni és tartalmát átmásolni a C:\WINDOWS\system32 mappába.
-Ha ezekkel megvagyunk nincs más teendönk mint a win mappába benni és a Schumix.sln megnyitani. Majd átálitani Release-ra.
+Hozzunk létre bárhol a gépünkön egy mappát. Pl legyen a neve schumix.
 
--([ Megjegyzés: A boost internetrõl kell leszedni és feltelepiteni. Túl nagy a kodja hogy svn-en legyen tárólva. ])-
+1. Visual Studio 2008 sp1
+Elsõ dolgunk a szükséges forditások elõkészítése. Ehez lekel töltenünk és elekel helyeznünk a fájlokat. Töltsük le innét a boost-ot:
+http://filebeam.com/a92a591f0afc565c8beae20c8ee05132
+Ha lejöt csomagoljuk ki és a kibontott mappában ha van olyan boost akkor azt másoljuk ha nincs akkor magát a mappát a C:\Program Files\Microsoft Visual Studio 9.0\VC\include mappába.
+Ezután szedjük le ezt: http://filebeam.com/d0cde3dc390cb26d0ecfb24cbcae6ec2
+Ez tartalmazza a lib fájlokat. Csomagoljuk ki és a benne lévõ .lib fájlokat másoljuk a C:\Program Files\Microsoft Visual Studio 9.0\VC\lib mappába.
+Fontos a lib-ek ne legyenek semmilyen mappába se úgy legyenek másolva különben nem fogja a forditó megtalálni öket.
+Eztuán itt a kodunkban találunk a /dep/DLL Files -en bellül dll-eket. Ezeket másoljuk a botunk mappályába amit létrehoztunk.
+Fontos az amd64 tartalma csak akkor kell ha x64-ben forgatunk majd. Ehez még töltsük le errõl a linkrõl: [link potolva lesz] a maradék dll fájlokat.
+Ezeket is helyezük el a botunk mappályába amit létrehoztunk.
+Ha ezekkel megvagyunk nincs más teendönk mint a win mappába benni és a Schumix.sln megnyitani. Majd átálitani Release-ra.
+Ha megvan a /bin/Release mappában lesz a Schumix.exe. Másoljuk abba a mappába amit létrehoztunk neki és az install fájlunk mellet van egy schumix.conf is.
+Azt is másoljuk mellé. Ha ezzel megvagyunk nincs más mint a konfot bekonfigolni.
+
+Ezek után már csak az sql fájlunkat kell betöltenünk az /sql/ mappából aminek neve schumix.sql. Ha van update akkor az /sql/update mappából azt is töltsük be majd inditsuk a bot-ot. :)
+
+2. Visual Studio 2010
+Elsõ dolgunk a szükséges forditások elõkészítése. Ehez lekel töltenünk és elekel helyeznünk a fájlokat. Töltsük le innét a boost-ot:
+http://filebeam.com/a92a591f0afc565c8beae20c8ee05132
+Ha lejöt csomagoljuk ki és a kibontott mappában ha van olyan boost akkor azt másoljuk ha nincs akkor magát a mappát a C:\Program Files\Microsoft Visual Studio 10.0\VC\include mappába.
+Ezután szedjük le ezt: http://filebeam.com/24ad26d1506d6e8ac36df4d9646c12f8
+Ez tartalmazza a lib fájlokat. Csomagoljuk ki és a benne lévõ .lib fájlokat másoljuk a C:\Program Files\Microsoft Visual Studio 10.0\VC\lib mappába.
+Fontos a lib-ek ne legyenek semmilyen mappába se úgy legyenek másolva különben nem fogja a forditó megtalálni öket.
+Eztuán itt a kodunkban találunk a /dep/DLL Files -en bellül dll-eket. Ezeket másoljuk a botunk mappályába amit létrehoztunk.
+Fontos az amd64 tartalma csak akkor kell ha x64-ben forgatunk majd. Ehez még töltsük le errõl a linkrõl: [link potolva lesz] a maradék dll fájlokat.
+Ezeket is helyezük el a botunk mappályába amit létrehoztunk.
+Ha ezekkel megvagyunk nincs más teendönk mint a win mappába benni és a Schumix.sln megnyitani. Majd átálitani Release-ra.
+Ha megvan a /bin/Release mappában lesz a Schumix.exe. Másoljuk abba a mappába amit létrehoztunk neki és az install fájlunk mellet van egy schumix.conf is.
+Azt is másoljuk mellé. Ha ezzel megvagyunk nincs más mint a konfot bekonfigolni.
+
+Ezek után már csak az sql fájlunkat kell betöltenünk az /sql/ mappából aminek neve schumix.sql. Ha van update akkor az /sql/update mappából azt is töltsük be majd inditsuk a bot-ot. :)
 
 
 ===============================
@@ -17,19 +43,12 @@ Schumix forditása Linux alatt
 
 Terminálba csak bekell irni a sorokat és ezzel feltelepiti a szükséges fájlokat.
 
-sudo apt-get install subversion gcc g++ make zlib1g-dev libssl-dev libpcre3-dev mysql-client mysql-server libmysql++-dev libmysqlclient15-dev libcurl4-gnutls-dev
-
-echo "deb http://ftp.de.debian.org/debian/ squeeze main contrib non-free" >> /etc/apt/sources.list
-echo "deb-src http://ftp.de.debian.org/debian/ squeeze main contrib non-free" >> /etc/apt/sources.list
-
-aptitude install libboost-all-dev/testing
-
-ha curl telepitése nem menne akkor itt van manuálisan:
-cd /tmp &&wget http://curl.haxx.se/download/curl-7.21.1.tar.gz && tar -xzf curl-7.21.1.tar.gz && cd curl-7.21.1 && ./configure --prefix=/usr --sysconfdir=/etc && make && make install
+sudo apt-get install g++ libssl-dev mysql-client mysql-server libmysql++-dev libmysqlclient15-dev libcurl4-gnutls-dev
+Ha minden igaz ezzel lehet boost-ot telepiteni:
+aptitude install libboost
 
 Ezután csak a build.sh-t kell inditani.
 chmod +x build.sh
 ./build.sh
 
-memori leak parancs: valgrind --leak-check=yes ./schumix
-valgrind --tool=memcheck --leak-check=full --log-file=valgrind.log ./schumix
+[folytatás következik]

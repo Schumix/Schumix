@@ -31,8 +31,10 @@
 
 #if ((defined(WIN32) || defined(WINDOWS) || defined(WIN_NT) || defined(WIN64)) && defined(_MSC_VER))
 #define PLATFORM PLATFORM_WINDOWS
+#define PLATFORM_TEXT "Win32"
 #elif defined(__APPLE__)
 #define PLATFORM PLATFORM_MAC
+#define PLATFORM_TEXT "MacOSX"
 #elif (defined(LINUX) || defined(__linux__) || defined(__unix__) || defined(UNIX) || defined(__BSD__))
 #define PLATFORM PLATFORM_LINUX
 #if !defined(__GNUC__)
@@ -43,29 +45,17 @@
 	+ __GNUC_MINOR__ * 100 \
 	+ __GNUC_PATCHLEVEL__)
 
+#ifdef USE_KQUEUE
+#define PLATFORM_TEXT "FreeBSD"
+#else
+#define PLATFORM_TEXT "Linux"
+#endif
 #else
 #define PLATFORM PLATFORM_OTHER
 #endif
 
 // create a wrapper to support existing code
 #define PLATFORM_UNIX PLATFORM_LINUX
-
-#if PLATFORM == PLATFORM_WINDOWS
-#	define PLATFORM_TEXT "Win32"
-#elif PLATFORM == PLATFORM_UNIX || PLATFORM == PLATFORM_APPLE
-#	ifdef HAVE_DARWIN
-#		define PLATFORM_TEXT "MacOSX"
-#		define UNIX_FLAVOUR UNIX_FLAVOUR_OSX
-#	else
-#		ifdef USE_KQUEUE
-#			define PLATFORM_TEXT "FreeBSD"
-#			define UNIX_FLAVOUR UNIX_FLAVOUR_BSD
-#		else
-#			define PLATFORM_TEXT "Linux"
-#			define UNIX_FLAVOUR UNIX_FLAVOUR_LINUX
-#		endif
-#	endif
-#endif
 
 #if PLATFORM == PLATFORM_WINDOWS && _MSC_VER >= 1600 || PLATFORM == PLATFORM_LINUX
 #include <cstdint>
