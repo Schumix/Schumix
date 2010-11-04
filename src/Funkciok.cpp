@@ -21,7 +21,7 @@
 
 void IRCSession::Logfajl(IRCMessage& recvData)
 {
-	if(FSelect(LOG) == bekapcsol FSelectChannel(LOG, recvData.target) == bekapcsol)
+	if(FSelect(LOG) == bekapcsol && FSelectChannel(LOG, recvData.target) == bekapcsol)
 	{
 		char* log = new char[5000];
 		snprintf(log, 5000, "[%i. %i. %i. %i:%i] <%s> %s\n", sVezerlo.Ev(), sVezerlo.Honap(), sVezerlo.Nap(), sVezerlo.Ora(), sVezerlo.Perc(), recvData.source_nick.c_str(), recvData.args.c_str());
