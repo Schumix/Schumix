@@ -38,6 +38,11 @@ CREATE TABLE `gitinfo` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records 
+-- ----------------------------
+INSERT INTO `gitinfo` VALUES ('1', 'Schumix', 'master', 'https://github.com/megax/Schumix/commits/master.atom', 'github', '0', '', '', ',#schumix');
+
 DROP TABLE IF EXISTS `hginfo`;
 CREATE TABLE `hginfo` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -120,11 +125,6 @@ CREATE TABLE `svninfo` (
   `channel` text NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
-
--- ----------------------------
--- Records 
--- ----------------------------
-INSERT INTO `svninfo` VALUES ('1', 'Schumix', 'https://www.assembla.com/spaces/schumixbot/stream.rss', 'assembla', '0', '', '', ',#schumix');
 
 DROP TABLE IF EXISTS `sznap`;
 CREATE TABLE `sznap` (
