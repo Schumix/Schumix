@@ -24,7 +24,7 @@
  * Aktuális verzió szám.
  */
 
-#define revision "3.1.6"
+#define revision "3.1.7"
 
 /*
  * Program fájlainak elnevezése. Ha cserélve van név egy helyen keljen csak cserélni.
@@ -55,7 +55,7 @@
 #define LIDO 15
 
 /*
- * Logolás helye. Megahátorra a mappát ahova logol.
+ * Logolás helye. Meghatározza a mappát hova logol.
  * Alapértelemzés: szoba
  */
 

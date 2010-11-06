@@ -36,7 +36,6 @@ void IRCSession::Logfajl(IRCMessage& recvData)
 			return;
 		}
 
-		//utf8printf(LogSzoba, "%s", log);
 		fprintf(LogSzoba, "%s", log);
 		fclose(LogSzoba);
 		delete[] log;

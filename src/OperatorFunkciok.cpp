@@ -902,13 +902,13 @@ void IRCSession::Svn(IRCMessage& recvData)
 					continue;
 				}
 
-				string adat1;
+				string adat;
 				int resChannel = reschannel.size();
 
 				for(int y = 1; y < resChannel; y++)
-					adat1 += " " + reschannel[y];
+					adat += " " + reschannel[y];
 
-				SendChatMessage(PRIVMSG, recvData.target.c_str(), "3%s Channel:2%s", nev.c_str(), adat1.c_str());
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "3%s Channel:2%s", nev.c_str(), adat.c_str());
 				reschannel.clear();
 			} while(db->NextRow());
 		}
@@ -924,9 +924,11 @@ void IRCSession::Svn(IRCMessage& recvData)
 				string nev = db->Fetch()[0].GetString();
 				lista += " " + nev;
 			} while(db->NextRow());
-		}
 
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Lista: 3%s", lista.substr(1).c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Lista: 3%s", lista.substr(1).c_str());
+		}
+		else
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hibás lekérdezés!");
 	}
 	else if(info == "new")
 	{
@@ -943,7 +945,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s thread hozzáadva", res[2].c_str());
 		}
 		else
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen hozzáadás");
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen hozzáadás!");
 	}
 	else if(info == "stop")
 	{
@@ -960,7 +962,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s thread leállitva", res[2].c_str());
 		}
 		else
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen leállitás");
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen leállitás!");
 	}
 	else if(info == "reload")
 	{
@@ -984,23 +986,20 @@ void IRCSession::Svn(IRCMessage& recvData)
 				SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s thread újrainditva.", res[2].c_str());
 			}
 			else
-				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen újrainditás");
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen újrainditás!");
 		}
 	}
 	else
 	{
-		if(res.size() < 4)
-		{
-			res.clear();
-			return;
-		}
-
 		if(info == added)
 		{
-			string nev = res[2];
-			string svn = res[3];
-			string adat1;
+			if(res.size() < 4)
+			{
+				res.clear();
+				return;
+			}
 
+			string nev = res[2];
 			QueryResultPointer db = m_SQLConn->Query("SELECT channel FROM svninfo WHERE nev = '%s'", nev.c_str());
 			if(db)
 			{
@@ -1014,24 +1013,30 @@ void IRCSession::Svn(IRCMessage& recvData)
 					return;
 				}
 
+				string adat;
 				int resChannel = reschannel.size();
 
 				for(int y = 1; y < resChannel; y++)
-					adat1 += "," + reschannel[y];
+					adat += "," + reschannel[y];
 
-				adat1 += "," + svn;
+				adat += "," + res[3];
 
 				reschannel.clear();
+				m_SQLConn->Query("UPDATE svninfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), nev.c_str());
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel sikeresen hozzáadva.");
 			}
-
-			m_SQLConn->Query("UPDATE svninfo SET channel = '%s' WHERE nev = '%s'", adat1.c_str(), nev.c_str());
+			else
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel hozzáadása sikertelen!");
 		}
 		else if(info == delet)
 		{
-			string nev = res[2];
-			string svn = res[3];
-			string adat1;
+			if(res.size() < 4)
+			{
+				res.clear();
+				return;
+			}
 
+			string nev = res[2];
 			QueryResultPointer db = m_SQLConn->Query("SELECT channel FROM svninfo WHERE nev = '%s'", nev.c_str());
 			if(db)
 			{
@@ -1045,20 +1050,23 @@ void IRCSession::Svn(IRCMessage& recvData)
 					return;
 				}
 
+				string adat;
 				int resChannel = reschannel.size();
 
 				for(int y = 1; y < resChannel; y++)
 				{
-					if(reschannel[y] == svn)
+					if(reschannel[y] == res[3])
 						continue;
 
-					adat1 += "," + reschannel[y];
+					adat += "," + reschannel[y];
 				}
 
 				reschannel.clear();
+				m_SQLConn->Query("UPDATE svninfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), nev.c_str());
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel sikeresen törölve.");
 			}
-
-			m_SQLConn->Query("UPDATE svninfo SET channel = '%s' WHERE nev = '%s'", adat1.c_str(), nev.c_str());
+			else
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel törlése sikertelen!");
 		}
 	}
 
@@ -1088,12 +1096,12 @@ void IRCSession::Git(IRCMessage& recvData)
 	{
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Alparancsok használata:");
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Választható emuk: %sgit lista", m_ParancsElojel.c_str());
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hozzáadás: %sgit add <id> <channel>", m_ParancsElojel.c_str());
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Eltávolítás: %sgit del <id> <channel>", m_ParancsElojel.c_str());
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "New thread: %sgit new <emuid>", m_ParancsElojel.c_str());
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Stop thread: %sgit stop <emuid>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hozzáadás: %sgit add <nev> <tipus> <channel>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Eltávolítás: %sgit del <nev> <tipus> <channel>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "New thread: %sgit new <nev> <tipus>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Stop thread: %sgit stop <nev> <tipus>", m_ParancsElojel.c_str());
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Reload all thread: %sgit reload all", m_ParancsElojel.c_str());
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Reload thread: %sgit reload <emuid>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Reload thread: %sgit reload <nev> <tipus>", m_ParancsElojel.c_str());
 	}
 	else if(info == INFO)
 	{
@@ -1114,13 +1122,13 @@ void IRCSession::Git(IRCMessage& recvData)
 					continue;
 				}
 
-				string adat1;
+				string adat;
 				int resChannel = reschannel.size();
 
 				for(int y = 1; y < resChannel; y++)
-					adat1 += " " + reschannel[y];
+					adat += " " + reschannel[y];
 
-				SendChatMessage(PRIVMSG, recvData.target.c_str(), "3%s 7%s Channel:2%s", nev.c_str(), tipus.c_str(), adat1.c_str());
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "3%s 7%s Channel:2%s", nev.c_str(), tipus.c_str(), adat.c_str());
 				reschannel.clear();
 			} while(db->NextRow());
 		}
@@ -1129,7 +1137,7 @@ void IRCSession::Git(IRCMessage& recvData)
 	{
 		string lista;
 
-		QueryResultPointer db = m_SQLConn->Query("SELECT entry, nev, tipus FROM gitinfo");
+		QueryResultPointer db = m_SQLConn->Query("SELECT id, nev, tipus FROM gitinfo");
 		if(db)
 		{
 			do
@@ -1138,55 +1146,51 @@ void IRCSession::Git(IRCMessage& recvData)
 				string nev = db->Fetch()[1].GetString();
 				string tipus = db->Fetch()[2].GetString();
 
-				string entry;
+				string id1;
 				stringstream ss;
 				ss << id;
-				ss >> entry;
-				lista += " " + nev + " " + tipus + " " + "Id:" + entry + ";";
+				ss >> id1;
+				lista += " " + nev + " " + tipus + " " + "Id:" + id1 + ";";
 			} while(db->NextRow());
-		}
 
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Lista: %s", lista.substr(1).c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Lista: %s", lista.substr(1).c_str());
+		}
+		else
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hibás lekérdezés!");
 	}
 	else if(info == "new")
 	{
-		if(res.size() < 3)
+		if(res.size() < 4)
 		{
 			res.clear();
 			return;
 		}
 
-		stringstream ss;
-		int id;
-		ss << res[2];
-		ss >> id;
-
-		bool engedely = sGitInfo.NewThread(cast_uint32(id));
-
-		if(!engedely)
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen hozzáadás");
+		QueryResultPointer db = m_SQLConn->Query("SELECT id FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", res[2].c_str(), res[3].c_str());
+		if(db)
+		{
+			sGitInfo.NewThread(db->Fetch()[0].GetUInt32());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s %s thread hozzáadva", res[2].c_str(), res[3].c_str());
+		}
 		else
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s thread hozzáadva", res[2].c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen hozzáadás!");
 	}
 	else if(info == "stop")
 	{
-		if(res.size() < 3)
+		if(res.size() < 4)
 		{
 			res.clear();
 			return;
 		}
 
-		stringstream ss;
-		int id;
-		ss << res[2];
-		ss >> id;
-
-		bool engedely = sGitInfo.StopThread(cast_uint32(id));
-
-		if(!engedely)
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen leállitás");
+		QueryResultPointer db = m_SQLConn->Query("SELECT id FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", res[2].c_str(), res[3].c_str());
+		if(db)
+		{
+			sGitInfo.StopThread(db->Fetch()[0].GetUInt32());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s %s thread leállitva", res[2].c_str(), res[3].c_str());
+		}
 		else
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s thread leállitva", res[2].c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen leállitás!");
 	}
 	else if(info == "reload")
 	{
@@ -1203,41 +1207,36 @@ void IRCSession::Git(IRCMessage& recvData)
 		}
 		else
 		{
-			stringstream ss;
-			int id;
-			ss << res[2];
-			ss >> id;
+			if(res.size() < 4)
+			{
+				res.clear();
+				return;
+			}
 
-			bool engedely = sGitInfo.ReloadThread(cast_uint32(id));
-
-			if(!engedely)
-				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen újrainditás");
+			QueryResultPointer db = m_SQLConn->Query("SELECT id FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", res[2].c_str(), res[3].c_str());
+			if(db)
+			{
+				sGitInfo.ReloadThread(db->Fetch()[0].GetUInt32());
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s %s thread újrainditva.", res[2].c_str(), res[3].c_str());
+			}
 			else
-				SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s thread újrainditva.", res[2].c_str());
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen újrainditás!");
 		}
 	}
 	else
 	{
-		if(res.size() < 4)
-		{
-			res.clear();
-			return;
-		}
-
 		if(info == added)
 		{
-			stringstream ss;
-			int id;
-			ss << res[2];
-			ss >> id;
+			if(res.size() < 5)
+			{
+				res.clear();
+				return;
+			}
 
-			string svn = res[3];
-			string adat1;
-
-			QueryResultPointer db = m_SQLConn->Query("SELECT channel FROM gitinfo WHERE entry = '%i'", id);
+			QueryResultPointer db = m_SQLConn->Query("SELECT id, channel FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", res[2].c_str(), res[3].c_str());
 			if(db)
 			{
-				string channel = db->Fetch()[0].GetString();
+				string channel = db->Fetch()[1].GetString();
 				vector<string> reschannel(1);
 				sVezerlo.split(channel, ",", reschannel);
 
@@ -1247,33 +1246,33 @@ void IRCSession::Git(IRCMessage& recvData)
 					return;
 				}
 
+				string adat;
 				int resChannel = reschannel.size();
 
 				for(int y = 1; y < resChannel; y++)
-					adat1 += "," + reschannel[y];
+					adat += "," + reschannel[y];
 
-				adat1 += "," + svn;
+				adat += "," + res[4];
 
 				reschannel.clear();
+				m_SQLConn->Query("UPDATE gitinfo SET channel = '%s' WHERE id = '%u'", adat.c_str(), db->Fetch()[0].GetUInt32());
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel sikeresen hozzáadva.");
 			}
-
-			m_SQLConn->Query("UPDATE gitinfo SET channel = '%s' WHERE entry = '%i'", adat1.c_str(), id);
+			else
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel hozzáadása sikertelen!");
 		}
-
 		else if(info == delet)
 		{
-			stringstream ss;
-			int id;
-			ss << res[2];
-			ss >> id;
+			if(res.size() < 5)
+			{
+				res.clear();
+				return;
+			}
 
-			string svn = res[3];
-			string adat1;
-
-			QueryResultPointer db = m_SQLConn->Query("SELECT channel FROM gitinfo WHERE entry = '%i'", id);
+			QueryResultPointer db = m_SQLConn->Query("SELECT id, channel FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", res[2].c_str(), res[3].c_str());
 			if(db)
 			{
-				string channel = db->Fetch()[0].GetString();
+				string channel = db->Fetch()[1].GetString();
 				vector<string> reschannel(1);
 				sVezerlo.split(channel, ",", reschannel);
 
@@ -1283,20 +1282,23 @@ void IRCSession::Git(IRCMessage& recvData)
 					return;
 				}
 
+				string adat;
 				int resChannel = reschannel.size();
 
 				for(int y = 1; y < resChannel; y++)
 				{
-					if(reschannel[y] == svn)
+					if(reschannel[y] == res[4])
 						continue;
 
-					adat1 += "," + reschannel[y];
+					adat += "," + reschannel[y];
 				}
 
 				reschannel.clear();
+				m_SQLConn->Query("UPDATE gitinfo SET channel = '%s' WHERE id = '%u'", adat.c_str(), db->Fetch()[0].GetUInt32());
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel sikeresen törölve.");
 			}
-
-			m_SQLConn->Query("UPDATE gitinfo SET channel = '%s' WHERE entry = '%i'", adat1.c_str(), id);
+			else
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel törlése sikertelen!");
 		}
 	}
 
@@ -1351,13 +1353,13 @@ void IRCSession::Hg(IRCMessage& recvData)
 					continue;
 				}
 
-				string adat1;
+				string adat;
 				int resChannel = reschannel.size();
 
 				for(int y = 1; y < resChannel; y++)
-					adat1 += " " + reschannel[y];
+					adat += " " + reschannel[y];
 
-				SendChatMessage(PRIVMSG, recvData.target.c_str(), "3%s Channel:2%s", nev.c_str(), adat1.c_str());
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "3%s Channel:2%s", nev.c_str(), adat.c_str());
 				reschannel.clear();
 			} while(db->NextRow());
 		}
@@ -1373,9 +1375,11 @@ void IRCSession::Hg(IRCMessage& recvData)
 				string nev = db->Fetch()[0].GetString();
 				lista += " " + nev;
 			} while(db->NextRow());
-		}
 
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Lista: 3%s", lista.substr(1).c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Lista: 3%s", lista.substr(1).c_str());
+		}
+		else
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hibás lekérdezés!");
 	}
 	else if(info == "new")
 	{
@@ -1392,7 +1396,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s thread hozzáadva", res[2].c_str());
 		}
 		else
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen hozzáadás");
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen hozzáadás!");
 	}
 	else if(info == "stop")
 	{
@@ -1409,7 +1413,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s thread leállitva", res[2].c_str());
 		}
 		else
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen leállitás");
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen leállitás!");
 	}
 	else if(info == "reload")
 	{
@@ -1433,23 +1437,20 @@ void IRCSession::Hg(IRCMessage& recvData)
 				SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s thread újrainditva.", res[2].c_str());
 			}
 			else
-				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen újrainditás");
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikertelen újrainditás!");
 		}
 	}
 	else
 	{
-		if(res.size() < 4)
-		{
-			res.clear();
-			return;
-		}
-
 		if(info == added)
 		{
-			string nev = res[2];
-			string svn = res[3];
-			string adat1;
+			if(res.size() < 4)
+			{
+				res.clear();
+				return;
+			}
 
+			string nev = res[2];
 			QueryResultPointer db = m_SQLConn->Query("SELECT channel FROM hginfo WHERE nev = '%s'", nev.c_str());
 			if(db)
 			{
@@ -1463,24 +1464,30 @@ void IRCSession::Hg(IRCMessage& recvData)
 					return;
 				}
 
+				string adat;
 				int resChannel = reschannel.size();
 
 				for(int y = 1; y < resChannel; y++)
-					adat1 += "," + reschannel[y];
+					adat += "," + reschannel[y];
 
-				adat1 += "," + svn;
+				adat += "," + res[3];
 
 				reschannel.clear();
+				m_SQLConn->Query("UPDATE hginfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), nev.c_str());
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel sikeresen hozzáadva.");
 			}
-
-			m_SQLConn->Query("UPDATE hginfo SET channel = '%s' WHERE nev = '%s'", adat1.c_str(), nev.c_str());
+			else
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel hozzáadása sikertelen!");
 		}
 		else if(info == delet)
 		{
-			string nev = res[2];
-			string svn = res[3];
-			string adat1;
+			if(res.size() < 4)
+			{
+				res.clear();
+				return;
+			}
 
+			string nev = res[2];
 			QueryResultPointer db = m_SQLConn->Query("SELECT channel FROM hginfo WHERE nev = '%s'", nev.c_str());
 			if(db)
 			{
@@ -1494,20 +1501,23 @@ void IRCSession::Hg(IRCMessage& recvData)
 					return;
 				}
 
+				string adat;
 				int resChannel = reschannel.size();
 
 				for(int y = 1; y < resChannel; y++)
 				{
-					if(reschannel[y] == svn)
+					if(reschannel[y] == res[3])
 						continue;
 
-					adat1 += "," + reschannel[y];
+					adat += "," + reschannel[y];
 				}
 
 				reschannel.clear();
+				m_SQLConn->Query("UPDATE hginfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), nev.c_str());
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel sikeresen törölve.");
 			}
-
-			m_SQLConn->Query("UPDATE hginfo SET channel = '%s' WHERE nev = '%s'", adat1.c_str(), nev.c_str());
+			else
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel törlése sikertelen!");
 		}
 	}
 

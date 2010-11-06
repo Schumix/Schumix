@@ -102,33 +102,31 @@ void GitInfo::Feltoltes(uint32 id)
 	}
 }
 
-bool GitInfo::NewThread(uint32 id)
+void GitInfo::NewThread(uint32 id)
 {
 	if(id >= MaxGitID)
-		return false;
+		return;
 
-	Log.Notice("GitInfo", "New thread: %u", id);
+	Log.Notice("GitInfo", "New thread: %s %s", nev[id].c_str(), tipus[id].c_str());
 	Feltoltes(id);
 
 	m_running[id] = true;
 	MultiThread Mt(this, id);
 	boost::thread t(Mt);
 
-	Log.Success("GitInfo", "Thread indult: %u", id);
-	return true;
+	Log.Success("GitInfo", "Thread indult: %s %s", nev[id].c_str(), tipus[id].c_str());
 }
 
-bool GitInfo::StopThread(uint32 id)
+void GitInfo::StopThread(uint32 id)
 {
 	if(id >= MaxGitID)
-		return false;
+		return;
 
 	m_running[id] = false;
 	MultiThread Mt(this, id);
 	boost::thread t(Mt);
 
-	Log.Success("GitInfo", "Thread leallt: %u", id);
-	return true;
+	Log.Success("GitInfo", "Thread leallt: %s %s", nev[id].c_str(), tipus[id].c_str());
 }
 
 void GitInfo::ReloadAllThread()
@@ -168,12 +166,12 @@ void GitInfo::ReloadAllThread()
 	Log.Success("GitInfo", "%u Thread indult ujra.", Threadszam);
 }
 
-bool GitInfo::ReloadThread(uint32 id)
+void GitInfo::ReloadThread(uint32 id)
 {
 	if(id >= MaxGitID)
-		return false;
+		return;
 
-	Log.Notice("GitInfo", "Reload thread: %u", id);
+	Log.Notice("GitInfo", "Reload thread: %s %s", nev[id].c_str(), tipus[id].c_str());
 	m_running[id] = false;
 	Sleep(2000);
 
@@ -183,8 +181,7 @@ bool GitInfo::ReloadThread(uint32 id)
 	MultiThread Mt(this, id);
 	boost::thread t(Mt);
 
-	Log.Success("GitInfo", "Thread ujraindult: %u", id);
-	return true;
+	Log.Success("GitInfo", "Thread ujraindult: %s %s", nev[id].c_str(), tipus[id].c_str());
 }
 
 void GitInfo::Thread(uint32 id)
@@ -227,7 +224,7 @@ void GitInfo::Thread(uint32 id)
 	}
 
 #ifdef _DEBUG_MOD
-	Log.Warning("GitInfo", "Thread leallt: %u", id);
+	Log.Warning("GitInfo", "Thread leallt: %s %s", nev[id].c_str(), tipus[id].c_str());
 #endif
 	ThreadExit(0);
 }
@@ -289,7 +286,7 @@ string GitInfo::titleUrl(uint32 id)
 		}
 		else
 		{
-			Log.Error("GitInfo", "Title: Hiba a Http lekerdezesben. %u thread", id);
+			Log.Error("GitInfo", "Title: Hiba a Http lekerdezesben. %s %s thread", nev[id].c_str(), tipus[id].c_str());
 			return "nincs adat";
 		}
 	}
@@ -342,7 +339,7 @@ string GitInfo::revUrl(uint32 id)
 		}
 		else
 		{
-			Log.Error("GitInfo", "Rev: Hiba a Http lekerdezesben. %u thread", id);
+			Log.Error("GitInfo", "Rev: Hiba a Http lekerdezesben. %s %s thread", nev[id].c_str(), tipus[id].c_str());
 			return "nincs adat";
 		}
 	}
@@ -395,7 +392,7 @@ string GitInfo::authorUrl(uint32 id)
 		}
 		else
 		{
-			Log.Error("GitInfo", "Author: Hiba a Http lekerdezesben. %u thread", id);
+			Log.Error("GitInfo", "Author: Hiba a Http lekerdezesben. %s %s thread", nev[id].c_str(), tipus[id].c_str());
 			return "nincs adat";
 		}
 	}

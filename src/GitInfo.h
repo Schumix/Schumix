@@ -29,10 +29,10 @@ public:
 	GitInfo(string host, string user, string password, string database);
 	~GitInfo();
 
-	bool NewThread(uint32 id);
-	bool StopThread(uint32 id);
+	void NewThread(uint32 id);
+	void StopThread(uint32 id);
 	void ReloadAllThread();
-	bool ReloadThread(uint32 id);
+	void ReloadThread(uint32 id);
 	void Leallas();
 
 	bool Running(uint32 id) { return m_running[id]; }
