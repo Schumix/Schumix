@@ -1,2 +1,4 @@
-- Git funkció kezelés átálitásra névre. Szerkezeti kérdezés pl: &git new Schumix master
+//- Git funkció kezelés átálitásra névre. Szerkezeti kérdezés pl: &git new Schumix master
 - hl uezenet hozzáadása ami akkor küldödik el annak a személynek amikor először megszolal
+- teljes elemzés a funkció kodokon.
+- &funkcio update parancs kiterjesztése mindenre is. Magyarul all rész hozzáadása.

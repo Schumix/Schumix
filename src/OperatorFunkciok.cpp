@@ -1137,23 +1137,18 @@ void IRCSession::Git(IRCMessage& recvData)
 	{
 		string lista;
 
-		QueryResultPointer db = m_SQLConn->Query("SELECT id, nev, tipus FROM gitinfo");
+		QueryResultPointer db = m_SQLConn->Query("SELECT nev, tipus FROM gitinfo");
 		if(db)
 		{
 			do
 			{
-				uint32 id = db->Fetch()[0].GetUInt32();
-				string nev = db->Fetch()[1].GetString();
-				string tipus = db->Fetch()[2].GetString();
+				string nev = db->Fetch()[0].GetString();
+				string tipus = db->Fetch()[1].GetString();
 
-				string id1;
-				stringstream ss;
-				ss << id;
-				ss >> id1;
-				lista += " " + nev + " " + tipus + " " + "Id:" + id1 + ";";
+				lista += " " + nev + " " + tipus + ";";
 			} while(db->NextRow());
 
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Lista: %s", lista.substr(1).c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Lista: 3%s", lista.substr(1).c_str());
 		}
 		else
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hibás lekérdezés!");
