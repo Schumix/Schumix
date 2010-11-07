@@ -77,18 +77,21 @@ void IRCSession::Admin(IRCMessage& recvData)
 	}
 	else if(iras == "lista")
 	{
-		string adminok;
 		QueryResultPointer db = m_SQLConn->Query("SELECT nev FROM adminok");
 		if(db)
 		{
+			string adminok;
+
 			do
 			{
 				string nev = db->Fetch()[0].GetString();
 				adminok += ", " + nev;
 			} while(db->NextRow());
-		}
 
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Adminok: %s", adminok.substr(2).c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Adminok: %s", adminok.substr(2).c_str());
+		}
+		else
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hibás lekérdezés!");
 	}
 	else if(iras == added)
 	{
@@ -199,11 +202,7 @@ void IRCSession::Hozzaferes(IRCMessage& recvData)
 		return;
 	}
 
-	string jelszo = res[1];
-	string ip = recvData.source_host;
-	string admin_nev = recvData.source_nick;
-
-	QueryResultPointer db = m_SQLConn->Query("SELECT nev, jelszo FROM adminok WHERE nev = '%s'", admin_nev.c_str());
+	QueryResultPointer db = m_SQLConn->Query("SELECT nev, jelszo FROM adminok WHERE nev = '%s'", recvData.source_nick.c_str());
 	if(db)
 	{
 		string Nev = db->Fetch()[0].GetString();
@@ -213,7 +212,7 @@ void IRCSession::Hozzaferes(IRCMessage& recvData)
 		unsigned char* j_hash = new unsigned char[SHA_DIGEST_LENGTH+1];
 
 		hash.Initialize();
-		hash.UpdateData(jelszo);
+		hash.UpdateData(res[1]);
 		hash.Finalize();
 		memcpy(j_hash, hash.GetDigest(), SHA_DIGEST_LENGTH);
 
@@ -228,7 +227,7 @@ void IRCSession::Hozzaferes(IRCMessage& recvData)
 
 		if(JelszoSql == jelszo_hash)
 		{
-			m_SQLConn->Query("UPDATE adminok SET ip = '%s' WHERE nev = '%s'", ip.c_str(), Nev.c_str());
+			m_SQLConn->Query("UPDATE adminok SET ip = '%s' WHERE nev = '%s'", recvData.source_host.c_str(), Nev.c_str());
 			SendChatMessage(PRIVMSG, Nev.c_str(), "Hozzáférés engedélyezve");
 		}
 		else
@@ -255,21 +254,18 @@ void IRCSession::Ujjelszo(IRCMessage& recvData)
 		return;
 	}
 
-	string admin_nev = recvData.source_nick;
-	string jelszo = res[1];
-	string ujjelszo = res[2];
-
-	QueryResultPointer db = m_SQLConn->Query("SELECT nev, jelszo FROM adminok WHERE nev = '%s'", admin_nev.c_str());
+	QueryResultPointer db = m_SQLConn->Query("SELECT nev, jelszo FROM adminok WHERE nev = '%s'", recvData.source_nick.c_str());
 	if(db)
 	{
 		string Nev = db->Fetch()[0].GetString();
 		string JelszoSql = db->Fetch()[1].GetString();
+		string ujjelszo = res[2];
 
 		Sha1Hash hash;
 		unsigned char* j_hash = new unsigned char[SHA_DIGEST_LENGTH+1];
 
 		hash.Initialize();
-		hash.UpdateData(jelszo);
+		hash.UpdateData(res[1]);
 		hash.Finalize();
 		memcpy(j_hash, hash.GetDigest(), SHA_DIGEST_LENGTH);
 
@@ -356,12 +352,11 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 
 		if(res[2] == INFO)
 		{
-			string be;
-			string ki;
-
 			QueryResultPointer db = m_SQLConn->Query("SELECT funkcio_nev, funkcio_status FROM schumix");
 			if(db)
 			{
+				string be, ki;
+
 				do 
 				{
 					string nev = db->Fetch()[0].GetString();
@@ -372,10 +367,12 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 					else
 						ki += nev + " ";
 				} while(db->NextRow());
-			}
 
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Bekapcsolva: %s", be.c_str());
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Kikapcsolva: %s", ki.c_str());
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Bekapcsolva: %s", be.c_str());
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Kikapcsolva: %s", ki.c_str());
+			}
+			else
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hibás lekérdezés!");
 		}
 
 		if(res.size() < 4)
@@ -539,14 +536,13 @@ void IRCSession::Channel(IRCMessage& recvData)
 	}
 	else if(iras == INFO)
 	{
-		string Aktivszobak;
-		string DeAktivszobak;
-		int adatszoba = NULL;
-		int adatszoba1 = NULL;
-
 		QueryResultPointer db = m_SQLConn->Query("SELECT szoba, aktivitas, error FROM channel");
 		if(db)
 		{
+			string Aktivszobak, DeAktivszobak;
+			int adatszoba = NULL;
+			int adatszoba1 = NULL;
+
 			do 
 			{
 				string szoba = db->Fetch()[0].GetString();
@@ -564,16 +560,18 @@ void IRCSession::Channel(IRCMessage& recvData)
 					adatszoba1 += 1;
 				}
 			} while(db->NextRow());
-		}
 
-		if(adatszoba != NULL)
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Aktiv: %s", Aktivszobak.substr(2).c_str());
+			if(adatszoba != NULL)
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Aktiv: %s", Aktivszobak.substr(2).c_str());
+			else
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Aktiv: Nincs adat.");
+			if(adatszoba1 != NULL)
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Deaktiv: %s", DeAktivszobak.substr(2).c_str());
+			else
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Deaktiv: Nincs adat.");
+		}
 		else
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Aktiv: Nincs adat.");
-		if(adatszoba1 != NULL)
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Deaktiv: %s", DeAktivszobak.substr(2).c_str());
-		else
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Deaktiv: Nincs adat.");
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hibás lekérdezés!");
 	}
 
 	res.clear();
@@ -781,20 +779,22 @@ void IRCSession::HLFunkcio(IRCMessage& recvData)
 	}
 	if(res[1] == INFO)
 	{
-		string Nevek;
 		QueryResultPointer db = m_SQLConn->Query("SELECT nick, alapot FROM hluzenet");
 		if(db)
 		{
+			string Nevek;
+
 			do
 			{
 				string nev = db->Fetch()[0].GetString();
 				string alapot = db->Fetch()[1].GetString();
 				Nevek += ", " + nev + ":" + alapot;
-				
 			} while(db->NextRow());
-		}
 
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Létezõ nickek: %s", Nevek.substr(2).c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Létezõ nickek: %s", Nevek.substr(2).c_str());
+		}
+		else
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hibás lekérdezés!");
 	}
 	if(res[1] == update)
 	{
@@ -915,10 +915,11 @@ void IRCSession::Svn(IRCMessage& recvData)
 	}
 	else if(info == "lista")
 	{
-		string lista;
 		QueryResultPointer db = m_SQLConn->Query("SELECT nev FROM svninfo");
 		if(db)
 		{
+			string lista;
+
 			do
 			{
 				string nev = db->Fetch()[0].GetString();
@@ -999,8 +1000,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 				return;
 			}
 
-			string nev = res[2];
-			QueryResultPointer db = m_SQLConn->Query("SELECT channel FROM svninfo WHERE nev = '%s'", nev.c_str());
+			QueryResultPointer db = m_SQLConn->Query("SELECT channel FROM svninfo WHERE nev = '%s'", res[2].c_str());
 			if(db)
 			{
 				string channel = db->Fetch()[0].GetString();
@@ -1022,7 +1022,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 				adat += "," + res[3];
 
 				reschannel.clear();
-				m_SQLConn->Query("UPDATE svninfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), nev.c_str());
+				m_SQLConn->Query("UPDATE svninfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), res[2].c_str());
 				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel sikeresen hozzáadva.");
 			}
 			else
@@ -1036,8 +1036,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 				return;
 			}
 
-			string nev = res[2];
-			QueryResultPointer db = m_SQLConn->Query("SELECT channel FROM svninfo WHERE nev = '%s'", nev.c_str());
+			QueryResultPointer db = m_SQLConn->Query("SELECT channel FROM svninfo WHERE nev = '%s'", res[2].c_str());
 			if(db)
 			{
 				string channel = db->Fetch()[0].GetString();
@@ -1062,7 +1061,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 				}
 
 				reschannel.clear();
-				m_SQLConn->Query("UPDATE svninfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), nev.c_str());
+				m_SQLConn->Query("UPDATE svninfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), res[2].c_str());
 				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel sikeresen törölve.");
 			}
 			else
@@ -1135,11 +1134,11 @@ void IRCSession::Git(IRCMessage& recvData)
 	}
 	else if(info == "lista")
 	{
-		string lista;
-
 		QueryResultPointer db = m_SQLConn->Query("SELECT nev, tipus FROM gitinfo");
 		if(db)
 		{
+			string lista;
+
 			do
 			{
 				string nev = db->Fetch()[0].GetString();
@@ -1361,10 +1360,11 @@ void IRCSession::Hg(IRCMessage& recvData)
 	}
 	else if(info == "lista")
 	{
-		string lista;
 		QueryResultPointer db = m_SQLConn->Query("SELECT nev FROM hginfo");
 		if(db)
 		{
+			string lista;
+
 			do
 			{
 				string nev = db->Fetch()[0].GetString();
@@ -1445,8 +1445,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 				return;
 			}
 
-			string nev = res[2];
-			QueryResultPointer db = m_SQLConn->Query("SELECT channel FROM hginfo WHERE nev = '%s'", nev.c_str());
+			QueryResultPointer db = m_SQLConn->Query("SELECT channel FROM hginfo WHERE nev = '%s'", res[2].c_str());
 			if(db)
 			{
 				string channel = db->Fetch()[0].GetString();
@@ -1468,7 +1467,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 				adat += "," + res[3];
 
 				reschannel.clear();
-				m_SQLConn->Query("UPDATE hginfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), nev.c_str());
+				m_SQLConn->Query("UPDATE hginfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), res[2].c_str());
 				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel sikeresen hozzáadva.");
 			}
 			else
@@ -1482,8 +1481,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 				return;
 			}
 
-			string nev = res[2];
-			QueryResultPointer db = m_SQLConn->Query("SELECT channel FROM hginfo WHERE nev = '%s'", nev.c_str());
+			QueryResultPointer db = m_SQLConn->Query("SELECT channel FROM hginfo WHERE nev = '%s'", res[2].c_str());
 			if(db)
 			{
 				string channel = db->Fetch()[0].GetString();
@@ -1508,7 +1506,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 				}
 
 				reschannel.clear();
-				m_SQLConn->Query("UPDATE hginfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), nev.c_str());
+				m_SQLConn->Query("UPDATE hginfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), res[2].c_str());
 				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel sikeresen törölve.");
 			}
 			else

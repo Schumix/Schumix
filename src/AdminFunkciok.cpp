@@ -103,10 +103,7 @@ void IRCSession::Szoba(IRCMessage& recvData)
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Funkció használata: %sszoba <ide jön a szoba>", m_ParancsElojel.c_str());
 	}
 	else
-	{
-		string szoba = res[1];
-		m_SQLConn->Query("UPDATE schumix SET irc_cim = '%s' WHERE entry = '1'", szoba.c_str());
-	}
+		m_SQLConn->Query("UPDATE schumix SET irc_cim = '%s' WHERE entry = '1'", res[1].c_str());
 
 	res.clear();
 }

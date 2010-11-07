@@ -602,13 +602,6 @@ string Vezerlo::htmldecode(string c)
 				escaped.append(res[i]);
 				continue;
 			}
-			/*else if(res[i].substr(0, 5) == "#180;")
-			{
-				res[i].erase(0, 5);
-				escaped.append("'");
-				escaped.append(res[i]);
-				continue;
-			}*/
 			else
 			{
 				if(Elsoresz == 1)

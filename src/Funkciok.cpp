@@ -321,11 +321,7 @@ void IRCSession::Xrev(IRCMessage& recvData)
 	string iras = res[1];
 
 	if(iras == Help)
-	{
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Parancs használata: %sxrev <emulátor neve> <rev>", m_ParancsElojel.c_str());
-		res.clear();
-		return;
-	}
 	else if(iras == "ascnhalf")
 	{
 		if(res.size() < 3)
@@ -408,11 +404,7 @@ void IRCSession::Xrev(IRCMessage& recvData)
 		SvnSchumix(rev, recvData.target);
 	}
 	else
-	{
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Emulátorok: ascnhalf | arcemu | arcscripts | sandshroud | schumix");
-		res.clear();
-		return;
-	}
 
 	res.clear();
 }
@@ -478,7 +470,6 @@ void IRCSession::Uzenet(IRCMessage& recvData)
 	string iras = res[1];
 
 	if(iras == Help)
-
 	{
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Segitség az üzenethez!");
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Funkció használata: %süzenet <ide jön a személy> <ha nem felhivás küldenél hanem saját üzenetet>", m_ParancsElojel.c_str());

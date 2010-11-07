@@ -58,25 +58,25 @@ IRCSession::IRCSession(string host, uint32 port, string sqlhost, string user, st
 	m_LastPing = getMSTime();
 
 	// Populate the giant IRCSession handler table
-	ADD_CODE( RPL_SUCCESSFUL_AUTH,	&IRCSession::HandleSuccessfulAuth )
-	ADD_CODE( RPL_MOTDSTART,		&IRCSession::HandleMotdStart )
-	ADD_CODE( RPL_MOTD,				&IRCSession::HandleMotd )
-	ADD_CODE( RPL_ENDOFMOTD,		&IRCSession::HandleMotdStop )
-	ADD_CODE( RPL_NOTICE,			&IRCSession::HandleNotice )
-	ADD_CODE( RPL_PRIVMSG,			&IRCSession::HandlePrivmsg )
-	ADD_CODE( RPL_PING,				&IRCSession::HandlePing )
-	ADD_CODE( RPL_PONG,				&IRCSession::HandlePong )
-	ADD_CODE( RPL_NICK_ERROR,		&IRCSession::HandleNickError )
-	ADD_CODE( RPL_319,				&IRCSession::HandleWhois )
-	ADD_CODE( RPL_KICK,				&IRCSession::HandleKick )
-	ADD_CODE( RPL_MODE,				&IRCSession::HandleMode )
-	ADD_CODE( RPL_JOIN,				&IRCSession::HandleJoin )
-	ADD_CODE( RPL_LEFT,				&IRCSession::HandleLeft )
-	ADD_CODE( RPL_QUIT,				&IRCSession::HandleQuit )
-	ADD_CODE( RPL_404,				&IRCSession::HandleReJoin )
-	ADD_CODE( RPL_NICK,				&IRCSession::HandleNick )
-	ADD_CODE( RPL_NoChannel_jelszo,	&IRCSession::HandleNoChannelJelszo )
-	ADD_CODE( RPL_Channel_ban,		&IRCSession::HandleChannelBan )
+	ADD_CODE(RPL_SUCCESSFUL_AUTH,	&IRCSession::HandleSuccessfulAuth)
+	ADD_CODE(RPL_MOTDSTART,			&IRCSession::HandleMotdStart)
+	ADD_CODE(RPL_MOTD,				&IRCSession::HandleMotd)
+	ADD_CODE(RPL_ENDOFMOTD,			&IRCSession::HandleMotdStop)
+	ADD_CODE(RPL_NOTICE,			&IRCSession::HandleNotice)
+	ADD_CODE(RPL_PRIVMSG,			&IRCSession::HandlePrivmsg)
+	ADD_CODE(RPL_PING,				&IRCSession::HandlePing)
+	ADD_CODE(RPL_PONG,				&IRCSession::HandlePong)
+	ADD_CODE(RPL_NICK_ERROR,		&IRCSession::HandleNickError)
+	ADD_CODE(RPL_319,				&IRCSession::HandleWhois)
+	ADD_CODE(RPL_KICK,				&IRCSession::HandleKick)
+	ADD_CODE(RPL_MODE,				&IRCSession::HandleMode)
+	ADD_CODE(RPL_JOIN,				&IRCSession::HandleJoin)
+	ADD_CODE(RPL_LEFT,				&IRCSession::HandleLeft)
+	ADD_CODE(RPL_QUIT,				&IRCSession::HandleQuit)
+	ADD_CODE(RPL_404,				&IRCSession::HandleReJoin)
+	ADD_CODE(RPL_NICK,				&IRCSession::HandleNick)
+	ADD_CODE(RPL_NoChannel_jelszo,	&IRCSession::HandleNoChannelJelszo)
+	ADD_CODE(RPL_Channel_ban,		&IRCSession::HandleChannelBan)
 
 	Log.Debug("IRCSession", "Reconnect Thread indul...");
 	Thread t(&RunUpdateProc, this);
@@ -123,9 +123,11 @@ void IRCSession::RehashConfig(string host, string user, string pass, string data
 
 			m_ChannelLista.insert(make_pair(szoba, jelszo));
 		} while(db->NextRow());
-	}
 
-	Log.Success("Config", "Config adatbazis betoltve.");
+		Log.Success("Config", "Config adatbazis betoltve.");
+	}
+	else
+		Log.Error("Config", "Lekerdezesi hiba! Betoltes sikertelen.");
 }
 
 IRCSession::~IRCSession()
