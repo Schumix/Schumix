@@ -107,14 +107,16 @@ void IRCSession::Ido(IRCMessage& recvData)
 void IRCSession::Keres(IRCMessage& recvData)
 {
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		res.clear();
 		return;
 	}
@@ -184,14 +186,16 @@ void IRCSession::Keres(IRCMessage& recvData)
 void IRCSession::Forditas(IRCMessage& recvData)
 {
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		res.clear();
 		return;
 	}
@@ -259,7 +263,10 @@ void IRCSession::Forditas(IRCMessage& recvData)
 void IRCSession::Sha1(IRCMessage& recvData)
 {
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	Sha1Hash sha1;
 	unsigned char* eredmeny = new unsigned char[SHA_DIGEST_LENGTH+1];
@@ -284,7 +291,10 @@ void IRCSession::Sha1(IRCMessage& recvData)
 void IRCSession::Md5(IRCMessage& recvData)
 {
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	MD5Hash md5;
 	unsigned char* eredmeny = new unsigned char[MD5_DIGEST_LENGTH+1];
@@ -331,6 +341,7 @@ void IRCSession::Xrev(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "A revision nincs megadva!");
 			res.clear();
 			return;
 		}
@@ -468,6 +479,7 @@ void IRCSession::Jegyzet(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "A kod nincs megadva!");
 			res.clear();
 			return;
 		}

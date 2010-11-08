@@ -97,6 +97,7 @@ void IRCSession::Admin(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
 			res.clear();
 			return;
 		}
@@ -134,6 +135,7 @@ void IRCSession::Admin(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
 			res.clear();
 			return;
 		}
@@ -153,8 +155,16 @@ void IRCSession::Admin(IRCMessage& recvData)
 	}
 	else if(iras == "rang")
 	{
+		if(res.size() < 3)
+		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
+			res.clear();
+			return;
+		}
+
 		if(res.size() < 4)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs rang megadva!");
 			res.clear();
 			return;
 		}
@@ -256,6 +266,7 @@ void IRCSession::Ujjelszo(IRCMessage& recvData)
 
 	if(res.size() < 3)
 	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs az újjelszó megadva!");
 		res.clear();
 		return;
 	}
@@ -355,6 +366,7 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs megadva az 1. paraméter!");
 			res.clear();
 			return;
 		}
@@ -386,6 +398,7 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 
 		if(res.size() < 4)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs a funkció név megadva!");
 			res.clear();
 			return;
 		}
@@ -401,8 +414,16 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 	}
 	else if(info == "channel")
 	{
+		if(res.size() < 3)
+		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs channel név megadva!");
+			res.clear();
+			return;
+		}
+
 		if(res.size() < 4)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs megadva a 2. paraméter!");
 			res.clear();
 			return;
 		}
@@ -422,6 +443,7 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 		{
 			if(res.size() < 5)
 			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs a funkció név megadva!");
 				res.clear();
 				return;
 			}
@@ -446,6 +468,7 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs a funkció név megadva!");
 			res.clear();
 			return;
 		}
@@ -496,6 +519,7 @@ void IRCSession::Channel(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs a channel név megadva!");
 			res.clear();
 			return;
 		}
@@ -529,6 +553,7 @@ void IRCSession::Channel(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs a channel név megadva!");
 			res.clear();
 			return;
 		}
@@ -766,6 +791,7 @@ void IRCSession::Mode(IRCMessage& recvData)
 
 	if(res.size() < 3)
 	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
 		res.clear();
 		return;
 	}
@@ -861,6 +887,7 @@ void IRCSession::HLFunkcio(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs a funkció név megadva!");
 			res.clear();
 			return;
 		}
@@ -971,6 +998,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
 			res.clear();
 			return;
 		}
@@ -988,6 +1016,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
 			res.clear();
 			return;
 		}
@@ -1005,6 +1034,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név vagy all megadva!");
 			res.clear();
 			return;
 		}
@@ -1030,8 +1060,16 @@ void IRCSession::Svn(IRCMessage& recvData)
 	{
 		if(info == added)
 		{
+			if(res.size() < 3)
+			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
+				res.clear();
+				return;
+			}
+
 			if(res.size() < 4)
 			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs a channel név megadva!");
 				res.clear();
 				return;
 			}
@@ -1066,8 +1104,16 @@ void IRCSession::Svn(IRCMessage& recvData)
 		}
 		else if(info == delet)
 		{
+			if(res.size() < 3)
+			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
+				res.clear();
+				return;
+			}
+
 			if(res.size() < 4)
 			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs a channel név megadva!");
 				res.clear();
 				return;
 			}
@@ -1193,8 +1239,16 @@ void IRCSession::Git(IRCMessage& recvData)
 	}
 	else if(info == "new")
 	{
+		if(res.size() < 3)
+		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
+			res.clear();
+			return;
+		}
+
 		if(res.size() < 4)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs tipus név megadva!");
 			res.clear();
 			return;
 		}
@@ -1210,8 +1264,16 @@ void IRCSession::Git(IRCMessage& recvData)
 	}
 	else if(info == "stop")
 	{
+		if(res.size() < 3)
+		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
+			res.clear();
+			return;
+		}
+
 		if(res.size() < 4)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs tipus név megadva!");
 			res.clear();
 			return;
 		}
@@ -1229,6 +1291,7 @@ void IRCSession::Git(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név vagy all megadva!");
 			res.clear();
 			return;
 		}
@@ -1242,6 +1305,7 @@ void IRCSession::Git(IRCMessage& recvData)
 		{
 			if(res.size() < 4)
 			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs tipus név megadva!");
 				res.clear();
 				return;
 			}
@@ -1260,8 +1324,23 @@ void IRCSession::Git(IRCMessage& recvData)
 	{
 		if(info == added)
 		{
+			if(res.size() < 3)
+			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
+				res.clear();
+				return;
+			}
+
+			if(res.size() < 4)
+			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs tipus név megadva!");
+				res.clear();
+				return;
+			}
+
 			if(res.size() < 5)
 			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs a channel név megadva!");
 				res.clear();
 				return;
 			}
@@ -1296,8 +1375,23 @@ void IRCSession::Git(IRCMessage& recvData)
 		}
 		else if(info == delet)
 		{
+			if(res.size() < 3)
+			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
+				res.clear();
+				return;
+			}
+
+			if(res.size() < 4)
+			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs tipus név megadva!");
+				res.clear();
+				return;
+			}
+
 			if(res.size() < 5)
 			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs a channel név megadva!");
 				res.clear();
 				return;
 			}
@@ -1422,6 +1516,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
 			res.clear();
 			return;
 		}
@@ -1439,6 +1534,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
 			res.clear();
 			return;
 		}
@@ -1456,6 +1552,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név vagy all megadva!");
 			res.clear();
 			return;
 		}
@@ -1481,8 +1578,16 @@ void IRCSession::Hg(IRCMessage& recvData)
 	{
 		if(info == added)
 		{
+			if(res.size() < 3)
+			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
+				res.clear();
+				return;
+			}
+
 			if(res.size() < 4)
 			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs a channel név megadva!");
 				res.clear();
 				return;
 			}
@@ -1517,8 +1622,16 @@ void IRCSession::Hg(IRCMessage& recvData)
 		}
 		else if(info == delet)
 		{
+			if(res.size() < 3)
+			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
+				res.clear();
+				return;
+			}
+
 			if(res.size() < 4)
 			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs a channel név megadva!");
 				res.clear();
 				return;
 			}
