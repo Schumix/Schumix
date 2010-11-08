@@ -114,6 +114,7 @@ void IRCSession::Keres(IRCMessage& recvData)
 
 	if(res.size() < 2)
 	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		res.clear();
 		return;
 	}
@@ -190,6 +191,7 @@ void IRCSession::Forditas(IRCMessage& recvData)
 
 	if(res.size() < 2)
 	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		res.clear();
 		return;
 	}
@@ -307,7 +309,10 @@ void IRCSession::Md5(IRCMessage& recvData)
 void IRCSession::Xrev(IRCMessage& recvData)
 {
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Emulátorok: sandshroud");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -322,57 +327,6 @@ void IRCSession::Xrev(IRCMessage& recvData)
 
 	if(iras == Help)
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Parancs használata: %sxrev <emulátor neve> <rev>", m_ParancsElojel.c_str());
-	else if(iras == "ascnhalf")
-	{
-		if(res.size() < 3)
-		{
-			res.clear();
-			return;
-		}
-
-		if(res.size() < 3)
-		{
-			res.clear();
-			return;
-		}
-
-		int rev;
-		stringstream ss;
-		ss << res[2];
-		ss >> rev;
-
-		SvnAscNHalf(rev, recvData.target);
-	}
-	else if(iras =="arcemu")
-	{
-		if(res.size() < 3)
-		{
-			res.clear();
-			return;
-		}
-
-		int rev;
-		stringstream ss;
-		ss << res[2];
-		ss >> rev;
-
-		SvnArcemu(rev, recvData.target);
-	}
-	else if(iras == "arcscripts")
-	{
-		if(res.size() < 3)
-		{
-			res.clear();
-			return;
-		}
-
-		int rev;
-		stringstream ss;
-		ss << res[2];
-		ss >> rev;
-
-		SvnArcScripts(rev, recvData.target);
-	}
 	else if(iras == "sandshroud")
 	{
 		if(res.size() < 3)
@@ -388,23 +342,8 @@ void IRCSession::Xrev(IRCMessage& recvData)
 
 		SvnSandshroud(rev, recvData.target);
 	}
-	else if(iras == "schumix")
-	{
-		if(res.size() < 3)
-		{
-			res.clear();
-			return;
-		}
-
-		int rev;
-		stringstream ss;
-		ss << res[2];
-		ss >> rev;
-
-		SvnSchumix(rev, recvData.target);
-	}
 	else
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Emulátorok: ascnhalf | arcemu | arcscripts | sandshroud | schumix");
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hibás név!");
 
 	res.clear();
 }
@@ -412,7 +351,10 @@ void IRCSession::Xrev(IRCMessage& recvData)
 void IRCSession::Irc(IRCMessage& recvData)
 {
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -446,7 +388,10 @@ void IRCSession::Irc(IRCMessage& recvData)
 void IRCSession::Szam(IRCMessage& recvData)
 {
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	setConsts();
 	makepolishform(recvData.args.substr(firstSpace+1));
@@ -456,7 +401,10 @@ void IRCSession::Szam(IRCMessage& recvData)
 void IRCSession::Uzenet(IRCMessage& recvData)
 {
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -494,7 +442,10 @@ void IRCSession::Uzenet(IRCMessage& recvData)
 void IRCSession::Jegyzet(IRCMessage& recvData)
 {
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -542,4 +493,24 @@ void IRCSession::Jegyzet(IRCMessage& recvData)
 	}
 
 	res.clear();
+}
+
+void IRCSession::Whois(IRCMessage& recvData)
+{
+	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
+		return;
+	}
+
+	string Nick = m_NickTarolo;
+	string nick = recvData.args.substr(firstSpace+1);
+	transform(Nick.begin(), Nick.end(), Nick.begin(), ::tolower);
+	transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
+
+	if(nick == Nick)
+		return;
+
+	m_WhoisPrivmsg = recvData.target;
+	WriteLine("WHOIS %s", recvData.args.substr(firstSpace+1).c_str());
 }

@@ -33,6 +33,7 @@ void IRCSession::HandleSuccessfulAuth(IRCMessage& recvData)
 		SendChatMessage(PRIVMSG, "NickServ", "identify %s", m_NickServPassword.c_str());
 	}
 
+	// Kitakaritja a channel funkciokat nehogy ütközés legyen.
 	m_ChannelFunkcio.clear();
 	m_ChannelPrivmsg = m_NickTarolo;
 
@@ -193,7 +194,7 @@ void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 		// info
 		if(cmd == "info") // id 8
 		{
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Programozóm: Csaba, Twl és Scymex. Üzemeltetõ: Skyne.");
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Programozóm: Csaba, Twl és Scymex. Üzemeltetõ: %s.", m_Uzemelteto.c_str());
 			return;
 		}
 
@@ -248,18 +249,7 @@ void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 
 		// Keresés meik nick meik channelon van fent
 		if(cmd == "whois") // id 20
-		{
-			string Nick = m_NickTarolo;
-			string nick = recvData.args.substr(firstSpace+1);
-			transform(Nick.begin(), Nick.end(), Nick.begin(), ::tolower);
-			transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
-
-			if(nick == Nick)
-				return;
-
-			m_WhoisPrivmsg = recvData.target;
-			WriteLine("WHOIS %s", recvData.args.substr(firstSpace+1).c_str());
-		}
+			Whois(recvData);
 
 		// Adminok születésnapja
 		if(cmd == "sznap") // id 21

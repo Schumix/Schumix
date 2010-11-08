@@ -191,7 +191,10 @@ void IRCSession::Hozzaferes(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -243,12 +246,15 @@ void IRCSession::Ujjelszo(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
-	if(res.size() < 3)
+	if(res.size() < 2)
 	{
 		res.clear();
 		return;
@@ -313,7 +319,10 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -460,7 +469,10 @@ void IRCSession::Channel(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -540,8 +552,8 @@ void IRCSession::Channel(IRCMessage& recvData)
 		if(db)
 		{
 			string Aktivszobak, DeAktivszobak;
-			int adatszoba = NULL;
-			int adatszoba1 = NULL;
+			bool adatszoba = false;
+			bool adatszoba1 = false;
 
 			do 
 			{
@@ -552,20 +564,20 @@ void IRCSession::Channel(IRCMessage& recvData)
 				if(aktivitas == "aktiv")
 				{
 					Aktivszobak += ", " + szoba;
-					adatszoba += 1;
+					adatszoba = true;
 				}
 				else if(aktivitas == "nem aktiv")
 				{
 					DeAktivszobak += ", " + szoba + ":" + error;
-					adatszoba1 += 1;
+					adatszoba1 = true;
 				}
 			} while(db->NextRow());
 
-			if(adatszoba != NULL)
+			if(adatszoba)
 				SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Aktiv: %s", Aktivszobak.substr(2).c_str());
 			else
 				SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Aktiv: Nincs adat.");
-			if(adatszoba1 != NULL)
+			if(adatszoba1)
 				SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Deaktiv: %s", DeAktivszobak.substr(2).c_str());
 			else
 				SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Deaktiv: Nincs adat.");
@@ -583,7 +595,10 @@ void IRCSession::Sznap(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -616,7 +631,10 @@ void IRCSession::Nick(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -640,7 +658,10 @@ void IRCSession::Join(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -665,7 +686,10 @@ void IRCSession::Left(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -686,7 +710,10 @@ void IRCSession::Kick(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -729,12 +756,15 @@ void IRCSession::Mode(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
-	if(res.size() < 3)
+	if(res.size() < 2)
 	{
 		res.clear();
 		return;
@@ -759,7 +789,10 @@ void IRCSession::HLFunkcio(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -860,7 +893,10 @@ void IRCSession::Svn(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -1078,7 +1114,10 @@ void IRCSession::Git(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -1305,7 +1344,10 @@ void IRCSession::Hg(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);

@@ -461,7 +461,7 @@ string Vezerlo::htmldecode(string c)
 
 	int hossz;
 	string betu;
-	int Elsoresz = 1;
+	bool Elsoresz = true;
 
 	for(int i = 1; i < max; i++)
 	{
@@ -604,10 +604,10 @@ string Vezerlo::htmldecode(string c)
 			}
 			else
 			{
-				if(Elsoresz == 1)
+				if(Elsoresz)
 				{
 					escaped.append(res[i]);
-					Elsoresz = NULL;
+					Elsoresz = false;
 					continue;
 				}
 				else

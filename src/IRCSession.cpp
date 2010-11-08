@@ -112,6 +112,7 @@ void IRCSession::RehashConfig(string host, string user, string pass, string data
 	m_UseNickServ = Config.MainConfig.GetBoolDefault("NickServ", "Enable", false);
 	m_NickServPassword = Config.MainConfig.GetStringDefault("NickServ", "Password", "");
 	m_ParancsElojel = Config.MainConfig.GetStringDefault("Parancs", "Elojel", "&");
+	m_Uzemelteto = Config.MainConfig.GetStringDefault("Parancs", "Uzemelteto", "Schumix");
 
 	QueryResultPointer db = m_SQLConn->Query("SELECT szoba, jelszo FROM channel");
 	if(db)

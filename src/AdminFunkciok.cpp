@@ -25,7 +25,10 @@ void IRCSession::Teszt(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -86,7 +89,10 @@ void IRCSession::Szoba(IRCMessage& recvData)
 		return;
 
 	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
 		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
@@ -112,6 +118,12 @@ void IRCSession::Reload(IRCMessage& recvData)
 {
 	if(!Admin(recvData.source_nick, recvData.source_host, Administrator))
 		return;
+
+	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
+		return;
+	}
 
 	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);

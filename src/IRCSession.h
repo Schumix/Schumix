@@ -191,6 +191,7 @@ protected:
 	void Hg(IRCMessage& recvData);
 	void Jegyzet(IRCMessage& recvData);
 	void Reload(IRCMessage& recvData);
+	void Whois(IRCMessage& recvData);
 	void Kikapcsolas(IRCMessage& recvData);
 
 	// Schumix
@@ -215,11 +216,7 @@ protected:
 	bool Admin(string nick, AdminFlag Flag);
 	bool Admin(string nick, string nick_ip, AdminFlag Flag);
 
-	void SvnArcemu(int rev, string channel);
-	void SvnArcScripts(int rev, string channel);
 	void SvnSandshroud(int rev, string channel);
-	void SvnAscNHalf(int rev, string channel);
-	void SvnSchumix(int rev, string channel);
 
 	void ChannelFunkcioReload();
 	void ChannelListaReload();
@@ -280,6 +277,8 @@ protected:
 
 	// Parancs elõjelét tárólja
 	string m_ParancsElojel;
+	// Az üzemeltetõ nevét tárólja
+	string m_Uzemelteto;
 
 private:
 	// Url kezeles
