@@ -190,7 +190,7 @@ void GitInfo::Thread(uint32 id)
 	m_SQLConn[id]->UseDatabase(_mysql[3]);
 
 	string status;
-	int kilepes = NULL;
+	bool kilepes = false;
 	Lekerdezes(id);
 
 	while(Running(id))
@@ -209,14 +209,14 @@ void GitInfo::Thread(uint32 id)
 			{
 				if(!Running(id))
 				{
-					kilepes = 1;
+					kilepes = true;
 					break;
 				}
 				else
 					lekerdezesi_ido();
 			}
 
-			if(kilepes == 1)
+			if(kilepes)
 				break;
 		}
 		else
