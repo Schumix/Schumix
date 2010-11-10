@@ -707,15 +707,10 @@ void Vezerlo::Leallas()
 
 	Uptime();
 	m_SvnInfo->Leallas();
-	delete m_SvnInfo;
 	m_GitInfo->Leallas();
-	delete m_GitInfo;
 	m_HgInfo->Leallas();
-	delete m_HgInfo;
 	m_Console->Leallas();
-	delete m_Console;
 	sIRCSession.Leallas();
-	delete IRCSession::getSingletonPtr();
 
 	Log.Success("Vezerlo", "Leallas befejezodot.");
 }
