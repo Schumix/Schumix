@@ -20,7 +20,7 @@
 #ifndef _SOCKET_MGR_H
 #define _SOCKET_MGR_H
 
-class SimpleSocket;
+class Socket;
 
 class SocketMgr
 {
@@ -28,14 +28,14 @@ public:
 	SocketMgr();
 	~SocketMgr();
 
-	void AddSocket(SimpleSocketPointer pSocket);
-	void RemoveSocket(SimpleSocketPointer pSocket);
+	void AddSocket(SocketPointer pSocket);
+	void RemoveSocket(SocketPointer pSocket);
 
 protected:
 	void Update();
 	static Thread_void RunUpdateProc(void* smg);
 
-	typedef set<SimpleSocketPointer> SocketSet;
+	typedef set<SocketPointer> SocketSet;
 	Mutex m_mutex;
 	SocketSet m_sockets;
 };

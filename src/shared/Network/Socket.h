@@ -31,12 +31,12 @@
 class IRCSession;
 class SocketMgr;
 
-class SimpleSocket : public boost::enable_shared_from_this<SimpleSocket>, public Singleton<SimpleSocket>
+class Socket : public boost::enable_shared_from_this<Socket>, public Singleton<Socket>
 {
 	friend class SocketMgr;
 public:
-	SimpleSocket();
-	~SimpleSocket();
+	Socket();
+	~Socket();
 
 	bool Connect(string host, uint32 port);
 	void Disconnect();
@@ -71,6 +71,6 @@ private:
 	SocketMgr* pSocketMgr;
 };
 
-#define sSimpleSocket SimpleSocket::getSingleton()
+#define sSocket Socket::getSingleton()
 
 #endif

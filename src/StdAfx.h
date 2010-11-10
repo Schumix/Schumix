@@ -113,7 +113,7 @@ extern CLog Log;
 #include "Replies.h"
 #include "IRCSession.h"
 #include "shared/Network/SocketMgr.h"
-#include "shared/Network/SimpleSocket.h"
+#include "shared/Network/Socket.h"
 #include "shared/Network/SocketOps.h"
 #include "Vezerlo.h"
 

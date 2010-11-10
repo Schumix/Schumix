@@ -27,7 +27,7 @@ IRCSession::IRCSession(string host, uint32 port, string sqlhost, string user, st
 {
 	m_Host = host;
 	m_Port = port;
-	m_Socket = SimpleSocketPointer(new SimpleSocket());
+	m_Socket = SocketPointer(new Socket());
 
 	if(!m_Socket->Connect(host, port))
 	{
@@ -136,9 +136,6 @@ IRCSession::~IRCSession()
 #ifdef _DEBUG_MOD
 	Log.Notice("IRCSession", "~IRCSession()");
 #endif
-
-	if(m_Socket)
-		SocketDisconnect();
 }
 
 void IRCSession::BejovoInfo(string SInfo)

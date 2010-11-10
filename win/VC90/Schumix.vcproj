@@ -375,11 +375,11 @@
 			Name="Socket"
 			>
 			<File
-				RelativePath="..\..\src\shared\Network\SimpleSocket.cpp"
+				RelativePath="..\..\src\shared\Network\Socket.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\shared\Network\SimpleSocket.h"
+				RelativePath="..\..\src\shared\Network\Socket.h"
 				>
 			</File>
 			<File

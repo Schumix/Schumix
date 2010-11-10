@@ -41,7 +41,7 @@
 #define PARANCSOK "parancsok"
 
 class MySQLConnection;
-class SimpleSocket;
+class Socket;
 class SvnInfo;
 class GitInfo;
 class HgInfo;
@@ -104,7 +104,7 @@ public:
 
 	inline string GetHost() { return m_Host; }
 	inline uint32 GetPort() { return m_Port; }
-	inline SimpleSocketPointer GetSocket() { return m_Socket; }
+	inline SocketPointer GetSocket() { return m_Socket; }
 	inline string GetNickTarolo() { return m_NickTarolo; }
 	inline string GetUserName() { return m_UserName; }
 
@@ -284,7 +284,7 @@ private:
 	// Url kezeles
 	CURL* m_Curl;
 	// Socket kapcsolat.
-	SimpleSocketPointer m_Socket;
+	SocketPointer m_Socket;
 	// Mysql kapcsolat.
 	MySQLConnectionPointer m_SQLConn;
 	static int writer(char* data, size_t size, size_t nmemb, string *buffer);

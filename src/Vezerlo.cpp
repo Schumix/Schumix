@@ -625,12 +625,12 @@ string Vezerlo::htmldecode(string c)
 
 string Vezerlo::Reload(string nev)
 {
-	printf("\n");
 	transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
 
 	if(nev == "svninfo")
 	{
 		m_SvnInfo->Leallas();
+		delete m_SvnInfo;
 		Log.Debug("Vezerlo", "SvnInfo reload...");
 		m_SvnInfo = new SvnInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
 		return "SvnInfo ujraindult.";
@@ -638,6 +638,7 @@ string Vezerlo::Reload(string nev)
 	else if(nev == "gitinfo")
 	{
 		m_GitInfo->Leallas();
+		delete m_GitInfo;
 		Log.Debug("Vezerlo", "GitInfo reload...");
 		m_GitInfo = new GitInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
 		return "GitInfo ujraindult.";
@@ -645,6 +646,7 @@ string Vezerlo::Reload(string nev)
 	else if(nev == "hginfo")
 	{
 		m_HgInfo->Leallas();
+		delete m_HgInfo;
 		Log.Debug("Vezerlo", "HgInfo reload...");
 		m_HgInfo = new HgInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
 		return "HgInfo ujraindult.";
@@ -652,6 +654,7 @@ string Vezerlo::Reload(string nev)
 	else if(nev == "console")
 	{
 		m_Console->Leallas();
+		delete m_Console;
 		Log.Debug("Vezerlo", "Console reload...");
 		m_Console = new Console(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
 		return "Console ujraindult.";
@@ -659,6 +662,7 @@ string Vezerlo::Reload(string nev)
 	else if(nev == "ircsession")
 	{
 		sIRCSession.Leallas();
+		delete IRCSession::getSingletonPtr();
 		Log.Debug("Vezerlo", "IRCSession reload...");
 		m_IRCSession = new IRCSession(m_server, m_port, _mysql[0], _mysql[1], _mysql[2], _mysql[3]);
 		return "IRCSession ujraindult.";
@@ -666,10 +670,15 @@ string Vezerlo::Reload(string nev)
 	else if(nev == "all")
 	{
 		m_SvnInfo->Leallas();
+		delete m_SvnInfo;
 		m_GitInfo->Leallas();
+		delete m_GitInfo;
 		m_HgInfo->Leallas();
+		delete m_HgInfo;
 		m_Console->Leallas();
+		delete m_Console;
 		sIRCSession.Leallas();
+		delete IRCSession::getSingletonPtr();
 
 		Log.Debug("Vezerlo", "SvnInfo reload...");
 		m_SvnInfo = new SvnInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
@@ -698,10 +707,15 @@ void Vezerlo::Leallas()
 
 	Uptime();
 	m_SvnInfo->Leallas();
+	delete m_SvnInfo;
 	m_GitInfo->Leallas();
+	delete m_GitInfo;
 	m_HgInfo->Leallas();
+	delete m_HgInfo;
 	m_Console->Leallas();
+	delete m_Console;
 	sIRCSession.Leallas();
+	delete IRCSession::getSingletonPtr();
 
 	Log.Success("Vezerlo", "Leallas befejezodot.");
 }

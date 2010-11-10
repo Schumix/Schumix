@@ -196,7 +196,7 @@
     <ClInclude Include="..\..\src\shared\Database\QueryResult.h" />
     <ClInclude Include="..\..\src\shared\dirent.h" />
     <ClInclude Include="..\..\src\shared\Log.h" />
-    <ClInclude Include="..\..\src\shared\Network\SimpleSocket.h" />
+    <ClInclude Include="..\..\src\shared\Network\Socket.h" />
     <ClInclude Include="..\..\src\shared\Network\SocketMgr.h" />
     <ClInclude Include="..\..\src\shared\Network\SocketOps.h" />
     <ClInclude Include="..\..\src\shared\Platforms.h" />
@@ -240,7 +240,7 @@
     <ClCompile Include="..\..\src\shared\Config\Config.cpp" />
     <ClCompile Include="..\..\src\shared\Database\MySQLConnection.cpp" />
     <ClCompile Include="..\..\src\shared\Database\QueryResult.cpp" />
-    <ClCompile Include="..\..\src\shared\Network\SimpleSocket.cpp" />
+    <ClCompile Include="..\..\src\shared\Network\Socket.cpp" />
     <ClCompile Include="..\..\src\shared\Network\SocketMgr.cpp" />
     <ClCompile Include="..\..\src\shared\Network\SocketOpsLinux.cpp" />
     <ClCompile Include="..\..\src\shared\Network\SocketOpsWin32.cpp" />

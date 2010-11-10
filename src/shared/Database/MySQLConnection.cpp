@@ -24,7 +24,7 @@ MySQLConnection::MySQLConnection(string host, string user, string password)
 {
 	sql_error = false;
 	handle = mysql_init(NULL);
-	MYSQL* temp = mysql_real_connect(handle, host.c_str(), user.c_str(), password.c_str(), "", 3306, "", 0);
+	MYSQL* temp = mysql_real_connect(handle, host.c_str(), user.c_str(), password.c_str(), "", 3306, "", NULL);
 	if(temp == NULL)
 	{
 		Log.Error("MySQL", "Error connecting to database on %s", host.c_str());
@@ -40,6 +40,10 @@ MySQLConnection::MySQLConnection(string host, string user, string password)
 
 MySQLConnection::~MySQLConnection()
 {
+#ifdef _DEBUG_MOD
+	Log.Notice("MySQLConnection", "~MySQLConnection()");
+#endif
+
 	if(handle)
 		mysql_close(handle);
 }
@@ -61,7 +65,7 @@ void MySQLConnection::Execute(string query)
 		if(errnom == 2006 || errnom == 2008 || errnom == 2013 || errnom == 2055)
 		{
 			handle = mysql_init(NULL);
-			mysql_real_connect(handle, m_Host.c_str(), m_User.c_str(), m_Password.c_str(), "", 3306, "", 0);
+			mysql_real_connect(handle, m_Host.c_str(), m_User.c_str(), m_Password.c_str(), "", 3306, "", NULL);
 			if(!handle)
 				return;
 
@@ -106,7 +110,7 @@ QueryResultPointer MySQLConnection::Query(const char * query, ...)
 	uint32 uRows = cast_uint32(mysql_affected_rows(handle));
 	uint32 uFields = cast_uint32(mysql_field_count(handle));
 
-	if(uRows == 0 || uFields == 0 || pRes == 0)
+	if(uRows == NULL || uFields == NULL || pRes == NULL)
 	{
 		if(pRes != NULL)
 			mysql_free_result(pRes);
@@ -124,7 +128,7 @@ string MySQLConnection::EscapeString(string Escape)
 {
 	char a2[16384] = {0};
 	const char* ret;
-	if(mysql_real_escape_string(handle, a2, Escape.c_str(), (unsigned long)Escape.length()) == 0)
+	if(mysql_real_escape_string(handle, a2, Escape.c_str(), (unsigned long)Escape.length()) == NULL)
 		ret = Escape.c_str();
 	else
 		ret = a2;

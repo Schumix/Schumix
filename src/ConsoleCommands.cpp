@@ -125,8 +125,7 @@ bool Console::ConsoleCommands(char* adat)
 
 		if(res[2] == INFO)
 		{
-			string be;
-			string ki;
+			string be, ki;
 
 			QueryResultPointer db = m_SQLConn->Query("SELECT funkcio_nev, funkcio_status FROM schumix");
 			if(db)

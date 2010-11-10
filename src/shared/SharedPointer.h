@@ -20,18 +20,18 @@
 #ifndef SHARED_PTR_WRAPPER
 #define SHARED_PTR_WRAPPER
 
-class SimpleSocket;
+class Socket;
 class MySQLConnection;
 class QueryResult;
 struct ASyncQuery;
 
-typedef boost::shared_ptr<SimpleSocket> SimpleSocketPointer;
+typedef boost::shared_ptr<Socket> SocketPointer;
 typedef boost::shared_ptr<MySQLConnection> MySQLConnectionPointer;
 typedef boost::shared_ptr<QueryResult> QueryResultPointer;
 typedef boost::shared_ptr<ASyncQuery> ASyncQueryPointer;
 
 //#define NULLIRC						boost::shared_ptr<IRCSession>()
-#define NULLSSO							boost::shared_ptr<SimpleSocket>()
+#define NULLSSO							boost::shared_ptr<Socket>()
 //#define NULLSMGR						boost::shared_ptr<SocketMgr>()
 #define NULLMSQL						boost::shared_ptr<MySQLConnection>()
 #define NULLQRL							boost::shared_ptr<QueryResult>()

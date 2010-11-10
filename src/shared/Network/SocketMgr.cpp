@@ -38,14 +38,14 @@ Thread_void SocketMgr::RunUpdateProc(void* smg)
 	return NULL;
 }
 
-void SocketMgr::AddSocket(SimpleSocketPointer pSocket)
+void SocketMgr::AddSocket(SocketPointer pSocket)
 {
 	m_mutex.Acquire();
 	m_sockets.insert(pSocket);
 	m_mutex.Release();
 }
 
-void SocketMgr::RemoveSocket(SimpleSocketPointer pSocket)
+void SocketMgr::RemoveSocket(SocketPointer pSocket)
 {
 	m_mutex.Acquire();
 	m_sockets.erase(pSocket);
@@ -57,8 +57,8 @@ void SocketMgr::Update()
 	fd_set read_set;
 	fd_set write_set;
 	fd_set exception_set;
-	set<SimpleSocketPointer>::iterator itr;
-	SimpleSocketPointer s;
+	set<SocketPointer>::iterator itr;
+	SocketPointer s;
 	int res;
 	int max_fd = NULL;
 	char buffer[65000];
@@ -69,9 +69,9 @@ void SocketMgr::Update()
 	
 	Log.Success("SocketMgr", "SocketMgr elindult.");
 
-	while(sSimpleSocket.Running())
+	while(sSocket.Running())
 	{
-		if(!sSimpleSocket.Running())
+		if(!sSocket.Running())
 			break;
 
 		FD_ZERO(&read_set);

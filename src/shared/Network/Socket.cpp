@@ -20,9 +20,9 @@
 
 #include "../../StdAfx.h"
 
-initialiseSingleton(SimpleSocket);
+initialiseSingleton(Socket);
 
-SimpleSocket::SimpleSocket()
+Socket::Socket()
 {
 	m_fd = NULL;
 	m_sendCount = NULL;
@@ -30,14 +30,14 @@ SimpleSocket::SimpleSocket()
 	m_lastSendTime = time(NULL);
 }
 
-SimpleSocket::~SimpleSocket()
+Socket::~Socket()
 {
 #ifdef _DEBUG_MOD
-	Log.Notice("SimpleSocket", "~SimpleSocket()");
+	Log.Notice("Socket", "~Socket()");
 #endif
 }
 
-void SimpleSocket::UpdateQueue()
+void Socket::UpdateQueue()
 {
 	time_t nt = time(NULL);
 	uint32 c = 0;
@@ -60,14 +60,14 @@ void SimpleSocket::UpdateQueue()
 	m_sendCount = c;
 }
 
-void SimpleSocket::SendLine(string line)
+void Socket::SendLine(string line)
 {
 	m_buffer_mutex.Acquire();
 	m_outBuf.append(line.c_str(), line.length());
 	m_buffer_mutex.Release();
 }
 
-void SimpleSocket::SendForcedLine(string line)
+void Socket::SendForcedLine(string line)
 {
 	if(m_sendCount >= m_sendPerPeriod)
 	{
@@ -81,7 +81,7 @@ void SimpleSocket::SendForcedLine(string line)
 	m_sendCount++;
 }
 
-bool SimpleSocket::HasLine()
+bool Socket::HasLine()
 {
 	bool ret = false;
 
@@ -93,7 +93,7 @@ bool SimpleSocket::HasLine()
 	return ret;
 }
 
-string SimpleSocket::GetLine()
+string Socket::GetLine()
 {
 	// can probably be optimized /lazy
 
@@ -117,7 +117,7 @@ string SimpleSocket::GetLine()
 	return ret;
 }
 
-bool SimpleSocket::Connect(string host, uint32 port)
+bool Socket::Connect(string host, uint32 port)
 {
 	if(m_fd) // We already have an existing socket
 		return false;
@@ -144,18 +144,18 @@ bool SimpleSocket::Connect(string host, uint32 port)
 	SocketOps::Blocking(m_fd);
 
 	pSocketMgr = new SocketMgr();
-	pSocketMgr->AddSocket(cast_default(SimpleSocketPointer, shared_from_this()));
+	pSocketMgr->AddSocket(cast_default(SocketPointer, shared_from_this()));
 	m_running = true;
 
 	return true;
 }
 
-void SimpleSocket::Disconnect()
+void Socket::Disconnect()
 {
 	SocketOps::CloseSocket(m_fd);
 	m_fd = NULL;
 
-	pSocketMgr->RemoveSocket(cast_default(SimpleSocketPointer, shared_from_this()));
+	pSocketMgr->RemoveSocket(cast_default(SocketPointer, shared_from_this()));
 	m_running = false;
 	Sleep(1500);
 }
