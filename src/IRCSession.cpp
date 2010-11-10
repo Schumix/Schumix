@@ -271,7 +271,7 @@ void IRCSession::ReConnect()
 				}
 			}
 
-			Sleep(10*1000);
+			Sleep(15*1000);
 		}
 		else
 			Sleep(100);
