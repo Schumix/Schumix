@@ -81,6 +81,7 @@ Vezerlo::Vezerlo()
 
 	// delete pid fájl
 	remove(pidfajl.c_str());
+	delete this;
 }
 
 Vezerlo::~Vezerlo()

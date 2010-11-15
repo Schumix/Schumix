@@ -22,7 +22,7 @@
 bool Console::ConsoleCommands(char* adat)
 {
 	string info = string(adat);
-	uint32 szokoz = info.find("\n");
+	int szokoz = info.find("\n");
 	string iras = info.substr(0, szokoz);
 
 	vector<string> res(1);
@@ -119,17 +119,18 @@ bool Console::ConsoleCommands(char* adat)
 	{
 		if(res.size() < 3)
 		{
+			Log.Notice("Console", "Nincs megadva az 1. parameter!");
 			res.clear();
 			return false;
 		}
 
 		if(res[2] == INFO)
 		{
-			string be, ki;
-
 			QueryResultPointer db = m_SQLConn->Query("SELECT funkcio_nev, funkcio_status FROM schumix");
 			if(db)
 			{
+				string be, ki;
+
 				do 
 				{
 					string nev = db->Fetch()[0].GetString();
@@ -140,15 +141,18 @@ bool Console::ConsoleCommands(char* adat)
 					else
 						ki += nev + " ";
 				} while(db->NextRow());
-			}
 
-			Log.Notice("Console", "Bekapcsolva: %s", be.c_str());
-			Log.Notice("Console", "Kikapcsolva: %s", ki.c_str());
+				Log.Notice("Console", "Bekapcsolva: %s", be.c_str());
+				Log.Notice("Console", "Kikapcsolva: %s", ki.c_str());
+			}
+			else
+				Log.Notice("Console", "Hibas lekerdezes!");
 		}
 		else
 		{
 			if(res.size() < 4)
 			{
+				Log.Notice("Console", "Nincs a funkcio nev megadva!");
 				res.clear();
 				return false;
 			}
@@ -171,6 +175,7 @@ bool Console::ConsoleCommands(char* adat)
 	{
 		if(res.size() < 3)
 		{
+			Log.Notice("Console", "Nincs parameter!");
 			res.clear();
 			return false;
 		}
@@ -185,6 +190,7 @@ bool Console::ConsoleCommands(char* adat)
 	{
 		if(res.size() < 3)
 		{
+			Log.Notice("Console", "Nincs parameter!");
 			res.clear();
 			return false;
 		}
@@ -200,6 +206,7 @@ bool Console::ConsoleCommands(char* adat)
 	{
 		if(res.size() < 3)
 		{
+			Log.Notice("Console", "Parancsok: help | lista | add | del");
 			res.clear();
 			return false;
 		}
@@ -217,6 +224,7 @@ bool Console::ConsoleCommands(char* adat)
 		{
 			if(res.size() < 4)
 			{
+				Log.Notice("Console", "Nincs nev megadva!");
 				res.clear();
 				return false;
 			}
@@ -227,6 +235,8 @@ bool Console::ConsoleCommands(char* adat)
 			QueryResultPointer db = m_SQLConn->Query("SELECT flag FROM adminok WHERE nev = '%s'", res[3].c_str());
 			if(db)
 				flag = cast_int(db->Fetch()[0].GetUInt8());
+			else
+				flag = -1;
 
 			if(flag == Operator)
 				Log.Notice("Console", "Jelenleg Operator.");
@@ -235,23 +245,25 @@ bool Console::ConsoleCommands(char* adat)
 		}
 		else if(res[2] == "lista")
 		{
-			string adminok;
 			QueryResultPointer db = m_SQLConn->Query("SELECT nev FROM adminok");
 			if(db)
 			{
+				string adminok;
+
 				do
 				{
 					string nev = db->Fetch()[0].GetString();
 					adminok += ", " + nev;
 				} while(db->NextRow());
-			}
 
-			Log.Notice("Console", "Adminok: %s", adminok.substr(2).c_str());
+				Log.Notice("Console", "Adminok: %s", adminok.substr(2).c_str());
+			}
 		}
 		else if(res[2] == added)
 		{
 			if(res.size() < 4)
 			{
+				Log.Notice("Console", "Nincs nev megadva!");
 				res.clear();
 				return false;
 			}
@@ -287,6 +299,7 @@ bool Console::ConsoleCommands(char* adat)
 		{
 			if(res.size() < 4)
 			{
+				Log.Notice("Console", "Nincs nev megadva!");
 				res.clear();
 				return false;
 			}
@@ -299,8 +312,16 @@ bool Console::ConsoleCommands(char* adat)
 		}
 		else if(res[2] == "rang")
 		{
+			if(res.size() < 4)
+			{
+				Log.Notice("Console", "Nincs nev megadva!");
+				res.clear();
+				return false;
+			}
+
 			if(res.size() < 5)
 			{
+				Log.Notice("Console", "Nincs rang megadva!");
 				res.clear();
 				return false;
 			}
@@ -320,8 +341,6 @@ bool Console::ConsoleCommands(char* adat)
 			else
 				Log.Notice("Console", "Hibas rang!");
 		}
-		else
-			Log.Notice("Console", "Parancsok: help | lista | add | del");
 
 		res.clear();
 		return true;
@@ -331,6 +350,7 @@ bool Console::ConsoleCommands(char* adat)
 	{
 		if(res.size() < 3)
 		{
+			Log.Notice("Console", "Nincs parameter!");
 			res.clear();
 			return false;
 		}

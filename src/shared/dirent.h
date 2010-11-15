@@ -161,16 +161,16 @@ typedef struct DIR
 } DIR;
 
 /* Forward declarations */
-static DIR *opendir(const char* dirname);
+static DIR* opendir(const char* dirname);
 static struct dirent* readdir(DIR* dirp);
 static int closedir(DIR* dirp);
 static void rewinddir(DIR* dirp);
 
 /* Use the new safe string functions introduced in Visual Studio 2005 */
 #if defined(_MSC_VER) && _MSC_VER >= 1400
-# define DIRENT_STRNCPY(dest, src, size) strncpy_s((dest), (size), (src), _TRUNCATE)
+#define DIRENT_STRNCPY(dest, src, size) strncpy_s((dest), (size), (src), _TRUNCATE)
 #else
-# define DIRENT_STRNCPY(dest, src, size) strncpy((dest), (src), (size))
+#define DIRENT_STRNCPY(dest, src, size) strncpy((dest), (src), (size))
 #endif
 
 /* Set errno variable */
@@ -218,7 +218,7 @@ static DIR* opendir(const char* dirname)
 
 			/* append the search pattern "\\*\0" to the directory name */
 			p = strchr (dirp->patt, '\0');
-			if(dirp->patt < p  &&  *(p-1) != '\\'  &&  *(p-1) != ':')
+			if(dirp->patt < p && *(p-1) != '\\' && *(p-1) != ':')
 				*p++ = '\\';
 
 			*p++ = '*';
@@ -356,7 +356,7 @@ static void rewinddir(DIR* dirp)
 	{
 		/* release search handle */
 		if(dirp->search_handle != INVALID_HANDLE_VALUE)
-			FindClose (dirp->search_handle);
+			FindClose(dirp->search_handle);
 
 		/* open new search handle and retrieve the first entry */
 		dirp->search_handle = FindFirstFileA(dirp->patt, &dirp->find_data);

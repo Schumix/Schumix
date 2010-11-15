@@ -176,7 +176,7 @@ void IRCSession::HJoin(IRCMessage& recvData)
 			SendChatMessage(PRIVMSG, channel.c_str(), "Jó estét %s", recvData.source_nick.c_str());
 		else
 		{
-			if(Admin(recvData.source_nick) == true)
+			if(Admin(recvData.source_nick))
 				SendChatMessage(PRIVMSG, channel.c_str(), "Üdv fõnök");
 			else
 				SendChatMessage(PRIVMSG, channel.c_str(), "%s %s", Koszones.c_str(), recvData.source_nick.c_str());
@@ -267,22 +267,19 @@ void IRCSession::ReJoin(IRCMessage& recvData)
 					continue;
 				else
 				{
-					if(res[i] == REJOIN)
+					if(res[i] == REJOIN && res[i+1] == bekapcsol)
 					{
-						if(res[i+1] == bekapcsol)
+						map<string, string>::iterator itr = m_ChannelLista.begin();
+						for(; itr != m_ChannelLista.end(); itr++)
 						{
-							map<string, string>::iterator itr = m_ChannelLista.begin();
-							for(; itr != m_ChannelLista.end(); itr++)
-							{
-								string join = itr->first;
-								string join1 = itr->first;
+							string join = itr->first;
+							string join1 = itr->first;
 
-								if(itr->second != "")
-									join += " " + itr->second;
+							if(itr->second != "")
+								join += " " + itr->second;
 
-								if(join1 == szoba)
-									WriteLine("JOIN %s", join.c_str());
-							}
+							if(join1 == szoba)
+								WriteLine("JOIN %s", join.c_str());
 						}
 					}
 				}
@@ -566,8 +563,7 @@ string IRCSession::ChannelFunkciok(string nev, string status, string channel)
 
 string IRCSession::ChannelFunkciokInfo(string channel)
 {
-	string be;
-	string ki;
+	string be, ki;
 
 	vector<string>::iterator it;
 	for(it = m_ChannelFunkcio.begin(); it < m_ChannelFunkcio.end(); it++)

@@ -362,75 +362,62 @@ int IRCSession::writer(char* data, size_t size, size_t nmemb, string *buffer)
 
 bool IRCSession::Admin(string nick)
 {
-	string admin;
 	transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
 
-	QueryResultPointer db = m_SQLConn->Query("SELECT nev FROM adminok WHERE nev = '%s'", nick.c_str());
+	QueryResultPointer db = m_SQLConn->Query("SELECT * FROM adminok WHERE nev = '%s'", nick.c_str());
 	if(db)
-		admin = db->Fetch()[0].GetString();
+		return true;
 
-	if(nick != admin)
-		return false;
-
-	return true;
+	return false;
 }
 
 bool IRCSession::Admin(string nick, AdminFlag Flag)
 {
-	string admin;
-	int flag;
 	transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
 
-	QueryResultPointer db = m_SQLConn->Query("SELECT nev, flag FROM adminok WHERE nev = '%s'", nick.c_str());
+	QueryResultPointer db = m_SQLConn->Query("SELECT flag FROM adminok WHERE nev = '%s'", nick.c_str());
 	if(db)
 	{
-		admin = db->Fetch()[0].GetString();
-		flag = cast_int(db->Fetch()[1].GetUInt8());
+		int flag = cast_int(db->Fetch()[0].GetUInt8());
+
+		if(Flag != flag)
+			return false;
+
+		return true;
 	}
 
-	if(nick != admin)
-		return false;
-
-	if(Flag != flag)
-		return false;
-
-	return true;
+	return false;
 }
 
 bool IRCSession::Admin(string nick, string nick_ip, AdminFlag Flag)
 {
-	string admin;
-	string ip;
-	int flag;
 	transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
 
-	QueryResultPointer db = m_SQLConn->Query("SELECT nev, ip, flag FROM adminok WHERE nev = '%s'", nick.c_str());
+	QueryResultPointer db = m_SQLConn->Query("SELECT ip, flag FROM adminok WHERE nev = '%s'", nick.c_str());
 	if(db)
 	{
-		admin = db->Fetch()[0].GetString();
-		ip = db->Fetch()[1].GetString();
-		flag = cast_int(db->Fetch()[2].GetUInt8());
+		string ip = db->Fetch()[0].GetString();
+
+		if(nick_ip != ip)
+			return false;
+
+		int flag = cast_int(db->Fetch()[1].GetUInt8());
+
+		if(flag == 1 && Flag == NULL)
+			return true;
+
+		if(Flag != flag)
+			return false;
+
+		return true;
 	}
 
-	if(nick != admin)
-		return false;
-
-	if(nick_ip != ip)
-		return false;
-
-	if(flag == 1 && Flag == NULL)
-		return true;
-
-	if(Flag != flag)
-		return false;
-
-	return true;
+	return false;
 }
 
 string IRCSession::randomString(int length, bool letters, bool numbers, bool symbols)
 {
-	string str;
-	string allPossible;
+	string str, allPossible;
 
 	if(letters == true)
 	{

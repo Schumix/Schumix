@@ -69,6 +69,8 @@ void IRCSession::Admin(IRCMessage& recvData)
 		QueryResultPointer db = m_SQLConn->Query("SELECT flag FROM adminok WHERE nev = '%s'", nev.c_str());
 		if(db)
 			flag = cast_int(db->Fetch()[0].GetUInt8());
+		else
+			flag = -1;
 
 		if(flag == Operator)
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Jelenleg Operátor vagy.");
@@ -315,7 +317,7 @@ void IRCSession::Ujjelszo(IRCMessage& recvData)
 			gg >> sql_hash;
 
 			QueryResultPointer db = m_SQLConn->Query("UPDATE adminok SET jelszo = '%s' WHERE nev = '%s'", sql_hash.c_str(), Nev.c_str());
-			SendChatMessage(PRIVMSG, Nev.c_str(), "Jelszó sikereset meg lett változtatva erre: %s", ujjelszo.c_str());
+			SendChatMessage(PRIVMSG, Nev.c_str(), "Jelszó sikeresen meg lett változtatva erre: %s", ujjelszo.c_str());
 		}
 		else
 			SendChatMessage(PRIVMSG, Nev.c_str(), "A mostani jelszó nem egyezik, modósitás megtagadva");
@@ -1390,6 +1392,7 @@ void IRCSession::Git(IRCMessage& recvData)
 			}
 
 			if(res.size() < 5)
+
 			{
 				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs a channel név megadva!");
 				res.clear();

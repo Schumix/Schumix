@@ -116,16 +116,16 @@ uint32 ahash(string& str)
 	return ahash(str.c_str());
 }
 
-bool ConfigFile::SetSource(const char *file, bool ignorecase)
+bool ConfigFile::SetSource(const char* file, bool ignorecase)
 {
 	/* wipe any existing settings. */
 	m_settings.clear();
 
 	/* open the file */
-	if(file != 0)
+	if(file != NULL)
 	{
-		FILE * f = fopen(file, "r");
-		char * buf;
+		FILE* f = fopen(file, "r");
+		char* buf;
 		int length;
 		if(!f)
 		{
@@ -142,7 +142,7 @@ bool ConfigFile::SetSource(const char *file, bool ignorecase)
 		fread(buf, length, 1, f);
 		buf[length] = '\0';
 		string buffer = string(buf);
-		delete [] buf;
+		delete[] buf;
 		
 		/* close the file, it is no longer needed */
 		fclose(f);
@@ -407,7 +407,7 @@ ConfigSetting* ConfigFile::GetSetting(const char * Block, const char * Setting)
 	return 0;
 }
 
-bool ConfigFile::GetString(const char * block, const char* name, std::string *value)
+bool ConfigFile::GetString(const char * block, const char* name, std::string* value)
 {
 	ConfigSetting* Setting = GetSetting(block, name);
 	if(Setting == 0)
@@ -425,7 +425,7 @@ string ConfigFile::GetStringDefault(const char * block, const char* name, const 
 }
 
 
-bool ConfigFile::GetBool(const char * block, const char* name, bool *value)
+bool ConfigFile::GetBool(const char * block, const char* name, bool* value)
 {
 	ConfigSetting* Setting = GetSetting(block, name);
 	if(Setting == 0)
@@ -452,7 +452,7 @@ bool ConfigFile::GetInt(const char * block, const char* name, int *value)
 	return true;
 }
 
-bool ConfigFile::GetFloat(const char * block, const char* name, float *value)
+bool ConfigFile::GetFloat(const char * block, const char* name, float* value)
 {
 	ConfigSetting* Setting = GetSetting(block, name);
 	if(Setting == 0)
