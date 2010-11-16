@@ -64,6 +64,8 @@ Vezerlo::Vezerlo()
 		fclose(f);
 	}
 
+	_HookSignals();
+
 	Log.Debug("Vezerlo", "SvnInfo indul...");
 	m_SvnInfo = new SvnInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
 
@@ -78,6 +80,8 @@ Vezerlo::Vezerlo()
 
 	Log.Debug("Vezerlo", "IRCSession indul...");
 	m_IRCSession = new IRCSession(m_server, m_port, _mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+
+	_UnhookSignals();
 
 	// delete pid fájl
 	remove(pidfajl.c_str());
@@ -104,6 +108,85 @@ Vezerlo::~Vezerlo()
 
 	if(m_IRCSession)
 		delete m_IRCSession;
+}
+
+void _OnSignal(int s)
+{
+	switch(s)
+	{
+#if PLATFORM == PLATFORM_LINUX
+	case SIGHUP:
+		break;
+#endif
+	case SIGINT:
+	case SIGTERM:
+	case SIGABRT:
+#if PLATFORM == PLATFORM_WINDOWS
+	case SIGBREAK:
+#endif
+		remove(format("%s.pid", Elnevezes).c_str());
+		sVezerlo.Leallas();
+		break;
+	}
+
+	signal(s, _OnSignal);
+}
+
+#if PLATFORM == PLATFORM_LINUX
+void segfault_handler(int c)
+{
+	Log.Warning("Crash", "Segfault handler elindult...");
+
+	try
+	{
+		if(Vezerlo::getSingletonPtr() != 0)
+		{
+			Log.Notice("Crash", "Uptime mentese elindult!");
+			sVezerlo.Uptime();
+			Log.Notice("Crash", "Mentes kesz.");
+		}
+	}
+	catch(...)
+	{
+		Log.Error("Crash", "Kivetel keletkezet mentes kozben ezert nincs mentes!");
+	}
+
+	Log.Notice("Crash", "Program leallt.");
+	abort();
+}
+#endif
+
+void Vezerlo::_HookSignals()
+{
+	Log.Notice("Vezerlo","Hooking signals...");
+	signal(SIGINT, _OnSignal);
+	signal(SIGTERM, _OnSignal);
+	signal(SIGABRT, _OnSignal);
+#if PLATFORM == PLATFORM_WINDOWS
+	signal(SIGBREAK, _OnSignal);
+#else
+	signal(SIGHUP, _OnSignal);
+	signal(SIGUSR1, _OnSignal);
+
+	// crash handler
+	signal(SIGSEGV, segfault_handler);
+	signal(SIGFPE, segfault_handler);
+	signal(SIGILL, segfault_handler);
+	signal(SIGBUS, segfault_handler);
+#endif
+}
+
+void Vezerlo::_UnhookSignals()
+{
+	Log.Notice("Vezerlo","Unhooking signals...");
+	signal(SIGINT, 0);
+	signal(SIGTERM, 0);
+	signal(SIGABRT, 0);
+#if PLATFORM == PLATFORM_WINDOWS
+	signal(SIGBREAK, 0);
+#else
+	signal(SIGHUP, 0);
+#endif
 }
 
 void Vezerlo::split(string str, string delim, vector<string>& results)
@@ -301,6 +384,7 @@ string Vezerlo::urlencode(const string &c)
 	for(int i = 0; i < max; i++)
 	{
 		if(c[i] == 'á')
+
 		{
 			escaped.append("%C3%A1");
 			continue;

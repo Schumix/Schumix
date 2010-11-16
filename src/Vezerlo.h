@@ -33,6 +33,7 @@ public:
 	int Perc();
 
 	void Leallas();
+	void Uptime();
 	string Reload(string nev);
 	string GetUptimeString();
 
@@ -53,7 +54,6 @@ protected:
 	time_t UNIXTIME;
 	uint32 m_StartTime;
 
-	void Uptime();
 	string m_server;
 	uint32 m_port;
 
@@ -77,6 +77,9 @@ private:
 
 	// Mysql kapcsolat.
 	MySQLConnectionPointer m_SQLConn;
+
+	void _HookSignals();
+	void _UnhookSignals();
 };
 
 #define sVezerlo Vezerlo::getSingleton()

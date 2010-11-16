@@ -36,6 +36,7 @@
 #include <queue>
 #include <set>
 #include <cstdarg>
+#include <signal.h>
 
 using namespace std;
 using std::string;
