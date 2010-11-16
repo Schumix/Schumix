@@ -118,6 +118,9 @@
     <ClInclude Include="..\..\src\shared\Common.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\shared\format.h">
+      <Filter>Common</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\shared\Config\Config.h">
       <Filter>Config</Filter>
     </ClInclude>

@@ -228,40 +228,38 @@ int Vezerlo::Perc()
 
 string Vezerlo::GetUptimeString()
 {
-	char str[300];
 	UNIXTIME = time(NULL);
 	time_t pTime = cast_default(time_t, UNIXTIME) - m_StartTime;
 	tm* tmv = gmtime(&pTime);
 
-	snprintf(str, 300, "%u nap, %u óra, %u perc, %u másodperc.", tmv->tm_yday, tmv->tm_hour, tmv->tm_min, tmv->tm_sec);
-	return string(str);
+	return format("%u nap, %u óra, %u perc, %u másodperc.", tmv->tm_yday, tmv->tm_hour, tmv->tm_min, tmv->tm_sec);
 }
 
 void Vezerlo::Uptime()
 {
-	char datum[500];
+	string datum;
 	int honap = Honap();
 	int nap = Nap();
 
 	if(honap < 10)
 	{
 		if(nap < 10)
-			snprintf(datum, 500, "%i. 0%i. 0%i. %i:%i", Ev(), honap, nap, Ora(), Perc());
+			datum = format("%i. 0%i. 0%i. %i:%i", Ev(), honap, nap, Ora(), Perc());
 		else
-			snprintf(datum, 500, "%i. 0%i. %i. %i:%i", Ev(), honap, nap, Ora(), Perc());
+			datum = format("%i. 0%i. %i. %i:%i", Ev(), honap, nap, Ora(), Perc());
 	}
 	else
 	{
 		if(nap < 10)
-			snprintf(datum, 500, "%i. %i. 0%i. %i:%i", Ev(), honap, nap, Ora(), Perc());
+			datum = format("%i. %i. 0%i. %i:%i", Ev(), honap, nap, Ora(), Perc());
 		else
-			snprintf(datum, 500, "%i. %i. %i. %i:%i", Ev(), honap, nap, Ora(), Perc());
+			datum = format("%i. %i. %i. %i:%i", Ev(), honap, nap, Ora(), Perc());
 	}
 
 #if PLATFORM == PLATFORM_WINDOWS
-	m_SQLConn->Query("INSERT INTO `uptime`(datum, uptime, memory) VALUES ('%s', '%s', '%f MB')", datum, GetUptimeString().c_str(), MemoryInfo(GetCurrentProcessId()/1024)/1024);
+	m_SQLConn->Query("INSERT INTO `uptime`(datum, uptime, memory) VALUES ('%s', '%s', '%f MB')", datum.c_str(), GetUptimeString().c_str(), MemoryInfo(GetCurrentProcessId()/1024)/1024);
 #else
-	m_SQLConn->Query("INSERT INTO `uptime`(datum, uptime, memory) VALUES ('%s', '%s', '%f MB')", datum, GetUptimeString().c_str(), MemoryInfo()/1000*0.3762);
+	m_SQLConn->Query("INSERT INTO `uptime`(datum, uptime, memory) VALUES ('%s', '%s', '%f MB')", datum.c_str(), GetUptimeString().c_str(), MemoryInfo()/1000*0.3762);
 #endif
 }
 

@@ -20,8 +20,8 @@
 #ifndef _CAST_H
 #define _CAST_H
 
-#define CAST(x, y) static_cast<x*>(y)
-#undef CAST
+//#define CAST(x, y) static_cast<x*>(y)
+//#undef CAST
 #define CAST(x, y) static_cast<x>(y)
 #define cast_int(cast) CAST(int, cast)
 #define cast_int8(cast) CAST(int8, cast)
@@ -32,6 +32,8 @@
 #define cast_uint32(cast) CAST(uint32, cast)
 #define cast_float(cast) CAST(int, cast)
 #define cast_char(cast) CAST(char, cast)
+#define cast_void(cast) CAST(void, cast)
+#define cast_double(cast) CAST(double, cast)
 #define cast_default(pointer, cast) CAST(pointer, cast)
 
 #endif

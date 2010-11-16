@@ -196,6 +196,7 @@
     <ClInclude Include="..\..\src\shared\Database\QueryResult.h" />
     <ClInclude Include="..\..\src\shared\dirent.h" />
     <ClInclude Include="..\..\src\shared\Log.h" />
+    <ClInclude Include="..\..\src\shared\format.h" />
     <ClInclude Include="..\..\src\shared\Network\Socket.h" />
     <ClInclude Include="..\..\src\shared\Network\SocketMgr.h" />
     <ClInclude Include="..\..\src\shared\Network\SocketOps.h" />

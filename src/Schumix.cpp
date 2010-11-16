@@ -45,15 +45,14 @@ int main()
 	Log.Notice("Config", "Config fajl betoltese...");
 
 	string config = string(Elnevezes) + ".conf";
-	string configfajl = "./" + config;
 
 	// Config fájl
-	if(!Config.MainConfig.SetSource(configfajl.c_str()))
+	if(!Config.MainConfig.SetSource(format("./%s", config.c_str()).c_str()))
 	{
 		Log.Error("Config", ">> %s", config.c_str());
 		new DefaultConfig(config);
 
-		if(Config.MainConfig.SetSource(configfajl.c_str()))
+		if(Config.MainConfig.SetSource(format("./%s", config.c_str()).c_str()))
 			Log.Success("Config", ">> Config adatbazis sikeresen betoltve.");
 		else
 		{

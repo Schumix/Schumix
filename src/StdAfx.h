@@ -58,6 +58,7 @@ using std::string;
 #include <Psapi.h>
 #include "shared/WinAPIExtensions.h"
 #include "shared/dirent.h"
+#include <assert>
 #else
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -67,6 +68,7 @@ using std::string;
 #include <netdb.h> 
 #include <unistd.h>
 #include <dirent.h>
+#include <assert.h>
 #endif
 
 #if PLATFORM == PLATFORM_WINDOWS
@@ -96,6 +98,7 @@ inline uint32 getMSTime()
 extern CLog Log;
 #include "shared/SharedPointer.h"
 #include "shared/Cast.h"
+#include "shared/format.h"
 #include "shared/Singleton.h"
 #include "shared/Config/Config.h"
 #include "DefaultConfig.h"

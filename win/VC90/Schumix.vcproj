@@ -630,6 +630,11 @@
 				RelativePath="..\..\src\shared\WinAPIExtensions.h"
 				>
 			</File>
+			<File
+
+				RelativePath="..\..\src\shared\format.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Config"

@@ -23,23 +23,15 @@ void IRCSession::Logfajl(IRCMessage& recvData)
 {
 	if(FSelect(LOG) == bekapcsol && FSelectChannel(LOG, recvData.target) == bekapcsol)
 	{
-		char* log = new char[5000];
-		snprintf(log, 5000, "[%i. %i. %i. %i:%i] <%s> %s\n", sVezerlo.Ev(), sVezerlo.Honap(), sVezerlo.Nap(), sVezerlo.Ora(), sVezerlo.Perc(), recvData.source_nick.c_str(), recvData.args.c_str());
-
-		char* fajl = new char[30];
-		snprintf(fajl, 30, "%s/%s.log", LogHelye, recvData.target.c_str());
-
-		FILE* LogSzoba = fopen(fajl, "a+");
+		FILE* LogSzoba = fopen(format("%s/%s.log", LogHelye, recvData.target.c_str()).c_str(), "a+");
 		if(!LogSzoba || LogSzoba == NULL)
 		{
 			Log.Error("Log", "Sikertelen olvasas.\n");
 			return;
 		}
 
-		fprintf(LogSzoba, "%s", log);
+		fprintf(LogSzoba, "[%i. %i. %i. %i:%i] <%s> %s\n", sVezerlo.Ev(), sVezerlo.Honap(), sVezerlo.Nap(), sVezerlo.Ora(), sVezerlo.Perc(), recvData.source_nick.c_str(), recvData.args.c_str());
 		fclose(LogSzoba);
-		delete[] log;
-		delete[] fajl;
 	}
 #ifdef _DEBUG_MOD
 	else
@@ -138,21 +130,17 @@ void IRCSession::Keres(IRCMessage& recvData)
 
 		string kiiras = sVezerlo.urlencode(alomany.substr(1));
 
-		char* eredmeny = new char[5000];
-		snprintf(eredmeny, 5000, "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&start=0&rsz=small&q=%s", kiiras.c_str());
-
 		m_Curl = curl_easy_init();
 		if(m_Curl)
 		{
 			string bufferdata;
 
-			curl_easy_setopt(m_Curl, CURLOPT_URL, eredmeny);
+			curl_easy_setopt(m_Curl, CURLOPT_URL, format("http://ajax.googleapis.com/ajax/services/search/web?v=1.0&start=0&rsz=small&q=%s", kiiras.c_str()).c_str());
 			curl_easy_setopt(m_Curl, CURLOPT_WRITEFUNCTION, IRCSession::writer);
 			curl_easy_setopt(m_Curl, CURLOPT_WRITEDATA, &bufferdata);
 			CURLcode result = curl_easy_perform(m_Curl);
 
 			curl_easy_cleanup(m_Curl);
-			delete[] eredmeny;
 
 			if(result == CURLE_OK)
 			{
@@ -222,22 +210,18 @@ void IRCSession::Forditas(IRCMessage& recvData)
 
 		string iras = sVezerlo.urlencode(alomany.substr(1));
 
-		char* eredmeny = new char[5000];
-		snprintf(eredmeny, 5000, "http://ajax.googleapis.com/ajax/services/language/translate?v=1.0&q=%s&langpair=%s", iras.c_str(), nyelv.c_str());
-
 		m_Curl = curl_easy_init();
 		if(m_Curl)
 		{
 			string bufferdata;
 
-			curl_easy_setopt(m_Curl, CURLOPT_URL, eredmeny);
+			curl_easy_setopt(m_Curl, CURLOPT_URL, format("http://ajax.googleapis.com/ajax/services/language/translate?v=1.0&q=%s&langpair=%s", iras.c_str(), nyelv.c_str()).c_str());
 			curl_easy_setopt(m_Curl, CURLOPT_WRITEFUNCTION, IRCSession::writer);
 			curl_easy_setopt(m_Curl, CURLOPT_WRITEDATA, &bufferdata);
 
 			CURLcode result = curl_easy_perform(m_Curl);
 
 			curl_easy_cleanup(m_Curl);
-			delete[] eredmeny;
 
 			if(result == CURLE_OK)
 			{
