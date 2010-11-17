@@ -316,7 +316,7 @@ void IRCSession::Ujjelszo(IRCMessage& recvData)
 			string sql_hash;
 			gg >> sql_hash;
 
-			QueryResultPointer db = m_SQLConn->Query("UPDATE adminok SET jelszo = '%s' WHERE nev = '%s'", sql_hash.c_str(), Nev.c_str());
+			m_SQLConn->Query("UPDATE adminok SET jelszo = '%s' WHERE nev = '%s'", sql_hash.c_str(), Nev.c_str());
 			SendChatMessage(PRIVMSG, Nev.c_str(), "Jelszó sikeresen meg lett változtatva erre: %s", ujjelszo.c_str());
 		}
 		else
@@ -354,7 +354,8 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel kezelés: %sfunkcio <be vagy ki> <funkcio név>", m_ParancsElojel.c_str());
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel kezelés máshonnét: %sfunkcio channel <channel név> <be vagy ki> <funkcio név>", m_ParancsElojel.c_str());
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Együtes kezelés: %sfunkcio all <be vagy ki> <funkcio név>", m_ParancsElojel.c_str());
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Update kezelése: %sfunkcio update", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "All update kezelése: %sfunkcio update all", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Update kezelése: %sfunkcio update <channel neve>", m_ParancsElojel.c_str());
 	}
 	else if(info == INFO)
 	{
@@ -397,21 +398,23 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 			else
 				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hibás lekérdezés!");
 		}
-
-		if(res.size() < 4)
+		else
 		{
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs a funkció név megadva!");
-			res.clear();
-			return;
-		}
+			if(res.size() < 4)
+			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs a funkció név megadva!");
+				res.clear();
+				return;
+			}
 
-		string status = res[2];
+			string status = res[2];
 
-		if(status == bekapcsol || status == kikapcsol)
-		{
-			string nev = res[3];
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s: %skapcsolva", nev.c_str(), status.c_str());
-			m_SQLConn->Query("UPDATE schumix SET funkcio_status = '%s' WHERE funkcio_nev = '%s'", status.c_str(), nev.c_str());
+			if(status == bekapcsol || status == kikapcsol)
+			{
+				string nev = res[3];
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s: %skapcsolva", nev.c_str(), status.c_str());
+				m_SQLConn->Query("UPDATE schumix SET funkcio_status = '%s' WHERE funkcio_nev = '%s'", status.c_str(), nev.c_str());
+			}
 		}
 	}
 	else if(info == "channel")
@@ -457,14 +460,30 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 	}
 	else if(info == update)
 	{
-		map<string, string>::iterator itr = m_ChannelLista.begin();
-		for(; itr != m_ChannelLista.end(); itr++)
+		if(res.size() < 3)
 		{
-			string szoba = itr->first;
-			m_SQLConn->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, szoba.c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs megadva az 1. paraméter!");
+			res.clear();
+			return;
 		}
 
-		ChannelFunkcioReload();
+		if(res[2] == "all")
+		{
+			map<string, string>::iterator itr = m_ChannelLista.begin();
+			for(; itr != m_ChannelLista.end(); itr++)
+			{
+				string szoba = itr->first;
+				m_SQLConn->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, szoba.c_str());
+			}
+
+			ChannelFunkcioReload();
+		}
+		else
+		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikeresen frissitve %s channel funkció.", res[2].c_str());
+			m_SQLConn->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, res[2].c_str());
+			ChannelFunkcioReload();
+		}
 	}
 	else
 	{
@@ -1390,6 +1409,7 @@ void IRCSession::Git(IRCMessage& recvData)
 				res.clear();
 				return;
 			}
+
 
 			if(res.size() < 5)
 

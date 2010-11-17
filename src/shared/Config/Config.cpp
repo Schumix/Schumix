@@ -46,6 +46,13 @@ void remove_all_spaces(string& str)
 		str.erase(off, 1);
 		off = str.find(" ");
 	}
+
+	off = str.find("\t");
+	while(off != string::npos)
+	{
+		str.erase(off, 1);
+		off = str.find("\t");
+	}
 }
 
 bool is_comment(string& str, bool * in_multiline_quote)
