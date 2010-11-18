@@ -32,6 +32,8 @@ public:
 	int Ora();
 	int Perc();
 
+	volatile bool m_crash;
+
 	void Leallas();
 	void Uptime();
 	string Reload(string nev);

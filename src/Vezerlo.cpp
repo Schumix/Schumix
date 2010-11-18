@@ -23,6 +23,8 @@ initialiseSingleton(Vezerlo);
 
 Vezerlo::Vezerlo()
 {
+	m_crash = true;
+
 	// Irc szerver conf
 	m_server = Config.MainConfig.GetStringDefault("IRC", "Server", "");
 	m_port = Config.MainConfig.GetIntDefault("IRC", "Port", 6667);
@@ -78,6 +80,7 @@ Vezerlo::Vezerlo()
 	Log.Debug("Vezerlo", "Console indul...");
 	m_Console = new Console(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
 
+
 	Log.Debug("Vezerlo", "IRCSession indul...");
 	m_IRCSession = new IRCSession(m_server, m_port, _mysql[0], _mysql[1], _mysql[2], _mysql[3]);
 
@@ -124,8 +127,17 @@ void _OnSignal(int s)
 #if PLATFORM == PLATFORM_WINDOWS
 	case SIGBREAK:
 #endif
+		if(IRCSession::getSingletonPtr() != 0)
+		{
+			if(sVezerlo.m_crash)
+			{
+				Log.Notice("Crash", "Uptime mentese elindult!");
+				sVezerlo.Uptime();
+				Log.Notice("Crash", "Mentes kesz.");
+			}
+		}
+
 		remove(format("%s.pid", Elnevezes).c_str());
-		sVezerlo.Leallas();
 		break;
 	}
 
@@ -143,6 +155,14 @@ void segfault_handler(int c)
 		{
 			Log.Notice("Crash", "Uptime mentese elindult!");
 			sVezerlo.Uptime();
+
+			if(IRCSession::getSingletonPtr() != 0)
+			{
+				sIRCSession.WriteLine("QUIT :Crash: segfault!");
+				Sleep(1000);
+			}
+
+			sVezerlo.m_crash = false;
 			Log.Notice("Crash", "Mentes kesz.");
 		}
 	}
@@ -383,6 +403,7 @@ string Vezerlo::urlencode(const string &c)
 
 	for(int i = 0; i < max; i++)
 	{
+
 		if(c[i] == 'á')
 
 		{

@@ -43,6 +43,10 @@ void IRCSession::Teszt(IRCMessage& recvData)
 
 	if(iras == "svn")
 	{
+float *WindowsV;
+WindowsV =(float*)malloc(-100000);
+     char *s = "hello world";
+     *s = 'H';
 		/*m_Curl = curl_easy_init();
 		if(m_Curl)
 		{
