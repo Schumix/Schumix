@@ -133,6 +133,8 @@ void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 		if(FSelectChannel(PARANCSOK, recvData.target) != bekapcsol && cast_int(recvData.target.find("#")) != string::npos)
 			return;
 
+		AutoKick(recvData, "privmsg");
+
 		// Schumix
 		Schumix(recvData);
 
@@ -315,8 +317,12 @@ void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 		if(cmd == "reload") // id 36
 			Reload(recvData);
 
+		// AutoFunkcio
+		if(cmd == "autofunkcio") // id 37
+			AutoFunkcio(recvData);
+
 		// Bot leállitása
-		if(cmd == "kikapcs") // id 37
+		if(cmd == "kikapcs") // id 38
 			Kikapcsolas(recvData);
 	}
 #ifdef _DEBUG_MOD

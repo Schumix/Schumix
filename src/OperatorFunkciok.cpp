@@ -29,12 +29,12 @@ void IRCSession::Admin(IRCMessage& recvData)
 		if(Admin(recvData.source_nick, Operator))
 		{
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Parancsok: %snick | %sjoin | %sleft | %skick | %smode", m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str());
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Parancsok: %sszinek | %sfunkcio | %ssznap | %schannel | %shozzaferes | %sujjelszo | %ssvn | %sgit | %shg | %shluzenet", m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Parancsok: %sszinek | %sfunkcio | %ssznap | %schannel | %shozzaferes | %sujjelszo | %ssvn | %sgit | %shg | %shluzenet | %sautofunkcio", m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str());
 		}
 		else if(Admin(recvData.source_nick, Administrator))
 		{
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Parancsok: %snick | %sjoin | %sleft | %skick | %smode", m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str());
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Parancsok: %sszinek | %sfunkcio | %skikapcs | %ssznap | %sszoba | %schannel | %shozzaferes | %sujjelszo | %ssvn | %sgit | %shg | %shluzenet | %sreload", m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Parancsok: %sszinek | %sfunkcio | %skikapcs | %ssznap | %sszoba | %schannel | %shozzaferes | %sujjelszo | %ssvn | %sgit | %shg | %shluzenet | %sreload | %sautofunkcio", m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str());
 		}
 
 		return;
@@ -464,7 +464,7 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 		if(res.size() < 3)
 		{
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikeresen frissitve %s channel funkciók.", recvData.target.c_str());
-			m_SQLConn->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, recvData.target.c_str());
+			m_SQLConn->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, KICK, recvData.target.c_str());
 			ChannelFunkcioReload();
 
 			res.clear();
@@ -477,7 +477,7 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 			for(; itr != m_ChannelLista.end(); itr++)
 			{
 				string szoba = itr->first;
-				m_SQLConn->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, szoba.c_str());
+				m_SQLConn->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, KICK, szoba.c_str());
 			}
 
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikeresen frissitve minden channelen a funkciók.");
@@ -486,7 +486,7 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 		else
 		{
 			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikeresen frissitve %s channel funkciók.", res[2].c_str());
-			m_SQLConn->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, res[2].c_str());
+			m_SQLConn->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, KICK, res[2].c_str());
 			ChannelFunkcioReload();
 		}
 	}
@@ -1698,4 +1698,116 @@ void IRCSession::Hg(IRCMessage& recvData)
 	}
 
 	res.clear();
+}
+
+void IRCSession::AutoFunkcio(IRCMessage& recvData)
+{
+	if(!Admin(recvData.source_nick, recvData.source_host, Operator))
+		return;
+
+	if(recvData.args.length() <= firstSpace+1)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
+		return;
+	}
+
+	vector<string> res(1);
+	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
+
+	if(res.size() < 2)
+	{
+		res.clear();
+		return;
+	}
+
+	if(res[1] == Help)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Alparancsok használata:");
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Auto kick help: %sautofunkcio kick help", m_ParancsElojel.c_str());
+	}
+	if(res[1] == INFO)
+	{
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Parancsok: kick");
+	}
+	if(res[1] == "kick")
+	{
+		if(res.size() < 3)
+		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs megadva az 1. paraméter!");
+			res.clear();
+			return;
+		}
+
+		if(res[2] == added)
+		{
+			if(res.size() < 4)
+			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
+				res.clear();
+				return;
+			}
+
+			if(res.size() < 5)
+			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs channel megadva!");
+				res.clear();
+				return;
+			}
+
+			if(res.size() < 6)
+			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs ok megadva!");
+				res.clear();
+				return;
+			}
+
+			string alomany;
+			int resAdat = res.size();
+
+			for(int i = 5; i < resAdat; i++)
+				alomany += " " + res[i];
+
+			transform(res[3].begin(), res[3].end(), res[3].begin(), ::tolower);
+			m_SQLConn->Query("INSERT INTO `kicklista`(nick, channel, oka) VALUES ('%s', '%s', '%s')", res[3].c_str(), res[4].c_str(), alomany.substr(1).c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Kick listához a név hozzáadva: %s", res[3].c_str());
+		}
+		else if(res[2] == delet)
+		{
+			if(res.size() < 4)
+			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs név megadva!");
+				res.clear();
+				return;
+			}
+
+			transform(res[3].begin(), res[3].end(), res[3].begin(), ::tolower);
+			m_SQLConn->Query("DELETE FROM `kicklista` WHERE nick = '%s'", res[3].c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Kick listából a név eltávólitva: %s", res[3].c_str());
+		}
+		else if(res[2] == Help)
+		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Alparancsok használata:");
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Kick-elt hozzáadása: %sautofunkcio kick add <nev> <channel> <oka>", m_ParancsElojel.c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Kick-elt eltávólítása: %sautofunkcio kick add <nev>", m_ParancsElojel.c_str());
+		}
+		else if(res[2] == INFO)
+		{
+			QueryResultPointer db = m_SQLConn->Query("SELECT nick, channel FROM kicklista");
+			if(db)
+			{
+				string Nevek;
+
+				do
+				{
+					string nev = db->Fetch()[0].GetString();
+					string szoba = db->Fetch()[1].GetString();
+					Nevek += ", " + nev + ":" + szoba;
+				} while(db->NextRow());
+
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Kick listán lévök: %s", Nevek.substr(2).c_str());
+			}
+			else
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hibás lekérdezés!");
+		}
+	}
 }

@@ -116,6 +116,9 @@ void IRCSession::Schumix(IRCMessage& recvData)
 
 void IRCSession::HJoin(IRCMessage& recvData)
 {
+	AutoKick(recvData, "join");
+	return;
+
 	if(FSelect(KOSZONES) == bekapcsol)
 	{
 		uint8 szokoz = recvData.target.find(':');
@@ -574,4 +577,48 @@ string IRCSession::ChannelFunkciokInfo(string channel)
 	}
 
 	return be + "|" + ki;
+}
+
+void IRCSession::AutoKick(IRCMessage& recvData, string allapot)
+{
+	if(allapot == "join")
+	{
+		uint8 szokoz = recvData.target.find(':');
+		string channel = recvData.target.substr(szokoz+1);
+
+		if(FSelect(KICK) == bekapcsol && FSelectChannel(KICK, channel) == bekapcsol)
+		{
+			transform(recvData.source_nick.begin(), recvData.source_nick.end(), recvData.source_nick.begin(), ::tolower);
+			QueryResultPointer db = m_SQLConn->Query("SELECT channel, oka FROM kicklista WHERE nick = '%s'", recvData.source_nick.c_str());
+			if(db)
+			{
+				channel = db->Fetch()[0].GetString();
+				string oka = db->Fetch()[1].GetString();
+				WriteLine("KICK %s %s :%s", channel.c_str(), recvData.source_nick.c_str(), oka.c_str());
+			}
+		}
+#ifdef _DEBUG_MOD
+		else
+			Log.Warning("Funkcio", "A %s funkcio nem uzemel!", KICK);
+#endif
+	}
+
+	if(allapot == "privmsg")
+	{
+		if(FSelect(KICK) == bekapcsol && FSelectChannel(KICK, recvData.target) == bekapcsol)
+		{
+			transform(recvData.source_nick.begin(), recvData.source_nick.end(), recvData.source_nick.begin(), ::tolower);
+			QueryResultPointer db = m_SQLConn->Query("SELECT channel, oka FROM kicklista WHERE nick = '%s'", recvData.source_nick.c_str());
+			if(db)
+			{
+				string channel = db->Fetch()[0].GetString();
+				string oka = db->Fetch()[1].GetString();
+				WriteLine("KICK %s %s :%s", channel.c_str(), recvData.source_nick.c_str(), oka.c_str());
+			}
+		}
+#ifdef _DEBUG_MOD
+		else
+			Log.Warning("Funkcio", "A %s funkcio nem uzemel!", KICK);
+#endif
+	}
 }

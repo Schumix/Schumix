@@ -39,6 +39,7 @@
 #define REJOIN "rejoin"
 #define HL "hl"
 #define PARANCSOK "parancsok"
+#define KICK "kick"
 
 class MySQLConnection;
 class Socket;
@@ -192,6 +193,7 @@ protected:
 	void Jegyzet(IRCMessage& recvData);
 	void Reload(IRCMessage& recvData);
 	void Whois(IRCMessage& recvData);
+	void AutoFunkcio(IRCMessage& recvData);
 	void Kikapcsolas(IRCMessage& recvData);
 
 	// Schumix
@@ -201,6 +203,7 @@ protected:
 	void HQuit(IRCMessage& recvData);
 	void ReJoin(IRCMessage& recvData);
 	void HLUzenet(IRCMessage& recvData);
+	void AutoKick(IRCMessage& recvData, string allapot);
 
 	// Számologép
 	void setConsts();
