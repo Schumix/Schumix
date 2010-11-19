@@ -341,25 +341,56 @@ void IRCSession::HandlePong(IRCMessage& recvData)
 
 void IRCSession::HandleKick(IRCMessage& recvData)
 {
-	if(sConsole.GetConsolLog() == bekapcsol)
+	vector<string> res(1);
+	sVezerlo.split(recvData.minden, " ", res);
+
+	if(res.size() < 5)
 	{
-		vector<string> res(1);
-		sVezerlo.split(recvData.minden, " ", res);
-
-		if(res.size() < 6)
-		{
-			res.clear();
-			return;
-		}
-
-		string oka;
-		int resAdat = res.size();
-
-		for(int i = 5; i < resAdat; i++)
-			oka += " " + res[i];
-
-		printf("%s kickelte a kovetkezo felhasznalot: %s oka: %s\n", recvData.source_nick.c_str(), res[4].c_str(), oka.substr(2).c_str());
+		res.clear();
+		return;
 	}
+
+	if(res[4] == m_NickTarolo)
+	{
+		if(FSelect(REJOIN) == bekapcsol && FSelectChannel(REJOIN, recvData.target) == bekapcsol)
+		{
+			map<string, string>::iterator itr = m_ChannelLista.begin();
+			for(; itr != m_ChannelLista.end(); itr++)
+			{
+				string join = itr->first;
+
+				if(itr->second != "")
+					join += " " + itr->second;
+
+				WriteLine("JOIN %s", join.c_str());
+			}
+		}
+	}
+	else
+	{
+		if(sConsole.GetConsolLog() == bekapcsol)
+		{
+			if(res.size() < 6)
+			{
+				res.clear();
+				return;
+			}
+
+			string oka;
+			int resAdat = res.size();
+
+			for(int i = 5; i < resAdat; i++)
+				oka += " " + res[i];
+
+			printf("%s kickelte a kovetkezo felhasznalot: %s oka: %s\n", recvData.source_nick.c_str(), res[4].c_str(), oka.substr(2).c_str());
+		}
+	}
+
+#ifdef _DEBUG_MOD
+	Log.Warning("Funkcio", "A %s funkcio nem uzemel!", REJOIN);
+#endif
+
+	res.clear();
 }
 
 void IRCSession::HandleJoin(IRCMessage& recvData)

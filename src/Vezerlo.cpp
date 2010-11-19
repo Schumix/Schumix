@@ -133,7 +133,9 @@ void _OnSignal(int s)
 			{
 				Log.Notice("Crash", "Uptime mentese elindult!");
 				sVezerlo.Uptime();
+				sVezerlo.m_crash = false;
 				Log.Notice("Crash", "Mentes kesz.");
+				sVezerlo.Leallas();
 			}
 		}
 
@@ -164,6 +166,7 @@ void segfault_handler(int c)
 
 			sVezerlo.m_crash = false;
 			Log.Notice("Crash", "Mentes kesz.");
+			sVezerlo.Leallas();
 		}
 	}
 	catch(...)
@@ -171,7 +174,7 @@ void segfault_handler(int c)
 		Log.Error("Crash", "Kivetel keletkezet mentes kozben ezert nincs mentes!");
 	}
 
-	Log.Notice("Crash", "Program leallt.");
+	Log.Notice("Crash", "Program leallhat...");
 	abort();
 }
 #endif
@@ -808,7 +811,9 @@ void Vezerlo::Leallas()
 	printf("\n");
 	Log.Notice("Vezerlo", "Leallasi folyamat elindult.");
 
-	Uptime();
+	if(!m_crash)
+		Uptime();
+
 	m_SvnInfo->Leallas();
 	m_GitInfo->Leallas();
 	m_HgInfo->Leallas();

@@ -246,46 +246,20 @@ void IRCSession::ReJoin(IRCMessage& recvData)
 {
 	if(FSelect(REJOIN) == bekapcsol)
 	{
-		vector<string>::iterator it;
-		for(it = m_ChannelFunkcio.begin(); it < m_ChannelFunkcio.end(); it++)
+		map<string, string>::iterator itr = m_ChannelLista.begin();
+		for(; itr != m_ChannelLista.end(); itr++)
 		{
-			string szobak = (*it);
-			uint32 szobaszokoz = szobak.find(".");
-			string szoba = szobak.substr(0, szobaszokoz);
-			string funkciok = szobak.substr(szobaszokoz+1);
+			string join1 = itr->first;
 
-			vector<string> res(1);
-			sVezerlo.split(funkciok, ":", res);
-
-			int resAdat = res.size();
-
-			for(int i = 1; i < resAdat; i++)
+			if(FSelectChannel(REJOIN, join1) == bekapcsol)
 			{
-				if(res[i] == bekapcsol)
-					continue;
-				else if(res[i] == kikapcsol)
-					continue;
-				else
-				{
-					if(res[i] == REJOIN && res[i+1] == bekapcsol)
-					{
-						map<string, string>::iterator itr = m_ChannelLista.begin();
-						for(; itr != m_ChannelLista.end(); itr++)
-						{
-							string join = itr->first;
-							string join1 = itr->first;
+				string join = itr->first;
 
-							if(itr->second != "")
-								join += " " + itr->second;
+				if(itr->second != "")
+					join += " " + itr->second;
 
-							if(join1 == szoba)
-								WriteLine("JOIN %s", join.c_str());
-						}
-					}
-				}
+				WriteLine("JOIN %s", join.c_str());
 			}
-
-			res.clear();
 		}
 	}
 #ifdef _DEBUG_MOD
