@@ -1,7 +1,7 @@
 - hl uezenet hozzáadása ami akkor küldödik el annak a személynek amikor először megszólal.
-//- &funkcio update parancs kiterjesztése mindenre. Magyarul all rész hozzáadása.
 - &jegyzet-hez mesterkulcs létrehozása és bekérdezés rész hozzáirása.
 - Ha nincs config fájl felajálja a program hogy leszedje-e internetről a configot és majd kézzel bekonfigurálja vagy kézzel konzolban betölti az adatokat vagy egyszerüen leáll a program.
 - Rss-ek átnézése mert valamitől eszik a memoriát!
 - Funkcióknál megirni hogy egyszerre többet is lehessen ki be kapcsolni.
 - Kick megirása mert most csak 404-re válaszol és az nem igazi rejoinra válasz.
+- autofunkcio parancs beépitése. Ehez kapcsolodoan pl kick és mode jog adogatása ha valaki join-ol. Vagy ha megszolal :P

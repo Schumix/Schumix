@@ -403,7 +403,6 @@ string Vezerlo::urlencode(const string &c)
 
 	for(int i = 0; i < max; i++)
 	{
-
 		if(c[i] == 'á')
 
 		{

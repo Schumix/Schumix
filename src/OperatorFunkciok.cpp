@@ -355,7 +355,8 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel kezelés máshonnét: %sfunkcio channel <channel név> <be vagy ki> <funkcio név>", m_ParancsElojel.c_str());
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Együtes kezelés: %sfunkcio all <be vagy ki> <funkcio név>", m_ParancsElojel.c_str());
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "All update kezelése: %sfunkcio update all", m_ParancsElojel.c_str());
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Update kezelése: %sfunkcio update <channel neve>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Más channel update kezelése: %sfunkcio update <channel neve>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Ahol tartozkodsz channel update kezelése: %sfunkcio update", m_ParancsElojel.c_str());
 	}
 	else if(info == INFO)
 	{
@@ -462,7 +463,10 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 	{
 		if(res.size() < 3)
 		{
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs megadva az 1. paraméter!");
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikeresen frissitve %s channel funkciók.", recvData.target.c_str());
+			m_SQLConn->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, recvData.target.c_str());
+			ChannelFunkcioReload();
+
 			res.clear();
 			return;
 		}
@@ -476,11 +480,12 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 				m_SQLConn->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, szoba.c_str());
 			}
 
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikeresen frissitve minden channelen a funkciók.");
 			ChannelFunkcioReload();
 		}
 		else
 		{
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikeresen frissitve %s channel funkció.", res[2].c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Sikeresen frissitve %s channel funkciók.", res[2].c_str());
 			m_SQLConn->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, res[2].c_str());
 			ChannelFunkcioReload();
 		}
