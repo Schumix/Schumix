@@ -554,7 +554,7 @@ string Vezerlo::htmldecode(string c)
 {
 	string escaped = "";
 
-	vector<string> res(1);
+	vector<string> res;
 	split(c, "&", res);
 
 	int max = res.size();

@@ -40,7 +40,7 @@ void IRCSession::Admin(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -208,7 +208,7 @@ void IRCSession::Hozzaferes(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -263,7 +263,7 @@ void IRCSession::Ujjelszo(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 3)
@@ -337,7 +337,7 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -523,7 +523,7 @@ void IRCSession::Channel(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -651,7 +651,7 @@ void IRCSession::Sznap(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -687,7 +687,7 @@ void IRCSession::Nick(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -714,7 +714,7 @@ void IRCSession::Join(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() == 2)
@@ -742,7 +742,7 @@ void IRCSession::Left(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -766,7 +766,7 @@ void IRCSession::Kick(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -812,7 +812,7 @@ void IRCSession::Mode(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 3)
@@ -846,7 +846,7 @@ void IRCSession::HLFunkcio(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -951,7 +951,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -1191,7 +1191,7 @@ void IRCSession::Git(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -1472,7 +1472,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -1712,7 +1712,7 @@ void IRCSession::AutoFunkcio(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)

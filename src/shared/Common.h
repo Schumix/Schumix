@@ -57,35 +57,17 @@
 // create a wrapper to support existing code
 #define PLATFORM_UNIX PLATFORM_LINUX
 
-#if PLATFORM == PLATFORM_WINDOWS && _MSC_VER >= 1600 || PLATFORM == PLATFORM_LINUX
-#include <cstdint>
-#endif
+#include <boost/cstdint.hpp>
 
-#if PLATFORM == PLATFORM_WINDOWS
+typedef boost::int8_t int8;
+typedef boost::int16_t int16;
+typedef boost::int32_t int32;
+typedef boost::int64_t int64;
 
-typedef __int8 int8;
-typedef __int16 int16;
-typedef __int32 int32;
-typedef __int64 int64;
-
-typedef unsigned __int8 uint8;
-typedef unsigned __int16 uint16;
-typedef unsigned __int32 uint32;
-typedef unsigned __int64 uint64;
-
-#else
-
-typedef int8_t int8;
-typedef int16_t int16;
-typedef int32_t int32;
-typedef int64_t int64;
-
-typedef uint8_t uint8;
-typedef uint16_t uint16;
-typedef uint32_t uint32;
-typedef uint64_t uint64;
-
-#endif
+typedef boost::uint8_t uint8;
+typedef boost::uint16_t uint16;
+typedef boost::uint32_t uint32;
+typedef boost::uint64_t uint64;
 
 #if PLATFORM == PLATFORM_WINDOWS
 

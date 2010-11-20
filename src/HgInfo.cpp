@@ -440,7 +440,7 @@ void HgInfo::Kiiras(uint32 id)
 	QueryResultPointer db = m_SQLConn[id]->Query("SELECT channel FROM hginfo WHERE nev = '%s'", nev[id].c_str());
 	if(db)
 	{
-		vector<string> reschannel(1);
+		vector<string> reschannel;
 		sVezerlo.split(db->Fetch()[0].GetString(), ",", reschannel);
 
 		if(reschannel.size() < 2)

@@ -452,7 +452,7 @@ void SvnInfo::Kiiras(uint32 id)
 	QueryResultPointer db = m_SQLConn[id]->Query("SELECT channel FROM svninfo WHERE nev = '%s'", nev[id].c_str());
 	if(db)
 	{
-		vector<string> reschannel(1);
+		vector<string> reschannel;
 		sVezerlo.split(db->Fetch()[0].GetString(), ",", reschannel);
 
 		if(reschannel.size() < 2)
@@ -475,7 +475,7 @@ void SvnInfo::Kiiras(uint32 id)
 			}
 			else
 			{
-				vector<string> res(1);
+				vector<string> res;
 				sVezerlo.split(title, " ", res);
 
 				if(res.size() < 3)

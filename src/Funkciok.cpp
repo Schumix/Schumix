@@ -104,7 +104,7 @@ void IRCSession::Keres(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -179,7 +179,7 @@ void IRCSession::Forditas(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -308,7 +308,7 @@ void IRCSession::Xrev(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -351,7 +351,7 @@ void IRCSession::Irc(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -401,7 +401,7 @@ void IRCSession::Uzenet(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -442,7 +442,7 @@ void IRCSession::Jegyzet(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)

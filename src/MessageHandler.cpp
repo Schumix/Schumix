@@ -64,7 +64,7 @@ void IRCSession::HandleSuccessfulAuth(IRCMessage& recvData)
 			if(db)
 			{
 				string funkcio = db->Fetch()[0].GetString();
-				vector<string> res(1);
+				vector<string> res;
 				sVezerlo.split(funkcio, ",", res);
 				int resAdat = res.size();
 
@@ -126,7 +126,7 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 
 	if(AutoMode)
 	{
-		vector<string> res(1);
+		vector<string> res;
 		sVezerlo.split(recvData.args, " ", res);
 		if(res.size() < 4)
 		{
@@ -175,7 +175,7 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 				if(db)
 				{
 					string funkcio = db->Fetch()[0].GetString();
-					vector<string> res(1);
+					vector<string> res;
 					sVezerlo.split(funkcio, ",", res);
 					int resAdat = res.size();
 
@@ -447,7 +447,7 @@ void IRCSession::HandlePong(IRCMessage& recvData)
 
 void IRCSession::HandleKick(IRCMessage& recvData)
 {
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.minden, " ", res);
 
 	if(res.size() < 5)
@@ -532,7 +532,7 @@ void IRCSession::HandleMode(IRCMessage& recvData)
 		if(recvData.target == m_NickTarolo)
 			return;
 
-		vector<string> res(1);
+		vector<string> res;
 		sVezerlo.split(recvData.minden, " ", res);
 		if(res.size() < 6)
 		{
@@ -557,7 +557,7 @@ void IRCSession::HandleNick(IRCMessage& recvData)
 {
 	if(sConsole.GetConsoleLog() == bekapcsol)
 	{
-		vector<string> res(1);
+		vector<string> res;
 		sVezerlo.split(recvData.args, ":", res);
 
 		Log.Color(TRED);
@@ -626,7 +626,7 @@ void IRCSession::HandleNickError(IRCMessage& recvData)
 
 void IRCSession::HandleNoChannelJelszo(IRCMessage& recvData)
 {
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.minden, " ", res);
 	if(res.size() < 5)
 	{
@@ -643,7 +643,7 @@ void IRCSession::HandleNoChannelJelszo(IRCMessage& recvData)
 
 void IRCSession::HandleChannelBan(IRCMessage& recvData)
 {
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.minden, " ", res);
 	if(res.size() < 5)
 	{
@@ -660,7 +660,7 @@ void IRCSession::HandleChannelBan(IRCMessage& recvData)
 
 void IRCSession::HandleWhois(IRCMessage& recvData)
 {
-	vector<string> res(1);
+	vector<string> res;
 	sVezerlo.split(recvData.minden, " ", res);
 	if(res.size() < 6)
 	{
