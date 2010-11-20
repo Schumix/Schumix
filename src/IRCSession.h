@@ -261,6 +261,10 @@ protected:
 	bool m_UseNickServ;
 	string m_NickServPassword;
 
+	// Hostserv állapota
+	bool m_UseHostServ;
+	bool m_vhost;
+
 	// The name the server refers to itself as.
 	string m_ServerRealName;
 

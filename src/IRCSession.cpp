@@ -112,6 +112,8 @@ void IRCSession::RehashConfig(string host, string user, string pass, string data
 
 	m_UseNickServ = Config.MainConfig.GetBoolDefault("NickServ", "Enable", false);
 	m_NickServPassword = Config.MainConfig.GetStringDefault("NickServ", "Password", "");
+	m_UseHostServ = Config.MainConfig.GetBoolDefault("HostServ", "Enable", false);
+	m_vhost = Config.MainConfig.GetBoolDefault("HostServ", "Vhost", false);
 	m_ParancsElojel = Config.MainConfig.GetStringDefault("Parancs", "Elojel", "&");
 	m_Uzemelteto = Config.MainConfig.GetStringDefault("Parancs", "Uzemelteto", "Schumix");
 

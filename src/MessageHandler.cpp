@@ -33,46 +33,58 @@ void IRCSession::HandleSuccessfulAuth(IRCMessage& recvData)
 		SendChatMessage(PRIVMSG, "NickServ", "identify %s", m_NickServPassword.c_str());
 	}
 
-	// Kitakaritja a channel funkciokat nehogy ütközés legyen.
-	m_ChannelFunkcio.clear();
-	m_ChannelPrivmsg = m_NickTarolo;
-
-	// Join az adatbázisban szereplõ channel-okra. Bármi hiba van a kapcsolodáskor eltárolodik a hiba oka.
-	map<string, string>::iterator itr = m_ChannelLista.begin();
-	for(; itr != m_ChannelLista.end(); itr++)
+	if(m_UseHostServ)
 	{
-		string szoba = itr->first;
-		string join = itr->first;
-		if(itr->second != "")
-			join += " " + itr->second;
+		Log.Notice("HostServ", "HostServ bevan kapcsolva.");
+		SendChatMessage(PRIVMSG, "HostServ", "on");
+	}
+	else
+	{
+		Log.Notice("HostServ", "HostServ kivan kapcsolva.");
+		if(m_vhost)
+			SendChatMessage(PRIVMSG, "HostServ", "off");
 
-		WriteLine("JOIN %s", join.c_str());
-		m_SQLConn->Query("UPDATE channel SET aktivitas = '', error = '' WHERE szoba = '%s'", szoba.c_str());
+		// Kitakaritja a channel funkciokat nehogy ütközés legyen.
+		m_ChannelFunkcio.clear();
+		m_ChannelPrivmsg = m_NickTarolo;
 
-		QueryResultPointer db = m_SQLConn->Query("SELECT funkciok FROM channel WHERE szoba = '%s'", szoba.c_str());
-		if(db)
+		// Join az adatbázisban szereplõ channel-okra. Bármi hiba van a kapcsolodáskor eltárolodik a hiba oka.
+		map<string, string>::iterator itr = m_ChannelLista.begin();
+		for(; itr != m_ChannelLista.end(); itr++)
 		{
-			string funkcio = db->Fetch()[0].GetString();
-			vector<string> res(1);
-			sVezerlo.split(funkcio, ",", res);
-			int resAdat = res.size();
+			string szoba = itr->first;
+			string join = itr->first;
+			if(itr->second != "")
+				join += " " + itr->second;
 
-			for(int i = 1; i < resAdat; i++)
+			WriteLine("JOIN %s", join.c_str());
+			m_SQLConn->Query("UPDATE channel SET aktivitas = '', error = '' WHERE szoba = '%s'", szoba.c_str());
+
+			QueryResultPointer db = m_SQLConn->Query("SELECT funkciok FROM channel WHERE szoba = '%s'", szoba.c_str());
+			if(db)
 			{
-				string szobaadat = szoba + "." + res[i];
-				m_ChannelFunkcio.push_back(szobaadat);
+				string funkcio = db->Fetch()[0].GetString();
+				vector<string> res(1);
+				sVezerlo.split(funkcio, ",", res);
+				int resAdat = res.size();
+
+				for(int i = 1; i < resAdat; i++)
+				{
+					string szobaadat = szoba + "." + res[i];
+					m_ChannelFunkcio.push_back(szobaadat);
+				}
+
+				res.clear();
 			}
 
-			res.clear();
-		}
+			QueryResultPointer db1 = m_SQLConn->Query("SELECT aktivitas FROM channel WHERE szoba = '%s'", szoba.c_str());
+			if(db1)
+			{
+				string aktivitas = db1->Fetch()[0].GetString();
 
-		QueryResultPointer db1 = m_SQLConn->Query("SELECT aktivitas FROM channel WHERE szoba = '%s'", szoba.c_str());
-		if(db1)
-		{
-			string aktivitas = db1->Fetch()[0].GetString();
-
-			if(aktivitas != "nem aktiv")
-				m_SQLConn->Query("UPDATE channel SET aktivitas = 'aktiv' WHERE szoba = '%s'", szoba.c_str());
+				if(aktivitas != "nem aktiv")
+					m_SQLConn->Query("UPDATE channel SET aktivitas = 'aktiv' WHERE szoba = '%s'", szoba.c_str());
+			}
 		}
 	}
 }
@@ -137,6 +149,55 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 
 		AutoMode = false;
 		res.clear();
+	}
+
+	if(m_UseHostServ)
+	{
+		if(cast_int(recvData.args.find("Your vhost of")) != string::npos)
+		{
+			// Kitakaritja a channel funkciokat nehogy ütközés legyen.
+			m_ChannelFunkcio.clear();
+			m_ChannelPrivmsg = m_NickTarolo;
+
+			// Join az adatbázisban szereplõ channel-okra. Bármi hiba van a kapcsolodáskor eltárolodik a hiba oka.
+			map<string, string>::iterator itr = m_ChannelLista.begin();
+			for(; itr != m_ChannelLista.end(); itr++)
+			{
+				string szoba = itr->first;
+				string join = itr->first;
+				if(itr->second != "")
+					join += " " + itr->second;
+
+				WriteLine("JOIN %s", join.c_str());
+				m_SQLConn->Query("UPDATE channel SET aktivitas = '', error = '' WHERE szoba = '%s'", szoba.c_str());
+
+				QueryResultPointer db = m_SQLConn->Query("SELECT funkciok FROM channel WHERE szoba = '%s'", szoba.c_str());
+				if(db)
+				{
+					string funkcio = db->Fetch()[0].GetString();
+					vector<string> res(1);
+					sVezerlo.split(funkcio, ",", res);
+					int resAdat = res.size();
+
+					for(int i = 1; i < resAdat; i++)
+					{
+						string szobaadat = szoba + "." + res[i];
+						m_ChannelFunkcio.push_back(szobaadat);
+					}
+
+					res.clear();
+				}
+
+				QueryResultPointer db1 = m_SQLConn->Query("SELECT aktivitas FROM channel WHERE szoba = '%s'", szoba.c_str());
+				if(db1)
+				{
+					string aktivitas = db1->Fetch()[0].GetString();
+
+					if(aktivitas != "nem aktiv")
+						m_SQLConn->Query("UPDATE channel SET aktivitas = 'aktiv' WHERE szoba = '%s'", szoba.c_str());
+				}
+			}
+		}
 	}
 }
 
