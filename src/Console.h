@@ -29,7 +29,7 @@ public:
 	Console(string host, string user, string password, string database);
 	~Console();
 
-	inline string GetConsolLog() { return ConsolLog; }
+	inline string GetConsoleLog() { return ConsoleLog; }
 	// Class leállása
 	void Leallas();
 
@@ -44,7 +44,7 @@ protected:
 	volatile bool m_running;
 
 	// Konzol irás állapota
-	string ConsolLog;
+	string ConsoleLog;
 
 private:
 	// Mysql kapcsolat.

@@ -6,23 +6,23 @@ CREATE TABLE `adminok` (
   `ip` varchar(100) NOT NULL default '',
   `flag` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `channel`;
 CREATE TABLE `channel` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `funkciok` varchar(255) NOT NULL default ',koszones:be,log:be,rejoin:be,parancsok:be,hl:be,kick:be',
+  `funkciok` varchar(255) NOT NULL default ',koszones:be,log:be,rejoin:be,parancsok:be,hl:be,kick:be,mode:be',
   `szoba` text NOT NULL default '',
   `jelszo` text NOT NULL default '',
   `aktivitas` text NOT NULL default '',
   `error` text NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records 
 -- ----------------------------
-INSERT INTO `channel` VALUES ('1', ',koszones:be,log:be,rejoin:be,parancsok:be,hl:be,kick:be', '#schumix', '', '', '');
+INSERT INTO `channel` VALUES ('1', ',koszones:be,log:be,rejoin:be,parancsok:be,hl:be,kick:be,mode:be', '#schumix', '', '', '');
 
 DROP TABLE IF EXISTS `gitinfo`;
 CREATE TABLE `gitinfo` (
@@ -36,7 +36,7 @@ CREATE TABLE `gitinfo` (
   `password` varchar(25) NOT NULL default '',
   `channel` text NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records 
@@ -54,7 +54,7 @@ CREATE TABLE `hginfo` (
   `password` varchar(25) NOT NULL default '',
   `channel` text NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `hluzenet`;
 CREATE TABLE `hluzenet` (
@@ -63,7 +63,7 @@ CREATE TABLE `hluzenet` (
   `info` text NOT NULL,
   `alapot` varchar(10) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `irc_parancsok`;
 CREATE TABLE `irc_parancsok` (
@@ -71,7 +71,7 @@ CREATE TABLE `irc_parancsok` (
   `parancs` varchar(21) NOT NULL default '',
   `hasznalata` text NOT NULL default '',
   PRIMARY KEY  (`guid`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records 
@@ -89,7 +89,7 @@ CREATE TABLE `jegyzetek` (
   `nick` varchar(21) NOT NULL default '',
   `jegyzet` text NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `kicklista`;
 CREATE TABLE `kicklista` (
@@ -98,7 +98,16 @@ CREATE TABLE `kicklista` (
   `channel` varchar(100) NOT NULL default '',
   `oka` text NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `modelista`;
+CREATE TABLE `modelista` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `nick` varchar(100) NOT NULL default '',
+  `channel` varchar(100) NOT NULL default '',
+  `rang` varchar(10) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `schumix`;
 CREATE TABLE `schumix` (
@@ -107,7 +116,7 @@ CREATE TABLE `schumix` (
   `funkcio_nev` varchar(21) NOT NULL default '',
   `funkcio_status` varchar(10) NOT NULL default '',
   PRIMARY KEY  (`entry`)
-) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records 
@@ -122,6 +131,7 @@ INSERT INTO `schumix` VALUES ('7', '', 'rejoin', 'be');
 INSERT INTO `schumix` VALUES ('8', '', 'parancsok', 'be');
 INSERT INTO `schumix` VALUES ('9', '', 'hl', 'ki');
 INSERT INTO `schumix` VALUES ('10', '', 'kick', 'ki');
+INSERT INTO `schumix` VALUES ('11', '', 'mode', 'ki');
 
 DROP TABLE IF EXISTS `svninfo`;
 CREATE TABLE `svninfo` (
@@ -134,7 +144,7 @@ CREATE TABLE `svninfo` (
   `password` varchar(25) NOT NULL default '',
   `channel` text NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `sznap`;
 CREATE TABLE `sznap` (
@@ -144,7 +154,7 @@ CREATE TABLE `sznap` (
   `honap1` tinyint(3) unsigned NOT NULL,
   `nap` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY  (`guid`)
-) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `uptime`;
 CREATE TABLE `uptime` (
@@ -153,4 +163,4 @@ CREATE TABLE `uptime` (
   `uptime` text NOT NULL,
   `memory` text NOT NULL,
   PRIMARY KEY  (`entry`)
-) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;

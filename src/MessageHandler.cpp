@@ -102,7 +102,7 @@ void IRCSession::HandleMotdStop(IRCMessage& recvData)
 
 void IRCSession::HandleNotice(IRCMessage& recvData)
 {
-	if(sConsole.GetConsolLog() == bekapcsol)
+	if(sConsole.GetConsoleLog() == bekapcsol)
 	{
 		Log.Color(TRED);
 		printf("%s", recvData.source_nick.c_str());
@@ -111,11 +111,38 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 		Log.Color(TNORMAL);
 		printf("%s%s", recvData.args.c_str(), NEWLINE);
 	}
+
+	if(AutoMode)
+	{
+		vector<string> res(1);
+		sVezerlo.split(recvData.args, " ", res);
+		if(res.size() < 4)
+		{
+			res.clear();
+			return;
+		}
+
+		if(res[3] == "3")
+		{
+			transform(res[2].begin(), res[2].end(), res[2].begin(), ::tolower);
+			QueryResultPointer db = m_SQLConn->Query("SELECT rang FROM modelista WHERE nick = '%s' AND channel = '%s'", res[2].c_str(), ModeChannel.c_str());
+			if(db)
+			{
+				string rang = db->Fetch()[0].GetString();
+				WriteLine("MODE %s %s %s", ModeChannel.c_str(), rang.c_str(), res[2].c_str());
+			}
+			else
+				WriteLine("MODE %s -aohv %s %s %s %s", ModeChannel.c_str(), res[2].c_str(), res[2].c_str(), res[2].c_str(), res[2].c_str());
+		}
+
+		AutoMode = false;
+		res.clear();
+	}
 }
 
 void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 {
-	if(sConsole.GetConsolLog() == bekapcsol)
+	if(sConsole.GetConsoleLog() == bekapcsol)
 	{
 		Log.Color(TYELLOW);
 		printf("[%s] <%s> %s%s", recvData.target.c_str(), recvData.source_nick.c_str(), recvData.args.c_str(), NEWLINE);
@@ -133,7 +160,19 @@ void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 		if(FSelectChannel(PARANCSOK, recvData.target) != bekapcsol && cast_int(recvData.target.find("#")) != string::npos)
 			return;
 
-		AutoKick(recvData, "privmsg");
+		if(AutoKick(recvData, "privmsg"))
+			return;
+
+		if(FSelect(MODE) == bekapcsol && FSelectChannel(MODE, recvData.target) == bekapcsol)
+		{
+			AutoMode = true;
+			ModeChannel = recvData.target;
+			WriteLine("NICKSERV STATUS %s", recvData.source_nick.c_str());
+		}
+#ifdef _DEBUG_MOD
+		else
+			Log.Warning("Funkcio", "A %s funkcio nem uzemel!", MODE);
+#endif
 
 		// Schumix
 		Schumix(recvData);
@@ -374,7 +413,7 @@ void IRCSession::HandleKick(IRCMessage& recvData)
 	}
 	else
 	{
-		if(sConsole.GetConsolLog() == bekapcsol)
+		if(sConsole.GetConsoleLog() == bekapcsol)
 		{
 			if(res.size() < 6)
 			{
@@ -427,7 +466,7 @@ void IRCSession::HandleReJoin(IRCMessage& recvData)
 
 void IRCSession::HandleMode(IRCMessage& recvData)
 {
-	if(sConsole.GetConsolLog() == bekapcsol)
+	if(sConsole.GetConsoleLog() == bekapcsol)
 	{
 		if(recvData.target == m_NickTarolo)
 			return;
@@ -455,7 +494,7 @@ void IRCSession::HandleMode(IRCMessage& recvData)
 
 void IRCSession::HandleNick(IRCMessage& recvData)
 {
-	if(sConsole.GetConsolLog() == bekapcsol)
+	if(sConsole.GetConsoleLog() == bekapcsol)
 	{
 		vector<string> res(1);
 		sVezerlo.split(recvData.args, ":", res);

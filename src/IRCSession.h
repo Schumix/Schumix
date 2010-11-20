@@ -40,6 +40,7 @@
 #define HL "hl"
 #define PARANCSOK "parancsok"
 #define KICK "kick"
+#define MODE "mode"
 
 class MySQLConnection;
 class Socket;
@@ -203,7 +204,7 @@ protected:
 	void HQuit(IRCMessage& recvData);
 	void ReJoin(IRCMessage& recvData);
 	void HLUzenet(IRCMessage& recvData);
-	void AutoKick(IRCMessage& recvData, string allapot);
+	bool AutoKick(IRCMessage& recvData, string allapot);
 
 	// Számologép
 	void setConsts();
@@ -282,6 +283,11 @@ protected:
 	string m_ParancsElojel;
 	// Az üzemeltetõ nevét tárólja
 	string m_Uzemelteto;
+
+	// Meghatározza hogy mode fusson-e le vagy sem
+	bool AutoMode;
+	// Channel-t tároló a mode futatásához
+	string ModeChannel;
 
 private:
 	// Url kezeles

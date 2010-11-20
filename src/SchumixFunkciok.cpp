@@ -116,17 +116,25 @@ void IRCSession::Schumix(IRCMessage& recvData)
 
 void IRCSession::HJoin(IRCMessage& recvData)
 {
-	AutoKick(recvData, "join");
-	return;
+	if(AutoKick(recvData, "join"))
+		return;
 
-	if(FSelect(KOSZONES) == bekapcsol)
+	uint8 szokoz = recvData.target.find(':');
+	string channel = recvData.target.substr(szokoz+1);
+
+	if(FSelect(MODE) == bekapcsol && FSelectChannel(MODE, channel) == bekapcsol)
 	{
-		uint8 szokoz = recvData.target.find(':');
-		string channel = recvData.target.substr(szokoz+1);
+		AutoMode = true;
+		ModeChannel = channel;
+		WriteLine("NICKSERV STATUS %s", recvData.source_nick.c_str());
+	}
+#ifdef _DEBUG_MOD
+	else
+		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", MODE);
+#endif
 
-		if(FSelectChannel(KOSZONES, channel) != bekapcsol)
-			return;
-
+	if(FSelect(KOSZONES) == bekapcsol && FSelectChannel(KOSZONES, channel) == bekapcsol)
+	{
 		string Koszones;
 		int ido = sVezerlo.Ora();
 
@@ -579,7 +587,7 @@ string IRCSession::ChannelFunkciokInfo(string channel)
 	return be + "|" + ki;
 }
 
-void IRCSession::AutoKick(IRCMessage& recvData, string allapot)
+bool IRCSession::AutoKick(IRCMessage& recvData, string allapot)
 {
 	if(allapot == "join")
 	{
@@ -595,12 +603,14 @@ void IRCSession::AutoKick(IRCMessage& recvData, string allapot)
 				channel = db->Fetch()[0].GetString();
 				string oka = db->Fetch()[1].GetString();
 				WriteLine("KICK %s %s :%s", channel.c_str(), recvData.source_nick.c_str(), oka.c_str());
+				return true;
 			}
 		}
 #ifdef _DEBUG_MOD
 		else
 			Log.Warning("Funkcio", "A %s funkcio nem uzemel!", KICK);
 #endif
+		return false;
 	}
 
 	if(allapot == "privmsg")
@@ -614,11 +624,15 @@ void IRCSession::AutoKick(IRCMessage& recvData, string allapot)
 				string channel = db->Fetch()[0].GetString();
 				string oka = db->Fetch()[1].GetString();
 				WriteLine("KICK %s %s :%s", channel.c_str(), recvData.source_nick.c_str(), oka.c_str());
+				return true;
 			}
 		}
 #ifdef _DEBUG_MOD
 		else
 			Log.Warning("Funkcio", "A %s funkcio nem uzemel!", KICK);
 #endif
+		return false;
 	}
+
+	return false;
 }

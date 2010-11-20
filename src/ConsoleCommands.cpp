@@ -39,7 +39,7 @@ bool Console::ConsoleCommands(char* adat)
 	if(cmd == "help")
 	{
 		Log.Notice("Console", "Prarancsok: connect, disconnect, reconnect, funkcio, kikapcs");
-		Log.Notice("Console", "szoba, consollog, admin, reload");
+		Log.Notice("Console", "szoba, konzollog, admin, reload");
 
 		res.clear();
 		return true;
@@ -186,7 +186,7 @@ bool Console::ConsoleCommands(char* adat)
 		return true;
 	}
 
-	if(cmd == "consollog")
+	if(cmd == "konzollog")
 	{
 		if(res.size() < 3)
 		{
@@ -195,7 +195,7 @@ bool Console::ConsoleCommands(char* adat)
 			return false;
 		}
 
-		ConsolLog = res[2];
+		ConsoleLog = res[2];
 		Log.Notice("Console", "Console logolas %skapcsolva", res[2].c_str());
 
 		res.clear();

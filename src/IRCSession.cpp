@@ -53,6 +53,7 @@ IRCSession::IRCSession(string host, uint32 port, string sqlhost, string user, st
 
 	m_ConnState = CONN_CONNECTED;
 	m_running = true;
+	AutoMode = false;
 
 	//mHasFullMotd = false;
 	m_LastPing = getMSTime();
@@ -180,7 +181,7 @@ void IRCSession::BejovoInfo(string SInfo)
 	MessageHandlerMap::iterator itr = IRCMessageHandlerMap.find(mess.opcode);
 	if(itr == IRCMessageHandlerMap.end())
 	{
-		if(sConsole.GetConsolLog() == bekapcsol)
+		if(sConsole.GetConsoleLog() == bekapcsol)
 		{
 			// Információ melyik opcode fut le ha nincs pl használva.
 			Log.Notice("IRCSession", "Received unhandled opcode: %s", mess.opcode.c_str());
