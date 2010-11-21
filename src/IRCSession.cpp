@@ -32,7 +32,7 @@ IRCSession::IRCSession(string host, uint32 port, string sqlhost, string user, st
 	if(!m_Socket->Connect(host, port))
 	{
 		Log.Error("IRCSession", "Kapcsolodas ide: %s sikertelen.", host.c_str());
-		exit(1);
+		Sleep(5000);
 		return;
 	}
 	else
@@ -392,16 +392,16 @@ bool IRCSession::Admin(string nick, AdminFlag Flag)
 	return false;
 }
 
-bool IRCSession::Admin(string nick, string nick_ip, AdminFlag Flag)
+bool IRCSession::Admin(string nick, string Vhost, AdminFlag Flag)
 {
 	transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
 
-	QueryResultPointer db = m_SQLConn->Query("SELECT ip, flag FROM adminok WHERE nev = '%s'", nick.c_str());
+	QueryResultPointer db = m_SQLConn->Query("SELECT vhost, flag FROM adminok WHERE nev = '%s'", nick.c_str());
 	if(db)
 	{
-		string ip = db->Fetch()[0].GetString();
+		string vhost = db->Fetch()[0].GetString();
 
-		if(nick_ip != ip)
+		if(Vhost != vhost)
 			return false;
 
 		int flag = cast_int(db->Fetch()[1].GetUInt8());

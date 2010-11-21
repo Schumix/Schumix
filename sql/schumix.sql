@@ -3,7 +3,7 @@ CREATE TABLE `adminok` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `nev` varchar(21) NOT NULL default '',
   `jelszo` varchar(100) NOT NULL default '',
-  `ip` varchar(100) NOT NULL default '',
+  `vhost` varchar(100) NOT NULL default '',
   `flag` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;

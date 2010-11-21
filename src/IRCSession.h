@@ -218,7 +218,7 @@ protected:
 	// Adminok megállapitása
 	bool Admin(string nick);
 	bool Admin(string nick, AdminFlag Flag);
-	bool Admin(string nick, string nick_ip, AdminFlag Flag);
+	bool Admin(string nick, string Vhost, AdminFlag Flag);
 
 	void SvnSandshroud(int rev, string channel);
 

@@ -242,7 +242,7 @@ void IRCSession::Hozzaferes(IRCMessage& recvData)
 
 		if(JelszoSql == jelszo_hash)
 		{
-			m_SQLConn->Query("UPDATE adminok SET ip = '%s' WHERE nev = '%s'", recvData.source_host.c_str(), Nev.c_str());
+			m_SQLConn->Query("UPDATE adminok SET vhost = '%s' WHERE nev = '%s'", recvData.source_host.c_str(), Nev.c_str());
 			SendChatMessage(PRIVMSG, Nev.c_str(), "Hozzáférés engedélyezve");
 		}
 		else

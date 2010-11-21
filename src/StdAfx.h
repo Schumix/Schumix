@@ -50,6 +50,7 @@ using std::string;
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/assert.hpp>
 
 #if PLATFORM == PLATFORM_WINDOWS
 #include <tchar.h>
@@ -59,7 +60,6 @@ using std::string;
 #include <Psapi.h>
 #include "shared/WinAPIExtensions.h"
 #include "shared/dirent.h"
-#include <assert.h>
 #else
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -69,7 +69,6 @@ using std::string;
 #include <netdb.h> 
 #include <unistd.h>
 #include <dirent.h>
-#include <assert.h>
 #endif
 
 #if PLATFORM == PLATFORM_WINDOWS
