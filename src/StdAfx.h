@@ -59,7 +59,7 @@ using std::string;
 #include <Psapi.h>
 #include "shared/WinAPIExtensions.h"
 #include "shared/dirent.h"
-#include <assert>
+#include <assert.h>
 #else
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -86,13 +86,8 @@ inline uint32 getMSTime()
 }
 #endif
 
-#if PLATFORM == PLATFORM_WINDOWS
-#include "../dep/VC/include/curl/curl.h"
-#include "../dep/VC/include/mysql/mysql.h"
-#else
 #include <curl/curl.h>
 #include <mysql/mysql.h>
-#endif
 
 #include "shared/Threading.h"
 #include "shared/Log.h"

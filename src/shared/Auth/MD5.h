@@ -20,11 +20,7 @@
 #ifndef _MD5_H
 #define _MD5_H
 
-#if PLATFORM == PLATFORM_WIN32
-#include "../../../dep/VC/include/openssl/md5.h"
-#else
 #include <openssl/md5.h>
-#endif
 
 class MD5Hash
 {

@@ -20,11 +20,7 @@
 #ifndef _SHA1_H
 #define _SHA1_H
 
-#if PLATFORM == PLATFORM_WIN32
-#include "../../../dep/VC/include/openssl/sha.h"
-#else
 #include <openssl/sha.h>
-#endif
 
 class Sha1Hash
 {
