@@ -7,7 +7,7 @@ Hozzunk létre bárhol a gépünkön egy mappát. Pl legyen a neve schumix.
 1. Visual Studio 2010
 A kodunkban találunk a /dep/DLL Files -en bellül dll-eket. Ezeket másoljuk a botunk mappályába amit létrehoztunk.
 Fontos az amd64 tartalma csak akkor kell ha x64-ben forgatunk majd. Ehez még töltsük le errõl a linkrõl: [link potolva lesz] a maradék dll fájlokat.
-Ezeket is helyezük el a botunk mappályába amit létrehoztunk.
+Ezeket helyezük el a botunk mappályába amit létrehoztunk.
 Ha ezekkel megvagyunk nincs más teendönk mint a win mappába benni és a Schumix.sln megnyitani. Majd átálitani Release-ra.
 Ha megvan a /bin/Release mappában lesz a Schumix.exe. Másoljuk abba a mappába amit létrehoztunk neki és az install fájlunk mellet van egy schumix.conf is.
 Azt is másoljuk mellé. Ha ezzel megvagyunk nincs más mint a konfot bekonfigolni.
