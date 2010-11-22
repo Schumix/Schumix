@@ -77,9 +77,8 @@ public:
 
 	void Notice(const char * source, const char * format, ...)
 	{
-#if PLATFORM == PLATFORM_WINDOWS
 		Guard g(mutex);
-#endif
+
 		va_list ap;
 		va_start(ap, format);
 		Time();
@@ -94,16 +93,15 @@ public:
 		}
 
 		vprintf(format, ap);
-		Line();
+		putchar('\n');
 		va_end(ap);
 		Color(TNORMAL);
 	}
 
 	void Info(const char * source, const char * format, ...)
 	{
-#if PLATFORM == PLATFORM_WINDOWS
 		Guard g(mutex);
-#endif
+
 		va_list ap;
 		va_start(ap, format);
 		Time();
@@ -118,16 +116,15 @@ public:
 		}
 
 		vprintf(format, ap);
-		Line();
+		putchar('\n');
 		va_end(ap);
 		Color(TNORMAL);
 	}
 
 	void Warning(const char * source, const char * format, ...)
 	{
-#if PLATFORM == PLATFORM_WINDOWS
 		Guard g(mutex);
-#endif
+
 		va_list ap;
 		va_start(ap, format);
 		Time();
@@ -143,16 +140,15 @@ public:
 		}
 
 		vprintf(format, ap);
-		Line();
+		putchar('\n');
 		va_end(ap);
 		Color(TNORMAL);
 	}
 
 	void Success(const char * source, const char * format, ...)
 	{
-#if PLATFORM == PLATFORM_WINDOWS
 		Guard g(mutex);
-#endif
+
 		va_list ap;
 		va_start(ap, format);
 		Time();
@@ -168,16 +164,15 @@ public:
 		}
 
 		vprintf(format, ap);
-		Line();
+		putchar('\n');
 		va_end(ap);
 		Color(TNORMAL);
 	}
 
 	void Error(const char * source, const char * format, ...)
 	{
-#if PLATFORM == PLATFORM_WINDOWS
 		Guard g(mutex);
-#endif
+
 		va_list ap;
 		va_start(ap, format);
 		Time();
@@ -193,16 +188,15 @@ public:
 		}
 
 		vprintf(format, ap);
-		Line();
+		putchar('\n');
 		va_end(ap);
 		Color(TNORMAL);
 	}
 
 	void Debug(const char * source, const char * format, ...)
 	{
-#if PLATFORM == PLATFORM_WINDOWS
 		Guard g(mutex);
-#endif
+
 		va_list ap;
 		va_start(ap, format);
 		Time();
@@ -218,7 +212,7 @@ public:
 		}
 
 		vprintf(format, ap);
-		Line();
+		putchar('\n');
 		va_end(ap);
 		Color(TNORMAL);
 	}
@@ -228,6 +222,8 @@ public:
 	
 	void LargeErrorMessage(uint32 Colour, ...)
 	{
+		Guard g(mutex);
+
 		vector<char*> lines;
 		char* pointer;
 		va_list ap;
@@ -240,6 +236,8 @@ public:
 			lines.push_back(pointer);
 			pointer = va_arg(ap, char*);
 		}
+
+		delete pointer;
 
 		if(Colour == LARGERRORMESSAGE_ERROR)
 			Color(TRED);
@@ -288,14 +286,6 @@ protected:
 	Mutex mutex;
 	//int32 log_level; Egyenlõre nincs használva.
 	time_t UNIXTIME; /* update this every loop to avoid the time() syscall! */
-
-	void Line()
-	{
-#if PLATFORM == PLATFORM_WINDOWS
-		Guard g(mutex);
-#endif
-		putchar('\n');
-	}
 
 	inline void Time()
 	{

@@ -37,6 +37,7 @@
 #include <set>
 #include <cstdarg>
 #include <signal.h>
+#include <cassert>
 
 using namespace std;
 using std::string;
@@ -50,7 +51,7 @@ using std::string;
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/enable_shared_from_this.hpp>
-#include <boost/assert.hpp>
+//#include <boost/assert.hpp>
 
 #if PLATFORM == PLATFORM_WINDOWS
 #include <tchar.h>

@@ -28,6 +28,7 @@ public:
 	Singleton()
 	{
 		// If you hit this assert, this singleton already exists -- you can't create another one!
+		assert(mSingleton == NULL);
 		mSingleton = static_cast<type*>(this);
 	}
 	// Destructor

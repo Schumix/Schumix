@@ -304,7 +304,7 @@ private:
 };
 
 typedef void(IRCSession::*IRCCallback)(IRCMessage& recvData);
-typedef map<std::string, IRCCallback> MessageHandlerMap;
+typedef map<string, IRCCallback> MessageHandlerMap;
 extern MessageHandlerMap IRCMessageHandlerMap;
 
 #define ADD_CODE(code, method) IRCMessageHandlerMap.insert(make_pair(code, method));

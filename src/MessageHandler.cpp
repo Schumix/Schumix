@@ -29,7 +29,7 @@ void IRCSession::HandleSuccessfulAuth(IRCMessage& recvData)
 	// Nickserv identification
 	if(m_UseNickServ)
 	{
-		Log.Notice("NickServ", "Sending NickServ identification.");
+		Log.Notice("NickServ", "NickServ azonosito kuldese.");
 		SendChatMessage(PRIVMSG, "NickServ", "identify %s", m_NickServPassword.c_str());
 	}
 
@@ -213,9 +213,6 @@ void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 	// Log
 	Logfajl(recvData);
 
-	// Hl üzenet
-	HLUzenet(recvData);
-
 	if(FSelect(PARANCSOK) == bekapcsol)
 	{
 		if(FSelectChannel(PARANCSOK, recvData.target) != bekapcsol && cast_int(recvData.target.find("#")) != string::npos)
@@ -234,6 +231,9 @@ void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 		else
 			Log.Warning("Funkcio", "A %s funkcio nem uzemel!", MODE);
 #endif
+
+		// Hl üzenet
+		HLUzenet(recvData);
 
 		// Schumix
 		Schumix(recvData);

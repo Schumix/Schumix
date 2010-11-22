@@ -78,7 +78,7 @@ void SocketMgr::Update()
 		FD_ZERO(&write_set);
 		FD_ZERO(&exception_set);
 
-		//m_mutex.Acquire();
+		m_mutex.Acquire();
 		for(itr = m_sockets.begin(); itr != m_sockets.end(); ++itr)
 		{
 #if PLATFORM == PLATFORM_WINDOWS
@@ -94,11 +94,11 @@ void SocketMgr::Update()
 			else
 				FD_SET((*itr)->m_fd, &read_set);
 		}
-		//m_mutex.Release();
+		m_mutex.Release();
 		
 		res = select(max_fd, &read_set, &write_set, &exception_set, &tv);
 
-		//m_mutex.Acquire();
+		m_mutex.Acquire();
 		for(itr = m_sockets.begin(); itr != m_sockets.end();)
 		{
 			s = *itr;
@@ -119,27 +119,22 @@ void SocketMgr::Update()
 					continue;
 				}
 
-				//m_mutex.Acquire();
 				s->m_inBuf.append(buffer, res);
-				//m_mutex.Release();
 			}
 
 			if(FD_ISSET(s->m_fd, &write_set) && s->m_outBuf.size())
 			{
-				//m_mutex.Acquire();
 				res = send(s->m_fd, s->m_outBuf.c_str(), s->m_outBuf.size(), 0);
 				if(res <= NULL)
 				{
-					//m_mutex.Release();
 					s->m_fd = NULL;
 					continue;
 				}
 
 				s->m_outBuf.erase(0, res);
-				//m_mutex.Release();
 			}
 		}
-		//m_mutex.Release();
+		m_mutex.Release();
 
 		Sleep(100);
 	}

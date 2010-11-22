@@ -218,7 +218,7 @@ void IRCSession::Update()
 			BejovoInfo(info);
 		}
 
-		// ~ 15 másodpercenként pinegel a szerver felé
+		// ~ 15 másodpercenként pinggel a szerver felé
 		if(getMSTime() - m_LastPing >= 15000)
 		{
 			WriteLine("PING :%s", m_Host.c_str());
@@ -274,7 +274,7 @@ void IRCSession::ReConnect()
 				}
 			}
 
-			Sleep(15*1000);
+			Sleep(30*1000);
 		}
 		else
 			Sleep(100);
