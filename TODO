@@ -1,3 +1,4 @@
 - hl uezenet hozzáadása ami akkor küldödik el annak a személynek amikor először megszólal.
 - &jegyzet-hez mesterkulcs létrehozása és bekérdezés rész hozzáirása.
 - Rss-ek átnézése mert valamitől eszik a memoriát!
+- Flood elleni védelem beépitése. Ha 10 másodperc alatt 10 sor üzenet érkezik kick.
