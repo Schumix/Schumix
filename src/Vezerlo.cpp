@@ -815,7 +815,7 @@ void Vezerlo::Leallas()
 	printf("\n");
 	Log.Notice("Vezerlo", "Leallasi folyamat elindult.");
 
-	if(!m_crash)
+	if(m_crash)
 		Uptime();
 
 	m_SvnInfo->Leallas();
