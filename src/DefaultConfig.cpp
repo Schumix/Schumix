@@ -21,15 +21,47 @@
 
 DefaultConfig::DefaultConfig(string conf)
 {
-	Log.Notice("DefaultConfig", "Nincs config fajl. Ha beszeretned allitani es letrehozni gepeld be igen. Ha nem akkor a nem szot.");
+	Log.Notice("DefaultConfig", "Nincs config fajl!");
+	Log.Notice("DefaultConfig", "Három lehetőség közül lehet választani:");
+	Log.Notice("DefaultConfig", "1. Letöltöd a konfigot. Parancs: net");
+	Log.Notice("DefaultConfig", "2. Konzolba bekonfugurálod. Parancs: konzol");
+	Log.Notice("DefaultConfig", "3. Konzolba bekonfugurálod. Parancs: kikapcs");
 	char valasz[20];
 	fgets(valasz, 20, stdin);
 	string _valasz = valasz;
 	int szokoz = _valasz.find("\n");
 
-	if(_valasz.substr(0, szokoz) == "nem")
-		exit(1);
-	else if(_valasz.substr(0, szokoz) == "igen")
+	if(_valasz.substr(0, szokoz) == "net")
+	{
+		CURL* Curl = curl_easy_init();
+		if(Curl)
+		{
+			string bufferdata;
+
+			curl_easy_setopt(Curl, CURLOPT_URL, "https://github.com/megax/Schumix/raw/master/schumix.conf");
+			curl_easy_setopt(Curl, CURLOPT_WRITEFUNCTION, DefaultConfig::writer);
+			curl_easy_setopt(Curl, CURLOPT_WRITEDATA, &bufferdata);
+			CURLcode result = curl_easy_perform(Curl);
+
+			curl_easy_cleanup(Curl);
+
+			if(result == CURLE_OK)
+			{
+				ConfigFajl = fopen(conf.c_str(), "a+");
+				if(!ConfigFajl || ConfigFajl == NULL)
+				{
+					Log.Error("DefaultConfig", "Sikertelen olvasas.\n");
+					return;
+				}
+
+				fprintf(ConfigFajl, bufferdata.c_str());
+				fclose(ConfigFajl);
+			}
+			else
+				Log.Notice("DefaultConfig", "Hiba a Http lekerdezesben.");
+		}
+	}
+	else if(_valasz.substr(0, szokoz) == "konzol")
 	{
 		ConfigFajl = fopen(conf.c_str(), "a+");
 		if(!ConfigFajl || ConfigFajl == NULL)
@@ -55,9 +87,10 @@ DefaultConfig::DefaultConfig(string conf)
 		fprintf(ConfigFajl, " *         Meghatározza a parancsok előjelét.\n");
 		fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
 		fprintf(ConfigFajl, "<Parancs Elojel=\"%s\">\n\n", _parancs.substr(0, szokoz).c_str());
+		fclose(ConfigFajl);
 	}
-
-	fclose(ConfigFajl);
+	else if(_valasz.substr(0, szokoz) == "kikapcs")
+		exit(1);
 }
 
 DefaultConfig::~DefaultConfig()
@@ -189,4 +222,16 @@ void DefaultConfig::MysqlConfig()
 	szokoz = _db.find("\n");
 
 	fprintf(ConfigFajl, "       Database=\"%s\">\n\n", _db.substr(0, szokoz).c_str());
+}
+
+int DefaultConfig::writer(char* data, size_t size, size_t nmemb, string *buffer)
+{
+	int result = NULL;
+
+	if(buffer != NULL)
+	{
+		buffer->append(data, size* nmemb);
+		result = size* nmemb;
+	}
+	return result;
 }

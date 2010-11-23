@@ -1,4 +1,3 @@
 - hl uezenet hozzáadása ami akkor küldödik el annak a személynek amikor először megszólal.
 - &jegyzet-hez mesterkulcs létrehozása és bekérdezés rész hozzáirása.
-- Ha nincs config fájl felajálja a program hogy leszedje-e internetről a configot és majd kézzel bekonfigurálja vagy kézzel konzolban betölti az adatokat vagy egyszerüen leáll a program.
 - Rss-ek átnézése mert valamitől eszik a memoriát!

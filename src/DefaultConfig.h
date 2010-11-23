@@ -32,6 +32,7 @@ protected:
 
 private:
 	FILE* ConfigFajl;
+	static int writer(char* data, size_t size, size_t nmemb, string *buffer);
 };
 
 #endif

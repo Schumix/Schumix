@@ -289,7 +289,7 @@ protected:
 
 	inline void Time()
 	{
-		tm * t = localtime(&UNIXTIME);
+		tm* t = localtime(&UNIXTIME);
 		printf("%02u:%02u ", t->tm_hour, t->tm_min);
 	}
 };
