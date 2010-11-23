@@ -212,21 +212,6 @@ void Vezerlo::_UnhookSignals()
 #endif
 }
 
-/*void Vezerlo::split(string str, string delim, vector<string>& results)
-{
-	int at;
-	while((at = str.find_first_of(delim)) != str.npos)
-	{
-		if(at > 0)
-			results.push_back(str.substr(0, at));
-
-		str = str.substr(at+1);
-	}
-
-	if(str.length() > 0)
-		results.push_back(str);
-}*/
-
 vector<string> Vezerlo::split(const string str, const string delim, vector<string>& result)
 {
 	int at = 0;
