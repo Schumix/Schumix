@@ -212,7 +212,7 @@ void Vezerlo::_UnhookSignals()
 #endif
 }
 
-void Vezerlo::split(string str, string delim, vector<string>& results)
+/*void Vezerlo::split(string str, string delim, vector<string>& results)
 {
 	int at;
 	while((at = str.find_first_of(delim)) != str.npos)
@@ -225,6 +225,25 @@ void Vezerlo::split(string str, string delim, vector<string>& results)
 
 	if(str.length() > 0)
 		results.push_back(str);
+}*/
+
+vector<string> Vezerlo::split(const string str, const string delim, vector<string>& result)
+{
+	int at = 0;
+	string text = str;
+
+	while((at = text.find_first_of(delim)) != text.npos)
+	{
+		if(at > 0)
+			result.push_back(text.substr(0, at));
+
+		text = text.substr(at+1);
+	}
+
+	if(text.length() > 0)
+		result.push_back(text);
+
+	return result;
 }
 
 int Vezerlo::Ev()
@@ -554,7 +573,7 @@ string Vezerlo::htmldecode(string c)
 {
 	string escaped = "";
 
-	vector<string> res;
+	vector<string> res(1);
 	split(c, "&", res);
 
 	int max = res.size();

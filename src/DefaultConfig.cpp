@@ -70,11 +70,11 @@ void DefaultConfig::IrcConfig()
 	fprintf(ConfigFajl, "/* Schumix Configuration File */\n");
 	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
 	fprintf(ConfigFajl, " * IRC\n");
-	fprintf(ConfigFajl, " *	Server\n");
-	fprintf(ConfigFajl, " * 		The IRC server this bot will connect to.\n");
-	fprintf(ConfigFajl, " * 	Port\n");
+	fprintf(ConfigFajl, " *    Server\n");
+	fprintf(ConfigFajl, " *     The IRC server this bot will connect to.\n");
+	fprintf(ConfigFajl, " *    Port\n");
 	fprintf(ConfigFajl, " *		The port of the IRC server the bot will connect to. Default: 6667\n");
-	fprintf(ConfigFajl, " *	LinesPerSecond\n");
+	fprintf(ConfigFajl, " *    LinesPerSecond\n");
 	fprintf(ConfigFajl, " *		Anti-flood feature. The lines the bot can send per second.\n");
 	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
 
@@ -124,6 +124,16 @@ void DefaultConfig::IrcConfig()
 	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
 	fprintf(ConfigFajl, "<NickServ Enable=\"0\"\n");
 	fprintf(ConfigFajl, "          Password=\"jelszo\">\n\n");
+
+	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
+	fprintf(ConfigFajl, " * HostServ\n");
+	fprintf(ConfigFajl, " *     Enable\n");
+	fprintf(ConfigFajl, " *         Vhost ki be kapcsolása. 0 kikapcsolva, 1 bekapcsolva.\n");
+	fprintf(ConfigFajl, " *     Vhost\n");
+	fprintf(ConfigFajl, " *         Ha nincs vhost-od ted 0-ra ha van 1-re.\n");
+	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
+	fprintf(ConfigFajl, "<HostServ Enable=\"0\"\n");
+ 	fprintf(ConfigFajl, "          Vhost=\"0\">\n");
 }
 
 void DefaultConfig::MysqlConfig()
@@ -134,14 +144,12 @@ void DefaultConfig::MysqlConfig()
 	fprintf(ConfigFajl, " *         Host of the Hearthstone character database's mysql.\n");
 	fprintf(ConfigFajl, " *    Port\n");
 	fprintf(ConfigFajl, " *         Port of the mySQL server.\n");
-	fprintf(ConfigFajl, " *	User\n");
-	fprintf(ConfigFajl, " *	     Username to authenticate to the mySQL server with.\n");
+	fprintf(ConfigFajl, " *    User\n");
+	fprintf(ConfigFajl, " *         Username to authenticate to the mySQL server with.\n");
 	fprintf(ConfigFajl, " *    Password\n");
-	fprintf(ConfigFajl, " * 	     Password to authenticate with.\n");
+	fprintf(ConfigFajl, " *         Password to authenticate with.\n");
 	fprintf(ConfigFajl, " *    Database\n");
 	fprintf(ConfigFajl, " *         The database that holds character information.\n");
-	fprintf(ConfigFajl, " *	  Allapot\n");
-	fprintf(ConfigFajl, " *			Az Mysql 1-es esetén üzemel 0-a esetén nem.\n");
 	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
 
 	printf("Ird be a hostot: ");

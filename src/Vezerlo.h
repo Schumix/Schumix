@@ -47,7 +47,8 @@ public:
 
 	string urlencode(const string &c);
 	string htmldecode(string c);
-	void split(string str, string delim, vector<string>& results);
+	//void split(string str, string delim, vector<string>& results);
+	vector<string> split(const string str, const string delim, vector<string>& result);
 
 protected:
 	// Mysql hozzáférés

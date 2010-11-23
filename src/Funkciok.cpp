@@ -104,7 +104,7 @@ void IRCSession::Keres(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -151,7 +151,6 @@ void IRCSession::Keres(IRCMessage& recvData)
 				string matched(matches[2].first, matches[2].second);
 
 				boost::regex re1(".titleNoFormatting.:.(.*).,.content.:.");
-
 				boost::cmatch matches1;
 
 				boost::regex_search(bufferdata.c_str(), matches1, re1);
@@ -180,7 +179,7 @@ void IRCSession::Forditas(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -309,7 +308,7 @@ void IRCSession::Xrev(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -352,7 +351,7 @@ void IRCSession::Irc(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -402,7 +401,7 @@ void IRCSession::Uzenet(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -443,7 +442,7 @@ void IRCSession::Jegyzet(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -483,7 +482,6 @@ void IRCSession::Jegyzet(IRCMessage& recvData)
 
 		for(int i = 1; i < resAdat; i++)
 			alomany += " " + res[i];
-
 
 		string kod = randomString(10, true, true, false);
 		m_SQLConn->Query("INSERT INTO `jegyzetek`(kod, nick, jegyzet) VALUES ('%s', '%s', '%s')", kod.c_str(), recvData.source_nick.c_str(), alomany.substr(1).c_str());

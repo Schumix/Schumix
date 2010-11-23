@@ -40,7 +40,7 @@ void IRCSession::Admin(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -208,7 +208,7 @@ void IRCSession::Hozzaferes(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -263,7 +263,7 @@ void IRCSession::Ujjelszo(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 3)
@@ -337,7 +337,7 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -352,8 +352,11 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 	{
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Alparancsok használata:");
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel kezelés: %sfunkcio <be vagy ki> <funkcio név>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel-en több funkció kezelése: %sfunkcio <be vagy ki> <funkcio név1> <funkcio név2> ... stb", m_ParancsElojel.c_str());
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel kezelés máshonnét: %sfunkcio channel <channel név> <be vagy ki> <funkcio név>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Channel-en több funkció kezelés máshonnét: %sfunkcio channel <channel név> <be vagy ki> <funkcio név1> <funkcio név2> ... stb", m_ParancsElojel.c_str());
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Együtes kezelés: %sfunkcio all <be vagy ki> <funkcio név>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Együtesen több funkció kezelése: %sfunkcio all <be vagy ki> <funkcio név1> <funkcio név2> ... stb", m_ParancsElojel.c_str());
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "All update kezelése: %sfunkcio update all", m_ParancsElojel.c_str());
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Más channel update kezelése: %sfunkcio update <channel neve>", m_ParancsElojel.c_str());
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Ahol tartozkodsz channel update kezelése: %sfunkcio update", m_ParancsElojel.c_str());
@@ -412,9 +415,25 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 
 			if(status == bekapcsol || status == kikapcsol)
 			{
-				string nev = res[3];
-				SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s: %skapcsolva", nev.c_str(), status.c_str());
-				m_SQLConn->Query("UPDATE schumix SET funkcio_status = '%s' WHERE funkcio_nev = '%s'", status.c_str(), nev.c_str());
+				if(res.size() >= 5)
+				{
+					string alomany;
+					int resAdat = res.size();
+
+					for(int i = 3; i < resAdat; i++)
+					{
+						alomany += ", " + res[i];
+						m_SQLConn->Query("UPDATE schumix SET funkcio_status = '%s' WHERE funkcio_nev = '%s'", status.c_str(), res[i].c_str());
+					}
+
+					SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s: %skapcsolva", alomany.substr(2).c_str(), status.c_str());
+				}
+				else
+				{
+					string nev = res[3];
+					SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s: %skapcsolva", nev.c_str(), status.c_str());
+					m_SQLConn->Query("UPDATE schumix SET funkcio_status = '%s' WHERE funkcio_nev = '%s'", status.c_str(), nev.c_str());
+				}
 			}
 		}
 	}
@@ -454,9 +473,26 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 				return;
 			}
 
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s: %skapcsolva", res[4].c_str(), status.c_str());
-			m_SQLConn->Query("UPDATE channel SET funkciok = '%s' WHERE szoba = '%s'", ChannelFunkciok(res[4], status, channel).c_str(), channel.c_str());
-			ChannelFunkcioReload();
+			if(res.size() >= 6)
+			{
+				string alomany;
+				int resAdat = res.size();
+
+				for(int i = 4; i < resAdat; i++)
+				{
+					alomany += ", " + res[i];
+					m_SQLConn->Query("UPDATE channel SET funkciok = '%s' WHERE szoba = '%s'", ChannelFunkciok(res[i], status, channel).c_str(), channel.c_str());
+					ChannelFunkcioReload();
+				}
+
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s: %skapcsolva",  alomany.substr(2).c_str(), status.c_str());
+			}
+			else
+			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s: %skapcsolva", res[4].c_str(), status.c_str());
+				m_SQLConn->Query("UPDATE channel SET funkciok = '%s' WHERE szoba = '%s'", ChannelFunkciok(res[4], status, channel).c_str(), channel.c_str());
+				ChannelFunkcioReload();
+			}
 		}
 	}
 	else if(info == update)
@@ -503,9 +539,26 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 
 		if(status == bekapcsol || status == kikapcsol)
 		{
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s: %skapcsolva", res[2].c_str(), status.c_str());
-			m_SQLConn->Query("UPDATE channel SET funkciok = '%s' WHERE szoba = '%s'", ChannelFunkciok(res[2], status, recvData.target).c_str(), recvData.target.c_str());
-			ChannelFunkcioReload();
+			if(res.size() >= 4)
+			{
+				string alomany;
+				int resAdat = res.size();
+
+				for(int i = 2; i < resAdat; i++)
+				{
+					alomany += ", " + res[i];
+					m_SQLConn->Query("UPDATE channel SET funkciok = '%s' WHERE szoba = '%s'", ChannelFunkciok(res[i], status, recvData.target).c_str(), recvData.target.c_str());
+					ChannelFunkcioReload();
+				}
+
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s: %skapcsolva",  alomany.substr(2).c_str(), status.c_str());
+			}
+			else
+			{
+				SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s: %skapcsolva", res[2].c_str(), status.c_str());
+				m_SQLConn->Query("UPDATE channel SET funkciok = '%s' WHERE szoba = '%s'", ChannelFunkciok(res[2], status, recvData.target).c_str(), recvData.target.c_str());
+				ChannelFunkcioReload();
+			}
 		}
 	}
 
@@ -523,7 +576,7 @@ void IRCSession::Channel(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -651,7 +704,7 @@ void IRCSession::Sznap(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -687,7 +740,7 @@ void IRCSession::Nick(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -714,7 +767,7 @@ void IRCSession::Join(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() == 2)
@@ -742,7 +795,7 @@ void IRCSession::Left(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -766,7 +819,7 @@ void IRCSession::Kick(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -812,7 +865,7 @@ void IRCSession::Mode(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 3)
@@ -846,7 +899,7 @@ void IRCSession::HLFunkcio(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -951,7 +1004,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -982,7 +1035,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 			{
 				string nev = db->Fetch()[0].GetString();
 				string channel = db->Fetch()[1].GetString();
-				vector<string> reschannel;
+				vector<string> reschannel(1);
 				sVezerlo.split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
@@ -1104,7 +1157,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 			if(db)
 			{
 				string channel = db->Fetch()[0].GetString();
-				vector<string> reschannel;
+				vector<string> reschannel(1);
 				sVezerlo.split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
@@ -1148,7 +1201,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 			if(db)
 			{
 				string channel = db->Fetch()[0].GetString();
-				vector<string> reschannel;
+				vector<string> reschannel(1);
 				sVezerlo.split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
@@ -1191,7 +1244,7 @@ void IRCSession::Git(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -1223,7 +1276,7 @@ void IRCSession::Git(IRCMessage& recvData)
 				string nev = db->Fetch()[0].GetString();
 				string tipus = db->Fetch()[1].GetString();
 				string channel = db->Fetch()[2].GetString();
-				vector<string> reschannel;
+				vector<string> reschannel(1);
 				sVezerlo.split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
@@ -1376,7 +1429,7 @@ void IRCSession::Git(IRCMessage& recvData)
 			if(db)
 			{
 				string channel = db->Fetch()[1].GetString();
-				vector<string> reschannel;
+				vector<string> reschannel(1);
 				sVezerlo.split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
@@ -1429,7 +1482,7 @@ void IRCSession::Git(IRCMessage& recvData)
 			if(db)
 			{
 				string channel = db->Fetch()[1].GetString();
-				vector<string> reschannel;
+				vector<string> reschannel(1);
 				sVezerlo.split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
@@ -1472,7 +1525,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
@@ -1503,7 +1556,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 			{
 				string nev = db->Fetch()[0].GetString();
 				string channel = db->Fetch()[1].GetString();
-				vector<string> reschannel;
+				vector<string> reschannel(1);
 				sVezerlo.split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
@@ -1625,7 +1678,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 			if(db)
 			{
 				string channel = db->Fetch()[0].GetString();
-				vector<string> reschannel;
+				vector<string> reschannel(1);
 				sVezerlo.split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
@@ -1669,7 +1722,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 			if(db)
 			{
 				string channel = db->Fetch()[0].GetString();
-				vector<string> reschannel;
+				vector<string> reschannel(1);
 				sVezerlo.split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
@@ -1712,7 +1765,7 @@ void IRCSession::AutoFunkcio(IRCMessage& recvData)
 		return;
 	}
 
-	vector<string> res;
+	vector<string> res(1);
 	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)

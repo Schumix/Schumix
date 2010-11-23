@@ -433,7 +433,7 @@ void GitInfo::Kiiras(uint32 id)
 	QueryResultPointer db = m_SQLConn[id]->Query("SELECT channel FROM gitinfo WHERE id = '%u'", id);
 	if(db)
 	{
-		vector<string> reschannel;
+		vector<string> reschannel(1);
 		sVezerlo.split(db->Fetch()[0].GetString(), ",", reschannel);
 
 		if(reschannel.size() < 2)
