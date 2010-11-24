@@ -33,6 +33,18 @@ void IRCSession::Logfajl(IRCMessage& recvData)
 		fprintf(LogSzoba, "[%i. %i. %i. %i:%i] <%s> %s\n", sVezerlo.Ev(), sVezerlo.Honap(), sVezerlo.Nap(), sVezerlo.Ora(), sVezerlo.Perc(), recvData.source_nick.c_str(), recvData.args.c_str());
 		fclose(LogSzoba);
 	}
+	else if(cast_int(recvData.target.find("#")) == string::npos)
+	{
+		FILE* LogSzoba = fopen(format("%s/%s.log", m_LogHelye.c_str(), recvData.target.c_str()).c_str(), "a+");
+		if(!LogSzoba || LogSzoba == NULL)
+		{
+			Log.Error("Log", "Sikertelen olvasas.\n");
+			return;
+		}
+
+		fprintf(LogSzoba, "[%i. %i. %i. %i:%i] <%s> %s\n", sVezerlo.Ev(), sVezerlo.Honap(), sVezerlo.Nap(), sVezerlo.Ora(), sVezerlo.Perc(), recvData.source_nick.c_str(), recvData.args.c_str());
+		fclose(LogSzoba);
+	}
 #ifdef _DEBUG_MOD
 	else
 		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", LOG);
