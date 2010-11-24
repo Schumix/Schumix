@@ -100,15 +100,15 @@ DefaultConfig::~DefaultConfig()
 
 void DefaultConfig::IrcConfig()
 {
-	fprintf(ConfigFajl, "/* Schumix Configuration File */\n");
+	fprintf(ConfigFajl, "/* Schumix konfig fájla */\n");
 	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
 	fprintf(ConfigFajl, " * IRC\n");
-	fprintf(ConfigFajl, " *    Server\n");
-	fprintf(ConfigFajl, " *     The IRC server this bot will connect to.\n");
-	fprintf(ConfigFajl, " *    Port\n");
-	fprintf(ConfigFajl, " *		The port of the IRC server the bot will connect to. Default: 6667\n");
-	fprintf(ConfigFajl, " *    LinesPerSecond\n");
-	fprintf(ConfigFajl, " *		Anti-flood feature. The lines the bot can send per second.\n");
+	fprintf(ConfigFajl, " *      Server\n");
+	fprintf(ConfigFajl, " *          Az irc szerver címe.\n");
+	fprintf(ConfigFajl, " *      Port\n");
+	fprintf(ConfigFajl, " *          Az irc szerver kapcsolodási portja. Alapértelmezés: 6667\n");
+	fprintf(ConfigFajl, " *      LinesPerSecond\n");
+	fprintf(ConfigFajl, " *          Anti-flood feature. The lines the bot can send per second. Jelenleg nem üzemel!\n");
 	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
 
 	printf("Ird be a szervert: ");
@@ -129,19 +129,29 @@ void DefaultConfig::IrcConfig()
 
 	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
 	fprintf(ConfigFajl, " * Log\n");
+	fprintf(ConfigFajl, " *     Loglevel\n");
+	fprintf(ConfigFajl, " *         Van három logolási szint.\n");
+	fprintf(ConfigFajl, " *         Első lehetőség, csak a semilyen szintüek futnak. Száma: 0\n");
+	fprintf(ConfigFajl, " *         Második lehetőség, csak az error fut le pluszba. Száma: 1\n");
+	fprintf(ConfigFajl, " *         Harmadik lehetőség, az error mellet lefut a warring is. Száma: 2\n");
+	fprintf(ConfigFajl, " *         Negyedik lehetőség, lefut a debug is. Száma: 3\n");
+	fprintf(ConfigFajl, " *         Alapértelmezés: 3\n");
 	fprintf(ConfigFajl, " *     Loghelye\n");
 	fprintf(ConfigFajl, " *         Meghatározza hogy a logolást hova mentse a bot. Alapértelmezés: szoba\n");
 	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
-	fprintf(ConfigFajl, "<Log Loghelye=\"szoba\">\n\n");
+	fprintf(ConfigFajl, "<Log Loglevel=\"3\"\n");
+	fprintf(ConfigFajl, "     Loghelye=\"szoba\">\n\n");
 
 	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
 	fprintf(ConfigFajl, " * User\n");
 	fprintf(ConfigFajl, " *     Nick\n");
-	fprintf(ConfigFajl, " *         The nickname this bot will use.\n");
+	fprintf(ConfigFajl, " *         Elsődleges nick.\n");
+	fprintf(ConfigFajl, " *     Nick2\n");
+	fprintf(ConfigFajl, " *         Másodlagos nick.\n");
+	fprintf(ConfigFajl, " *     Nick3\n");
+	fprintf(ConfigFajl, " *         Harmadlagos nick.\n");
 	fprintf(ConfigFajl, " *     Username\n");
-	fprintf(ConfigFajl, " *         The username this bot will use.\n");
-	fprintf(ConfigFajl, " *     Host\n");
-	fprintf(ConfigFajl, " *         The host this bot will use.\n");
+	fprintf(ConfigFajl, " *         Felhasználó név.\n");
 	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
 
 	printf("Ird be a nicket: ");
@@ -154,12 +164,11 @@ void DefaultConfig::IrcConfig()
 	fprintf(ConfigFajl, "      Nick2=\"_%s\"\n", _nick.substr(0, szokoz).c_str());
 	fprintf(ConfigFajl, "      Nick3=\"__%s\"\n", _nick.substr(0, szokoz).c_str());
 	fprintf(ConfigFajl, "      Username=\"%s\"\n", _nick.substr(0, szokoz).c_str());
-	fprintf(ConfigFajl, "      Host=\"%s\">\n\n", host.c_str());
 	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
 	fprintf(ConfigFajl, " * NickServ\n");
-	fprintf(ConfigFajl, " *     Enable\n");
+	fprintf(ConfigFajl, " *    Enable\n");
 	fprintf(ConfigFajl, " *         Whether or not the IRC server supports NickServ and you would like to AUTH.\n");
-	fprintf(ConfigFajl, " *     Password\n");
+	fprintf(ConfigFajl, " *    Password\n");
 	fprintf(ConfigFajl, " *         The password for this bot's nickname with NickServ.\n");
 	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
 	fprintf(ConfigFajl, "<NickServ Enable=\"0\"\n");
@@ -167,9 +176,9 @@ void DefaultConfig::IrcConfig()
 
 	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
 	fprintf(ConfigFajl, " * HostServ\n");
-	fprintf(ConfigFajl, " *     Enable\n");
+	fprintf(ConfigFajl, " *    Enable\n");
 	fprintf(ConfigFajl, " *         Vhost ki be kapcsolása. 0 kikapcsolva, 1 bekapcsolva.\n");
-	fprintf(ConfigFajl, " *     Vhost\n");
+	fprintf(ConfigFajl, " *    Vhost\n");
 	fprintf(ConfigFajl, " *         Ha nincs vhost-od ted 0-ra ha van 1-re.\n");
 	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
 	fprintf(ConfigFajl, "<HostServ Enable=\"0\"\n");
@@ -181,15 +190,15 @@ void DefaultConfig::MysqlConfig()
 	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
 	fprintf(ConfigFajl, " * MySQL\n");
 	fprintf(ConfigFajl, " *    Host\n");
-	fprintf(ConfigFajl, " *         Host of the Hearthstone character database's mysql.\n");
+	fprintf(ConfigFajl, " *         Mysql szerver host neve.\n");
 	fprintf(ConfigFajl, " *    Port\n");
-	fprintf(ConfigFajl, " *         Port of the mySQL server.\n");
+	fprintf(ConfigFajl, " *         Mysql-hez használt port.\n");
 	fprintf(ConfigFajl, " *    User\n");
-	fprintf(ConfigFajl, " *         Username to authenticate to the mySQL server with.\n");
+	fprintf(ConfigFajl, " *         Felhasználónév a mysql szerverhez.\n");
 	fprintf(ConfigFajl, " *    Password\n");
-	fprintf(ConfigFajl, " *         Password to authenticate with.\n");
+	fprintf(ConfigFajl, " *         Jelszó a mysql szerverhez.\n");
 	fprintf(ConfigFajl, " *    Database\n");
-	fprintf(ConfigFajl, " *         The database that holds character information.\n");
+	fprintf(ConfigFajl, " *         Az adatbázis neve.\n");
 	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
 
 	printf("Ird be a hostot: ");

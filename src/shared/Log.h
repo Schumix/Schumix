@@ -300,7 +300,7 @@ protected:
 	Mutex mutex;
 	uint8 log_level;
 
-	// Frissiti az idõt a jelenlegi aktiálisra.
+	// Frissiti az idõt a jelenlegire
 	time_t UNIXTIME;
 
 	inline void Time()
