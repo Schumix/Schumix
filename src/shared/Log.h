@@ -55,6 +55,11 @@ public:
 		UNIXTIME = time(&UNIXTIME);
 	}
 
+	void Init(uint8 loglevel)
+	{
+		log_level = loglevel;
+	}
+
 	void Color(unsigned int color)
 	{
 #if PLATFORM == PLATFORM_UNIX
@@ -121,30 +126,6 @@ public:
 		Color(TNORMAL);
 	}
 
-	void Warning(const char * source, const char * format, ...)
-	{
-		Guard g(mutex);
-
-		va_list ap;
-		va_start(ap, format);
-		Time();
-		Color(TYELLOW);
-		fputs("W ", stdout);
-		if(*source)
-		{
-			Color(TWHITE);
-			fputs(source, stdout);
-			putchar(':');
-			putchar(' ');
-			Color(TYELLOW);
-		}
-
-		vprintf(format, ap);
-		putchar('\n');
-		va_end(ap);
-		Color(TNORMAL);
-	}
-
 	void Success(const char * source, const char * format, ...)
 	{
 		Guard g(mutex);
@@ -171,6 +152,9 @@ public:
 
 	void Error(const char * source, const char * format, ...)
 	{
+		if(log_level < 1)
+			return;
+
 		Guard g(mutex);
 
 		va_list ap;
@@ -193,8 +177,38 @@ public:
 		Color(TNORMAL);
 	}
 
+	void Warning(const char * source, const char * format, ...)
+	{
+		if(log_level < 2)
+			return;
+
+		Guard g(mutex);
+
+		va_list ap;
+		va_start(ap, format);
+		Time();
+		Color(TYELLOW);
+		fputs("W ", stdout);
+		if(*source)
+		{
+			Color(TWHITE);
+			fputs(source, stdout);
+			putchar(':');
+			putchar(' ');
+			Color(TYELLOW);
+		}
+
+		vprintf(format, ap);
+		putchar('\n');
+		va_end(ap);
+		Color(TNORMAL);
+	}
+
 	void Debug(const char * source, const char * format, ...)
 	{
+		if(log_level < 3)
+			return;
+
 		Guard g(mutex);
 
 		va_list ap;
@@ -284,8 +298,10 @@ protected:
 	HANDLE stdout_handle, stderr_handle;
 #endif
 	Mutex mutex;
-	//int32 log_level; Egyenlõre nincs használva.
-	time_t UNIXTIME; /* update this every loop to avoid the time() syscall! */
+	uint8 log_level;
+
+	// Frissiti az idõt a jelenlegi aktiálisra.
+	time_t UNIXTIME;
 
 	inline void Time()
 	{

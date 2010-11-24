@@ -26,6 +26,7 @@ CLog Log;
 
 int main()
 {
+	Log.Init(3);
 	Log.Color(TBLUE);
 	printf("Schumix Verzio: %s\n", revision);
 	printf("A program leallitasahoz hasznald a <Ctrl+C> parancsot vagy <kikapcs>\n\n");
@@ -65,6 +66,7 @@ int main()
 
 	printf("\n");
 
+	Log.Init(cast_uint8(Config.MainConfig.GetIntDefault("Log", "Loglevel", 3)));
 	new Vezerlo();
 
 #if PLATFORM == PLATFORM_WINDOWS
