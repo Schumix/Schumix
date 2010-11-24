@@ -21,10 +21,10 @@
 #define _SCHUMIX_CONFIG_H
 
 /*
- * Aktuális verzió szám.
+ * Aktuális verzió száma.
  */
 
-#define revision "3.3.7"
+#define revision "3.4.0"
 
 /*
  * Program fájlainak elnevezése. Ha cserélve van név egy helyen keljen csak cserélni.
@@ -53,13 +53,6 @@
  */
 
 #define LIDO 15
-
-/*
- * Logolás helye. Meghatározza a mappát hova logol.
- * Alapértelemzés: szoba
- */
-
-#define LogHelye "szoba"
 
 /*
  * Svn multithread maximáls száma. Meghatározza mennyi lehet a max multithread.

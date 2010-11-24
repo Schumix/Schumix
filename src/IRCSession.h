@@ -247,12 +247,8 @@ protected:
 	string m_UserName;
 	// Éppen használatban lévõ nick
 	string m_NickTarolo;
-	// Configból olvasható hárómom nick név
+	// Configból olvasható három nick név
 	string m_NickName[3];
-	// Configból olvasható hárómom host név
-	string m_HostName;
-	// m_HostName
-	string m_ServerName;
 
 	// Channel meghatárózás hova kell irni az adatott
 	string m_ChannelPrivmsg;
@@ -292,6 +288,9 @@ protected:
 	bool AutoMode;
 	// Channel-t tároló a mode futatásához
 	string ModeChannel;
+
+	// Log helye
+	string m_LogHelye;
 
 private:
 	// Url kezeles

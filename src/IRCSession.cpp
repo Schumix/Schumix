@@ -43,12 +43,12 @@ IRCSession::IRCSession(string host, uint32 port, string sqlhost, string user, st
 
 	m_NickTarolo = m_NickName[0];
 
-	DIR* pDir = opendir(LogHelye);
+	DIR* pDir = opendir(m_LogHelye.c_str());
 	if(pDir == NULL)
 #if PLATFORM == PLATFORM_WINDOWS
-		CreateDirectoryA(LogHelye, 0);
+		CreateDirectoryA(m_LogHelye.c_str(), 0);
 #else
-		mkdir(LogHelye, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		mkdir(m_LogHelye.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 #endif
 
 	m_ConnState = CONN_CONNECTED;
@@ -102,13 +102,13 @@ void IRCSession::RehashConfig(string host, string user, string pass, string data
 	else
 		Log.Error("IRCSession", "Mysql adatbazishoz sikertelen a kapcsolodas.");
 
+	m_LogHelye = Config.MainConfig.GetStringDefault("Log", "Loghelye", "szoba");
+
 	// Irc Config
 	m_NickName[0] = Config.MainConfig.GetStringDefault("User", "Nick", "Test");
 	m_NickName[1] = Config.MainConfig.GetStringDefault("User", "Nick2", "Test2");
 	m_NickName[2] = Config.MainConfig.GetStringDefault("User", "Nick3", "Test3");
 	m_UserName = Config.MainConfig.GetStringDefault("User", "Username", "Test");
-	m_HostName = Config.MainConfig.GetStringDefault("User", "Host", "schumix");
-	m_ServerName = m_HostName;
 
 	m_UseNickServ = Config.MainConfig.GetBoolDefault("NickServ", "Enable", false);
 	m_NickServPassword = Config.MainConfig.GetStringDefault("NickServ", "Password", "");

@@ -128,6 +128,13 @@ void DefaultConfig::IrcConfig()
 	fprintf(ConfigFajl, "     LinesPerSecond=\"3\">\n\n");
 
 	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
+	fprintf(ConfigFajl, " * Log\n");
+	fprintf(ConfigFajl, " *     Loghelye\n");
+	fprintf(ConfigFajl, " *         Meghatározza hogy a logolást hova mentse a bot. Alapértelmezés: szoba\n");
+	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
+	fprintf(ConfigFajl, "<Log Loghelye=\"szoba\">\n\n");
+
+	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
 	fprintf(ConfigFajl, " * User\n");
 	fprintf(ConfigFajl, " *     Nick\n");
 	fprintf(ConfigFajl, " *         The nickname this bot will use.\n");
@@ -166,7 +173,7 @@ void DefaultConfig::IrcConfig()
 	fprintf(ConfigFajl, " *         Ha nincs vhost-od ted 0-ra ha van 1-re.\n");
 	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
 	fprintf(ConfigFajl, "<HostServ Enable=\"0\"\n");
- 	fprintf(ConfigFajl, "          Vhost=\"0\">\n");
+ 	fprintf(ConfigFajl, "          Vhost=\"0\">\n\n");
 }
 
 void DefaultConfig::MysqlConfig()

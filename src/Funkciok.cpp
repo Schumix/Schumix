@@ -23,7 +23,7 @@ void IRCSession::Logfajl(IRCMessage& recvData)
 {
 	if(FSelect(LOG) == bekapcsol && FSelectChannel(LOG, recvData.target) == bekapcsol)
 	{
-		FILE* LogSzoba = fopen(format("%s/%s.log", LogHelye, recvData.target.c_str()).c_str(), "a+");
+		FILE* LogSzoba = fopen(format("%s/%s.log", m_LogHelye.c_str(), recvData.target.c_str()).c_str(), "a+");
 		if(!LogSzoba || LogSzoba == NULL)
 		{
 			Log.Error("Log", "Sikertelen olvasas.\n");
