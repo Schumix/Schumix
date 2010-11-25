@@ -62,7 +62,7 @@ Vezerlo::Vezerlo()
 #else
 		pid = getpid();
 #endif
-		fprintf(f, "%u", (unsigned int)pid);
+		fprintf(f, "%u", pid);
 		fclose(f);
 	}
 
