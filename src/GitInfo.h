@@ -80,6 +80,8 @@ protected:
 	volatile bool m_running[MaxGitID];
 	inline void lekerdezesi_ido() { Sleep(1000); }
 
+	uint16 m_Lido;
+
 private:
 	// Url kezeles
 	CURL* m_Curl[MaxGitID];

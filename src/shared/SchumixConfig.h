@@ -24,7 +24,7 @@
  * Aktuális verzió száma.
  */
 
-#define revision "3.4.3"
+#define revision "3.4.4"
 
 /*
  * Program fájlainak elnevezése. Ha cserélve van név egy helyen keljen csak cserélni.
@@ -46,13 +46,6 @@
  */
 
 //#define _CONFIG_DEBUG
-
-/*
- * Lekérdezési idő. Meghatározza a lekérdezések lefutási idejét.
- * Alapértelemzés: 15 másodperc
- */
-
-#define LIDO 15
 
 /*
  * Svn multithread maximáls száma. Meghatározza mennyi lehet a max multithread.

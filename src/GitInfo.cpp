@@ -39,6 +39,7 @@ GitInfo::GitInfo(string host, string user, string password, string database)
 		Log.Error("GitInfo", "Mysql adatbazishoz sikertelen a kapcsolodas.");
 
 	uint32 Threadszam = NULL;
+	m_Lido = cast_uint16(Config.MainConfig.GetIntDefault("LekerdezesiIdo", "Gitinfo", 15));
 
 	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT id FROM gitinfo");
 	if(adatbazis)
@@ -205,7 +206,7 @@ void GitInfo::Thread(uint32 id)
 		if(status == bekapcsol)
 		{
 			Kiiras(id);
-			for(int x = 0; x < LIDO; x++)
+			for(int x = 0; x < m_Lido; x++)
 			{
 				if(!Running(id))
 				{
