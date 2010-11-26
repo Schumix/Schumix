@@ -81,12 +81,31 @@ DefaultConfig::DefaultConfig(string conf)
 		string _parancs = parancs;
 		szokoz = _parancs.find("\n");
 
-		fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
-		fprintf(ConfigFajl, " * Parancs\n");
-		fprintf(ConfigFajl, " *    Elojel\n");
-		fprintf(ConfigFajl, " *         Meghatározza a parancsok előjelét.\n");
-		fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
+		fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
+		fprintf(ConfigFajl, "# Parancs\n");
+		fprintf(ConfigFajl, "#    Elojel\n");
+		fprintf(ConfigFajl, "#         Meghatározza a parancsok előjelét.\n");
+		fprintf(ConfigFajl, "#         Alapértelmezés: &\n");
+		fprintf(ConfigFajl, "#    Uzemelteto\n");
+		fprintf(ConfigFajl, "#         Meghatározza az üzemeltető nevét is azt fogja kiirni az info parancsnál.\n");
+		fprintf(ConfigFajl, "#         Alapértelmezés: Schumix\n");
+		fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 		fprintf(ConfigFajl, "<Parancs Elojel=\"%s\">\n\n", _parancs.substr(0, szokoz).c_str());
+		fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
+		fprintf(ConfigFajl, "# LekerdezesiIdo\n");
+		fprintf(ConfigFajl, "#    Gitinfo\n");
+		fprintf(ConfigFajl, "#         Meghatározza hogy hány másodpercenként legyen lekérdezés.\n");
+		fprintf(ConfigFajl, "#         Alapértelmezés: 15\n");
+		fprintf(ConfigFajl, "#    Hginfo\n");
+		fprintf(ConfigFajl, "#         Meghatározza hogy hány másodpercenként legyen lekérdezés.\n");
+		fprintf(ConfigFajl, "#         Alapértelmezés: 15\n");
+		fprintf(ConfigFajl, "#    Svninfo\n");
+		fprintf(ConfigFajl, "#         Meghatározza hogy hány másodpercenként legyen lekérdezés.\n");
+		fprintf(ConfigFajl, "#         Alapértelmezés: 15\n");
+		fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
+		fprintf(ConfigFajl, "<LekerdezesiIdo Gitinfo = \"15\"\n");
+		fprintf(ConfigFajl, "                Hginfo = \"15\"\n");
+		fprintf(ConfigFajl, "                Svninfo = \"15\">\n\n");
 		fclose(ConfigFajl);
 	}
 	else if(_valasz.substr(0, szokoz) == "kikapcs")
@@ -100,16 +119,21 @@ DefaultConfig::~DefaultConfig()
 
 void DefaultConfig::IrcConfig()
 {
-	fprintf(ConfigFajl, "/* Schumix konfig fájla */\n");
-	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
-	fprintf(ConfigFajl, " * IRC\n");
-	fprintf(ConfigFajl, " *      Server\n");
-	fprintf(ConfigFajl, " *          Az irc szerver címe.\n");
-	fprintf(ConfigFajl, " *      Port\n");
-	fprintf(ConfigFajl, " *          Az irc szerver kapcsolodási portja. Alapértelmezés: 6667\n");
-	fprintf(ConfigFajl, " *      LinesPerSecond\n");
-	fprintf(ConfigFajl, " *          Anti-flood feature. The lines the bot can send per second. Jelenleg nem üzemel!\n");
-	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
+	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
+	fprintf(ConfigFajl, "#                       Schumix konfig fájla                          #\n");
+	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
+	fprintf(ConfigFajl, "\n");
+	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
+	fprintf(ConfigFajl, "# IRC\n");
+	fprintf(ConfigFajl, "#     Server\n");
+	fprintf(ConfigFajl, "#         Az irc szerver címe.\n");
+	fprintf(ConfigFajl, "#     Port\n");
+	fprintf(ConfigFajl, "#         Az irc szerver kapcsolodási portja.\n");
+	fprintf(ConfigFajl, "#         Alapértelmezés: 6667\n");
+	fprintf(ConfigFajl, "#     LinesPerSecond\n");
+	fprintf(ConfigFajl, "#         Anti-flood feature. The lines the bot can send per second. Jelenleg nem üzemel!\n");
+	fprintf(ConfigFajl, "#         Alapértelmezés: 3\n");
+	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 
 	printf("Ird be a szervert: ");
 	char server[300];
@@ -127,32 +151,33 @@ void DefaultConfig::IrcConfig()
 	fprintf(ConfigFajl, "     Port=\"%s\"\n", _port.substr(0, szokoz).c_str());
 	fprintf(ConfigFajl, "     LinesPerSecond=\"3\">\n\n");
 
-	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
-	fprintf(ConfigFajl, " * Log\n");
-	fprintf(ConfigFajl, " *     Loglevel\n");
-	fprintf(ConfigFajl, " *         Van három logolási szint.\n");
-	fprintf(ConfigFajl, " *         Első lehetőség, csak a semilyen szintüek futnak. Száma: 0\n");
-	fprintf(ConfigFajl, " *         Második lehetőség, csak az error fut le pluszba. Száma: 1\n");
-	fprintf(ConfigFajl, " *         Harmadik lehetőség, az error mellet lefut a warring is. Száma: 2\n");
-	fprintf(ConfigFajl, " *         Negyedik lehetőség, lefut a debug is. Száma: 3\n");
-	fprintf(ConfigFajl, " *         Alapértelmezés: 3\n");
-	fprintf(ConfigFajl, " *     Loghelye\n");
-	fprintf(ConfigFajl, " *         Meghatározza hogy a logolást hova mentse a bot. Alapértelmezés: szoba\n");
-	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
+	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
+	fprintf(ConfigFajl, "# Log\n");
+	fprintf(ConfigFajl, "#     Loglevel\n");
+	fprintf(ConfigFajl, "#         Van három logolási szint.\n");
+	fprintf(ConfigFajl, "#         Első lehetőség, csak a semilyen szintüek futnak. Száma: 0\n");
+	fprintf(ConfigFajl, "#         Második lehetőség, csak az error fut le pluszba. Száma: 1\n");
+	fprintf(ConfigFajl, "#         Harmadik lehetőség, az error mellet lefut a warring is. Száma: 2\n");
+	fprintf(ConfigFajl, "#         Negyedik lehetőség, lefut a debug is. Száma: 3\n");
+	fprintf(ConfigFajl, "#         Alapértelmezés: 3\n");
+	fprintf(ConfigFajl, "#     Loghelye\n");
+	fprintf(ConfigFajl, "#         Meghatározza hogy a logolást hova mentse a bot.\n");
+	fprintf(ConfigFajl, "#         Alapértelmezés: szoba\n");
+	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 	fprintf(ConfigFajl, "<Log Loglevel=\"3\"\n");
 	fprintf(ConfigFajl, "     Loghelye=\"szoba\">\n\n");
 
-	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
-	fprintf(ConfigFajl, " * User\n");
-	fprintf(ConfigFajl, " *     Nick\n");
-	fprintf(ConfigFajl, " *         Elsődleges nick.\n");
-	fprintf(ConfigFajl, " *     Nick2\n");
-	fprintf(ConfigFajl, " *         Másodlagos nick.\n");
-	fprintf(ConfigFajl, " *     Nick3\n");
-	fprintf(ConfigFajl, " *         Harmadlagos nick.\n");
-	fprintf(ConfigFajl, " *     Username\n");
-	fprintf(ConfigFajl, " *         Felhasználó név.\n");
-	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
+	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
+	fprintf(ConfigFajl, "# User\n");
+	fprintf(ConfigFajl, "#     Nick\n");
+	fprintf(ConfigFajl, "#         Elsődleges nick.\n");
+	fprintf(ConfigFajl, "#     Nick2\n");
+	fprintf(ConfigFajl, "#         Másodlagos nick.\n");
+	fprintf(ConfigFajl, "#     Nick3\n");
+	fprintf(ConfigFajl, "#         Harmadlagos nick.\n");
+	fprintf(ConfigFajl, "#     Username\n");
+	fprintf(ConfigFajl, "#         Felhasználó név.\n");
+	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 
 	printf("Ird be a nicket: ");
 	char nick[50];
@@ -164,42 +189,45 @@ void DefaultConfig::IrcConfig()
 	fprintf(ConfigFajl, "      Nick2=\"_%s\"\n", _nick.substr(0, szokoz).c_str());
 	fprintf(ConfigFajl, "      Nick3=\"__%s\"\n", _nick.substr(0, szokoz).c_str());
 	fprintf(ConfigFajl, "      Username=\"%s\"\n", _nick.substr(0, szokoz).c_str());
-	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
-	fprintf(ConfigFajl, " * NickServ\n");
-	fprintf(ConfigFajl, " *    Enable\n");
-	fprintf(ConfigFajl, " *         Whether or not the IRC server supports NickServ and you would like to AUTH.\n");
-	fprintf(ConfigFajl, " *    Password\n");
-	fprintf(ConfigFajl, " *         The password for this bot's nickname with NickServ.\n");
-	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
+	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
+	fprintf(ConfigFajl, "# NickServ\n");
+	fprintf(ConfigFajl, "#    Enable\n");
+	fprintf(ConfigFajl, "#         Whether or not the IRC server supports NickServ and you would like to AUTH.\n");
+	fprintf(ConfigFajl, "#         Alapértelmezés: 0\n");
+	fprintf(ConfigFajl, "#    Password\n");
+	fprintf(ConfigFajl, "#         The password for this bot's nickname with NickServ.\n");
+	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 	fprintf(ConfigFajl, "<NickServ Enable=\"0\"\n");
 	fprintf(ConfigFajl, "          Password=\"jelszo\">\n\n");
 
-	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
-	fprintf(ConfigFajl, " * HostServ\n");
-	fprintf(ConfigFajl, " *    Enable\n");
-	fprintf(ConfigFajl, " *         Vhost ki be kapcsolása. 0 kikapcsolva, 1 bekapcsolva.\n");
-	fprintf(ConfigFajl, " *    Vhost\n");
-	fprintf(ConfigFajl, " *         Ha nincs vhost-od ted 0-ra ha van 1-re.\n");
-	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
+	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
+	fprintf(ConfigFajl, "# HostServ\n");
+	fprintf(ConfigFajl, "#    Enable\n");
+	fprintf(ConfigFajl, "#         Vhost ki be kapcsolása. 0 kikapcsolva, 1 bekapcsolva.\n");
+	fprintf(ConfigFajl, "#         Alapértelmezés: 0\n");
+	fprintf(ConfigFajl, "#    Vhost\n");
+	fprintf(ConfigFajl, "#         Ha nincs vhost-od ted 0-ra ha van 1-re.\n");
+	fprintf(ConfigFajl, "#         Alapértelmezés: 0\n");
+	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 	fprintf(ConfigFajl, "<HostServ Enable=\"0\"\n");
  	fprintf(ConfigFajl, "          Vhost=\"0\">\n\n");
 }
 
 void DefaultConfig::MysqlConfig()
 {
-	fprintf(ConfigFajl, "/* ------------------------------------------------------\n");
-	fprintf(ConfigFajl, " * MySQL\n");
-	fprintf(ConfigFajl, " *    Host\n");
-	fprintf(ConfigFajl, " *         Mysql szerver host neve.\n");
-	fprintf(ConfigFajl, " *    Port\n");
-	fprintf(ConfigFajl, " *         Mysql-hez használt port.\n");
-	fprintf(ConfigFajl, " *    User\n");
-	fprintf(ConfigFajl, " *         Felhasználónév a mysql szerverhez.\n");
-	fprintf(ConfigFajl, " *    Password\n");
-	fprintf(ConfigFajl, " *         Jelszó a mysql szerverhez.\n");
-	fprintf(ConfigFajl, " *    Database\n");
-	fprintf(ConfigFajl, " *         Az adatbázis neve.\n");
-	fprintf(ConfigFajl, " * ------------------------------------------------------ */\n");
+	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
+	fprintf(ConfigFajl, "# MySQL\n");
+	fprintf(ConfigFajl, "#    Host\n");
+	fprintf(ConfigFajl, "#         Mysql szerver host neve.\n");
+	fprintf(ConfigFajl, "#    Port\n");
+	fprintf(ConfigFajl, "#         Mysql-hez használt port.\n");
+	fprintf(ConfigFajl, "#    User\n");
+	fprintf(ConfigFajl, "#         Felhasználónév a mysql szerverhez.\n");
+	fprintf(ConfigFajl, "#    Password\n");
+	fprintf(ConfigFajl, "#         Jelszó a mysql szerverhez.\n");
+	fprintf(ConfigFajl, "#    Database\n");
+	fprintf(ConfigFajl, "#         Az adatbázis neve.\n");
+	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 
 	printf("Ird be a hostot: ");
 	char server[300];
