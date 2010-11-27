@@ -146,7 +146,7 @@ void IRCSession::Admin(IRCMessage& recvData)
 		transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
 		if(Admin(recvData.source_nick, Operator) && Admin(nev, Administrator))
 		{
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nem vagy Adminisztrátor!", nev.c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nem vagy Adminisztrátor!");
 			res.clear();
 			return;
 		}
@@ -175,7 +175,7 @@ void IRCSession::Admin(IRCMessage& recvData)
 		transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
 		if(Admin(recvData.source_nick, Operator) && Admin(nev, Administrator))
 		{
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nem vagy Adminisztrátor!", nev.c_str());
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nem vagy Adminisztrátor!");
 			res.clear();
 			return;
 		}
@@ -184,6 +184,13 @@ void IRCSession::Admin(IRCMessage& recvData)
 		int rang;
 		ss << res[3];
 		ss >> rang;
+
+		if(Admin(recvData.source_nick, Operator) && Admin(nev, Operator) && rang == Administrator)
+		{
+			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nem vagy Adminisztrátor!");
+			res.clear();
+			return;
+		}
 
 		if(rang == Administrator || rang == Operator)
 		{
