@@ -1761,7 +1761,7 @@ void IRCSession::AutoFunkcio(IRCMessage& recvData)
 
 	if(recvData.args.length() <= firstSpace+1)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
+		SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Parancsok: kick | mode");
 		return;
 	}
 
@@ -1780,10 +1780,10 @@ void IRCSession::AutoFunkcio(IRCMessage& recvData)
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Auto kick help: %sautofunkcio kick help", m_ParancsElojel.c_str());
 		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Auto mode help: %sautofunkcio mode help", m_ParancsElojel.c_str());
 	}
-	if(res[1] == INFO)
+	/*if(res[1] == INFO)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Parancsok: kick | mode");
-	}
+
+	}*/
 	if(res[1] == "kick")
 	{
 		if(res.size() < 3)
