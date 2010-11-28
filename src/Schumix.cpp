@@ -40,7 +40,7 @@ int main()
 #if PLATFORM == PLATFORM_WINDOWS
 	// WSA Setup
 	WSADATA info;
-	WSAStartup(MAKEWORD(2, 0), &info);
+	WSAStartup(MAKEWORD(2, 2), &info);
 #endif
 
 	Log.Notice("Config", "Config fajl betoltese...");
