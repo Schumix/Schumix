@@ -131,7 +131,7 @@ void DefaultConfig::IrcConfig()
 	fprintf(ConfigFajl, "#         Az irc szerver kapcsolodási portja.\n");
 	fprintf(ConfigFajl, "#         Alapértelmezés: 6667\n");
 	fprintf(ConfigFajl, "#     LinesPerSecond\n");
-	fprintf(ConfigFajl, "#         Anti-flood feature. The lines the bot can send per second. Jelenleg nem üzemel!\n");
+	fprintf(ConfigFajl, "#         Anti-flood feature. The lines the bot can send per second.\n");
 	fprintf(ConfigFajl, "#         Alapértelmezés: 3\n");
 	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 

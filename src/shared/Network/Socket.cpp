@@ -62,13 +62,6 @@ void Socket::UpdateQueue()
 
 void Socket::SendLine(string line)
 {
-	m_buffer_mutex.Acquire();
-	m_outBuf.append(line.c_str(), line.length());
-	m_buffer_mutex.Release();
-}
-
-void Socket::SendForcedLine(string line)
-{
 	if(m_sendCount >= m_sendPerPeriod)
 	{
 		m_sendQueue.push_back(line);
@@ -79,6 +72,13 @@ void Socket::SendForcedLine(string line)
 	m_outBuf.append(line.c_str(), line.length());
 	m_buffer_mutex.Release();
 	m_sendCount++;
+}
+
+void Socket::SendForcedLine(string line)
+{
+	m_buffer_mutex.Acquire();
+	m_outBuf.append(line.c_str(), line.length());
+	m_buffer_mutex.Release();
 }
 
 bool Socket::HasLine()

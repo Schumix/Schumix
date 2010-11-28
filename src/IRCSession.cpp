@@ -227,7 +227,7 @@ void IRCSession::Update()
 
 		m_Socket->UpdateQueue();
 
-		Sleep(20);
+		Sleep(100);
 	}
 }
 
