@@ -79,7 +79,7 @@
     <ClInclude Include="..\..\src\VarVector.hpp">
       <Filter>Calculator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\DefaultConfig.hpppp">
+    <ClInclude Include="..\..\src\DefaultConfig.hpp">
       <Filter>Config</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shared\SchumixConfig.hpp">
@@ -130,7 +130,7 @@
     <ClInclude Include="..\..\src\shared\Auth\Sha1.hpp">
       <Filter>Crypt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Console.hpppp">
+    <ClInclude Include="..\..\src\Console.hpp">
       <Filter>Console</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shared\targetver.h">
@@ -169,13 +169,13 @@
     <ClInclude Include="..\..\src\shared\Network\SocketMgr.hpp">
       <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Network\SocketOps.hpppp">
+    <ClInclude Include="..\..\src\shared\Network\SocketOps.hpp">
       <Filter>Socket</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shared\Threading\Guard.hpp">
       <Filter>Threading</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Threading\Lock.hpppp">
+    <ClInclude Include="..\..\src\shared\Threading\Lock.hpp">
       <Filter>Threading</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shared\Threading\Mutex.hpp">
