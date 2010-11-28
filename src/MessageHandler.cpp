@@ -108,7 +108,7 @@ void IRCSession::HandleMotd(IRCMessage& recvData)
 void IRCSession::HandleMotdStop(IRCMessage& recvData)
 {
 	// The MOTD is over.
-	//Log.Notice("IRCSession", "Server Message of the Day received.");
+	Log.Notice("IRCSession", "Server Message of the Day received.");
 	//mHasFullMotd = true;
 }
 
@@ -438,17 +438,6 @@ void IRCSession::HandleReJoin(IRCMessage& recvData)
 	else
 		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", REJOIN);
 #endif
-}
-
-string IRCSession::FSelect(string nev)
-{
-	string status;
-
-	QueryResultPointer db = m_SQLConn->Query("SELECT funkcio_status FROM schumix WHERE funkcio_nev = '%s'", nev.c_str());
-	if(db)
-		status = db->Fetch()[0].GetString();
-
-	return status;
 }
 
 void IRCSession::HandleMode(IRCMessage& recvData)
