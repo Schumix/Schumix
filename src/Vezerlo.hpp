@@ -17,8 +17,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _VEZERLO_H
-#define _VEZERLO_H
+#ifndef _SCHUMIX_VEZERLO_HPP
+#define _SCHUMIX_VEZERLO_HPP
 
 class Vezerlo : public Singleton<Vezerlo>
 {

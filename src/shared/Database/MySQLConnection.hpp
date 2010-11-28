@@ -18,27 +18,42 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _QUERY_RESULT_H
-#define _QUERY_RESULT_H
+#ifndef _SCHUMIX_MYSQL_CONNECTION_HPP
+#define _SCHUMIX_MYSQL_CONNECTION_HPP
 
-class Field;
+typedef void(*mySQLCallback)(QueryResultPointer);
+struct ASyncQuery
+{
+	mySQLCallback callback;
+	string query;
+};
 
-class QueryResult : public boost::enable_shared_from_this<QueryResult>
+class MySQLConnection : public boost::enable_shared_from_this<MySQLConnection>
 {
 public:
-	QueryResult(MYSQL_RES* res, uint32 uFields, uint32 uRows);
-	~QueryResult();
-	bool NextRow();
-	Field* Fetch() { return m_CurrentRow; }
+	MySQLConnection(string host, string user, string password);
+	~MySQLConnection();
 
-	uint32 GetAffectedFields() { return m_Fields; }
-	uint32 GetAffectedRows() { return m_Rows; }
+	void UseDatabase(string database);
+	void Execute(string query);
+	QueryResultPointer Query(const char * query, ...);
+
+	string EscapeString(string Escape);
+
+	void QueryASync(mySQLCallback callback, const char * query, ...);
+	volatile bool kiiras;
+	inline bool GetSqlError() { return sql_error; }
 
 protected:
-	MYSQL_RES* m_res;
-	Field* m_CurrentRow;
-	uint32 m_Fields;
-	uint32 m_Rows;
+	MYSQL* handle;
+
+	string m_Host;
+	string m_User;
+	string m_Password;
+	string m_Database;
+	bool sql_error;
+
+	deque<ASyncQueryPointer> AsynchronousQueries;
 };
 
 #endif

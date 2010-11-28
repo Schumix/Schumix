@@ -18,8 +18,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SIMPLE_SOCKET_H
-#define _SIMPLE_SOCKET_H
+#ifndef _SCHUMIX_SOCKET_HPP
+#define _SCHUMIX_SOCKET_HPP
 
 #if PLATFORM == PLATFORM_LINUX
 #include <sys/ioctl.h>

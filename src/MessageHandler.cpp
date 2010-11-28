@@ -243,7 +243,7 @@ void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 			return;
 
 		firstSpace = recvData.args.find(' ');
-		if(firstSpace == NULL)
+		if(firstSpace == string::npos)
 			firstSpace = recvData.args.length();
 
 		string cmd = recvData.args.substr(1, firstSpace - 1);

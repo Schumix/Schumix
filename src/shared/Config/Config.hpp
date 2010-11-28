@@ -18,8 +18,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CONFIG_H
-#define _CONFIG_H
+#ifndef _SCHUMIX_CONFIG_HPP
+#define _SCHUMIX_CONFIG_HPP
 
 struct ConfigSetting
 {

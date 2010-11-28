@@ -17,8 +17,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CALC_H
-#define CALC_H
+#ifndef _SCHUMIX_CALC_H
+#define _SCHUMIX_CALC_H
 
 #define LG 1
 #define RG 2
@@ -36,8 +36,8 @@
 #define TKN_NEXT_LINE string("TKN_NEXT_LINE")
 
 #include "StdAfx.h"
-#include "VarVector.h"
-#include "CalcLexer.h"
-#include "TokenQueue.h"
+#include "VarVector.hpp"
+#include "CalcLexer.hpp"
+#include "TokenQueue.hpp"
 
 #endif

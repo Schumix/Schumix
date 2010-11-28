@@ -17,25 +17,29 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SHARED_PTR_WRAPPER
-#define SHARED_PTR_WRAPPER
+#ifndef _SCHUMIX_SHA1_HPP
+#define _SCHUMIX_SHA1_HPP
 
-class Socket;
-class MySQLConnection;
-class QueryResult;
-struct ASyncQuery;
+#include <openssl/sha.h>
 
-typedef boost::shared_ptr<Socket> SocketPointer;
-typedef boost::shared_ptr<MySQLConnection> MySQLConnectionPointer;
-typedef boost::shared_ptr<QueryResult> QueryResultPointer;
-typedef boost::shared_ptr<ASyncQuery> ASyncQueryPointer;
+class Sha1Hash
+{
+public:
+	Sha1Hash();
+	~Sha1Hash();
 
-//#define NULLIRC						boost::shared_ptr<IRCSession>()
-#define NULLSSO							boost::shared_ptr<Socket>()
-//#define NULLSMGR						boost::shared_ptr<SocketMgr>()
-#define NULLMSQL						boost::shared_ptr<MySQLConnection>()
-#define NULLQRL							boost::shared_ptr<QueryResult>()
-#define NULLASQ							boost::shared_ptr<ASyncQuery>()
-//#define NULLGIF						boost::shared_ptr<GitInfo>()
+	void UpdateData(const uint8 *dta, int len);
+	void UpdateData(const std::string &str);
+
+	void Initialize();
+	void Finalize();
+
+	uint8 *GetDigest(void) { return mDigest; };
+	int GetLength(void) { return SHA_DIGEST_LENGTH; };
+
+private:
+	SHA_CTX mC;
+	uint8 mDigest[SHA_DIGEST_LENGTH];
+};
 
 #endif

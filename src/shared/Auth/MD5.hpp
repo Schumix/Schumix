@@ -17,27 +17,29 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SOCKET_MGR_H
-#define _SOCKET_MGR_H
+#ifndef _SCHUMIX_MD5_HPP
+#define _SCHUMIX_MD5_HPP
 
-class Socket;
+#include <openssl/md5.h>
 
-class SocketMgr
+class MD5Hash
 {
 public:
-	SocketMgr();
-	~SocketMgr();
+	MD5Hash();
+	~MD5Hash();
 
-	void AddSocket(SocketPointer pSocket);
-	void RemoveSocket(SocketPointer pSocket);
+	void UpdateData(const uint8 *dta, int len);
+	void UpdateData(const std::string &str);
 
-protected:
-	void Update();
-	static Thread_void RunUpdateProc(void* smg);
+	void Initialize();
+	void Finalize();
 
-	typedef set<SocketPointer> SocketSet;
-	Mutex m_mutex;
-	SocketSet m_sockets;
+	uint8 *GetDigest(void) { return mDigest; };
+	int GetLength(void) { return MD5_DIGEST_LENGTH; };
+
+private:
+	MD5_CTX mC;
+	uint8 mDigest[MD5_DIGEST_LENGTH];
 };
 
 #endif

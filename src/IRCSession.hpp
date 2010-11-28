@@ -18,8 +18,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _IRC_SESSION_H
-#define _IRC_SESSION_H
+#ifndef _SCHUMIX_IRC_SESSION_HPP
+#define _SCHUMIX_IRC_SESSION_HPP
 
 // funkciok
 #define bekapcsol "be"

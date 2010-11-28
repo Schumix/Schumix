@@ -17,17 +17,17 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GIT_INFO_H
-#define _GIT_INFO_H
+#ifndef _SCHUMIX_SVN_INFO_HPP
+#define _SCHUMIX_SVN_INFO_HPP
 
 class MySQLConnection;
 class IRCSession;
 
-class GitInfo : public Singleton<GitInfo>
+class SvnInfo : public Singleton<SvnInfo>
 {
 public:
-	GitInfo(string host, string user, string password, string database);
-	~GitInfo();
+	SvnInfo(string host, string user, string password, string database);
+	~SvnInfo();
 
 	void NewThread(uint32 id);
 	void StopThread(uint32 id);
@@ -41,9 +41,9 @@ protected:
 	struct MultiThread
 	{
 		uint32 _id;
-		GitInfo* _mgr;
+		SvnInfo* _mgr;
 
-		MultiThread(GitInfo* mgr, uint32 id)
+		MultiThread(SvnInfo* mgr, uint32 id)
 		{
 			_id = id;
 			_mgr = mgr;
@@ -55,8 +55,8 @@ protected:
 		}
 	};
 
+	int getrfa(uint32 id, string title);
 	string titleUrl(uint32 id);
-	string revUrl(uint32 id);
 	string authorUrl(uint32 id);
 
 	void Thread(uint32 id);
@@ -64,32 +64,30 @@ protected:
 	void Lekerdezes(uint32 id);
 	void Feltoltes(uint32 id);
 
-	string nev[MaxGitID];
-	string url[MaxGitID];
-	string tipus[MaxGitID];
-	string oldal[MaxGitID];
-	string regex[MaxGitID];
-	string regex2[MaxGitID];
-	string regex3[MaxGitID];
-	uint8 engedely[MaxGitID];
-	string account[MaxGitID];
-	string password[MaxGitID];
+	string nev[MaxSvnID];
+	string url[MaxSvnID];
+	string oldal[MaxSvnID];
+	string regex[MaxSvnID];
+	string regex2[MaxSvnID];
+	uint8 engedely[MaxSvnID];
+	string account[MaxSvnID];
+	string password[MaxSvnID];
 
 	string _mysql[4];
-	string a_rev[MaxGitID];
-	volatile bool m_running[MaxGitID];
+	uint32 a_rev[MaxSvnID];
+	volatile bool m_running[MaxSvnID];
 	inline void lekerdezesi_ido() { Sleep(1000); }
 
 	uint16 m_Lido;
 
 private:
 	// Url kezeles
-	CURL* m_Curl[MaxGitID];
+	CURL* m_Curl[MaxSvnID];
 	// Mysql kapcsolat.
-	MySQLConnectionPointer m_SQLConn[MaxGitID];
+	MySQLConnectionPointer m_SQLConn[MaxSvnID];
 	static int writer(char* data, size_t size, size_t nmemb, string *buffer);
 };
 
-#define sGitInfo GitInfo::getSingleton()
+#define sSvnInfo SvnInfo::getSingleton()
 
 #endif

@@ -1,6 +1,7 @@
 /*
  * This file is part of Schumix.
  * 
+ * Copyright (C) 2007 Burlex
  * Copyright (C) 2010 Megax <http://www.megaxx.info/>
  * 
  * Schumix is free software: you can redistribute it and/or modify
@@ -17,29 +18,22 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _MD5_H
-#define _MD5_H
+#ifndef _SCHUMIX_SOCKET_OPS_HPP
+#define _SCHUMIX_SOCKET_OPS_HPP
 
-#include <openssl/md5.h>
-
-class MD5Hash
+namespace SocketOps
 {
-public:
-	MD5Hash();
-	~MD5Hash();
+	// Create file descriptor for socket i/o operations.
+	SOCKET CreateTCPFileDescriptor();
 
-	void UpdateData(const uint8 *dta, int len);
-	void UpdateData(const std::string &str);
+	// Disable blocking send/recv calls.
+	bool Nonblocking(SOCKET fd);
 
-	void Initialize();
-	void Finalize();
+	// Enable blocking send/recv calls.
+	bool Blocking(SOCKET fd);
 
-	uint8 *GetDigest(void) { return mDigest; };
-	int GetLength(void) { return MD5_DIGEST_LENGTH; };
-
-private:
-	MD5_CTX mC;
-	uint8 mDigest[MD5_DIGEST_LENGTH];
+	// Closes socket completely.
+	void CloseSocket(SOCKET fd);
 };
 
 #endif

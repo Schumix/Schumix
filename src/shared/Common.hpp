@@ -20,8 +20,8 @@
  * Written by: Twl
  */
 
-#ifndef _INC_COMMON_H
-#define _INC_COMMON_H
+#ifndef _SCHUMIX_COMMON_HPP
+#define _SCHUMIX_COMMON_HPP
 
 #include "Platforms.h"
 

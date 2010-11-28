@@ -21,8 +21,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FORMAT_H
-#define FORMAT_H
+#ifndef _SCHUMIX_FORMAT_H
+#define _SCHUMIX_FORMAT_H
 
 // If your platform does not have vsnprintf, you can find a
 // implementation at http://www.ijs.si/software/snprintf/

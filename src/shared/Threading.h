@@ -19,12 +19,12 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef THREADING_H
-#define THREADING_H
+#ifndef _SCHUMIX_THREADING_H
+#define _SCHUMIX_THREADING_H
 
-#include "Threading/Thread.h"
-#include "Threading/Mutex.h"
-#include "Threading/Guard.h"
-#include "Threading/Lock.h"
+#include "Threading/Thread.hpp"
+#include "Threading/Mutex.hpp"
+#include "Threading/Guard.hpp"
+#include "Threading/Lock.hpp"
 
 #endif

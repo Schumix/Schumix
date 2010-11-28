@@ -19,8 +19,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _THREAD_H
-#define _THREAD_H
+#ifndef _SCHUMIX_THREAD_HPP
+#define _SCHUMIX_THREAD_HPP
 
 #if PLATFORM == PLATFORM_LINUX
 #include <pthread.h>

@@ -18,8 +18,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _LOG_H
-#define _LOG_H
+#ifndef _SCHUMIX_LOG_HPP
+#define _SCHUMIX_LOG_HPP
 
 #if PLATFORM == PLATFORM_WINDOWS
 

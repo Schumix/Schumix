@@ -1,6 +1,8 @@
 /*
  * This file is part of Schumix.
  * 
+ * Cross-platform Mutex implementation.
+ * Copyright (C) 2010 Twl
  * Copyright (C) 2010 Megax <http://www.megaxx.info/>
  * 
  * Schumix is free software: you can redistribute it and/or modify
@@ -17,30 +19,24 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOKEN_QUEUE_H
-#define TOKEN_QUEUE_H
+#ifndef _SCHUMIX_LOCK_HPP
+#define _SCHUMIX_LOCK_HPP
 
-class TokenQueue
+class Lock
 {
 public:
-	TokenQueue();
-	virtual bool empty();
-	bool full();
-	void put(Token t);
-	virtual Token get();
+	Lock(Mutex& mutex) : m_mutex(mutex)
+	{
+		this->m_mutex.Acquire();
+	}
 
-protected:
-	Token a[MAXTOKENS];
-	int inptr;
-	int outptr;
-};
+	~Lock()
+	{
+		this->m_mutex.Release();
+	}
 
-class TokenStack : public TokenQueue
-{
-public:
-	bool empty();
-	Token get();
-	Token seek();
+private:
+	Mutex& m_mutex;
 };
 
 #endif

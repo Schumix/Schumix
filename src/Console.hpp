@@ -17,29 +17,40 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SHA1_H
-#define _SHA1_H
+#ifndef _SCHUMIX_CONSOL_HPP
+#define _SCHUMIX_CONSOL_HPP
 
-#include <openssl/sha.h>
+class MySQLConnection;
+class IRCSession;
 
-class Sha1Hash
+class Console : public Singleton<Console>
 {
 public:
-	Sha1Hash();
-	~Sha1Hash();
+	Console(string host, string user, string password, string database);
+	~Console();
 
-	void UpdateData(const uint8 *dta, int len);
-	void UpdateData(const std::string &str);
+	inline string GetConsoleLog() { return ConsoleLog; }
+	// Class leállása
+	void Leallas();
 
-	void Initialize();
-	void Finalize();
+protected:
+	// Konzol irás
+	void ReadConsoleRoutine();
+	//Konzol parancsok
+	bool ConsoleCommands(char* adat);
+	static Thread_void RunUpdateProc(void* smg);
 
-	uint8 *GetDigest(void) { return mDigest; };
-	int GetLength(void) { return SHA_DIGEST_LENGTH; };
+	bool Running() { return m_running; }
+	volatile bool m_running;
+
+	// Konzol irás állapota
+	string ConsoleLog;
 
 private:
-	SHA_CTX mC;
-	uint8 mDigest[SHA_DIGEST_LENGTH];
+	// Mysql kapcsolat.
+	MySQLConnectionPointer m_SQLConn;
 };
+
+#define sConsole Console::getSingleton()
 
 #endif

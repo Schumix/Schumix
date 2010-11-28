@@ -18,8 +18,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _REPLIES_H
-#define _REPLIES_H
+#ifndef _SCHUMIX_REPLIES_HPP
+#define _SCHUMIX_REPLIES_HPP
 
 #define RPL_SUCCESSFUL_AUTH		"001"
 #define RPL_MOTD				"372"

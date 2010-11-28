@@ -1,8 +1,7 @@
 /*
  * This file is part of Schumix.
  * 
- * Cross-platform Mutex implementation.
- * Copyright (C) 2010 Twl
+ * Copyright (C) 2008 Valroft <http://www.aspiredev.org/>
  * Copyright (C) 2010 Megax <http://www.megaxx.info/>
  * 
  * Schumix is free software: you can redistribute it and/or modify
@@ -19,24 +18,27 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _LOCK_H
-#define _LOCK_H
+#ifndef _SCHUMIX_QUERY_RESULT_HPP
+#define _SCHUMIX_QUERY_RESULT_HPP
 
-class Lock
+class Field;
+
+class QueryResult : public boost::enable_shared_from_this<QueryResult>
 {
 public:
-	Lock(Mutex& mutex) : m_mutex(mutex)
-	{
-		this->m_mutex.Acquire();
-	}
+	QueryResult(MYSQL_RES* res, uint32 uFields, uint32 uRows);
+	~QueryResult();
+	bool NextRow();
+	Field* Fetch() { return m_CurrentRow; }
 
-	~Lock()
-	{
-		this->m_mutex.Release();
-	}
+	uint32 GetAffectedFields() { return m_Fields; }
+	uint32 GetAffectedRows() { return m_Rows; }
 
-private:
-	Mutex& m_mutex;
+protected:
+	MYSQL_RES* m_res;
+	Field* m_CurrentRow;
+	uint32 m_Fields;
+	uint32 m_Rows;
 };
 
 #endif

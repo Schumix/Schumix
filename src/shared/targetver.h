@@ -18,8 +18,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _TARGETVER_H
-#define _TARGETVER_H
+#ifndef _SCHUMIX_TARGETVER_H
+#define _SCHUMIX_TARGETVER_H
 
 #pragma once
 

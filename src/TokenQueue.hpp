@@ -1,7 +1,6 @@
 /*
  * This file is part of Schumix.
  * 
- * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
  * Copyright (C) 2010 Megax <http://www.megaxx.info/>
  * 
  * Schumix is free software: you can redistribute it and/or modify
@@ -18,35 +17,30 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GUARD_H
-#define _GUARD_H
+#ifndef _SCHUMIX_TOKEN_QUEUE_HPP
+#define _SCHUMIX_TOKEN_QUEUE_HPP
 
-/************************************************************************/
-/* Guard class, unlocks mutex on destroy								*/
-/************************************************************************/
-// crossplatform :)
-
-class Guard
+class TokenQueue
 {
 public:
-	Guard(Mutex& mutex) : target(mutex)
-	{
-		target.Acquire();
-	}
-
-	~Guard()
-	{
-		target.Release();
-	}
-
-	Guard& operator=(Guard& src)
-	{
-		this->target = src.target;
-		return *this;
-	}
+	TokenQueue();
+	virtual bool empty();
+	bool full();
+	void put(Token t);
+	virtual Token get();
 
 protected:
-	Mutex& target;
+	Token a[MAXTOKENS];
+	int inptr;
+	int outptr;
+};
+
+class TokenStack : public TokenQueue
+{
+public:
+	bool empty();
+	Token get();
+	Token seek();
 };
 
 #endif

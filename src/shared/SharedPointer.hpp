@@ -17,40 +17,25 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CONSOL_H
-#define _CONSOL_H
+#ifndef _SCHUMIX_SHARED_PTR_WRAPPER
+#define _SCHUMIX_SHARED_PTR_WRAPPER
 
+class Socket;
 class MySQLConnection;
-class IRCSession;
+class QueryResult;
+struct ASyncQuery;
 
-class Console : public Singleton<Console>
-{
-public:
-	Console(string host, string user, string password, string database);
-	~Console();
+typedef boost::shared_ptr<Socket> SocketPointer;
+typedef boost::shared_ptr<MySQLConnection> MySQLConnectionPointer;
+typedef boost::shared_ptr<QueryResult> QueryResultPointer;
+typedef boost::shared_ptr<ASyncQuery> ASyncQueryPointer;
 
-	inline string GetConsoleLog() { return ConsoleLog; }
-	// Class leállása
-	void Leallas();
-
-protected:
-	// Konzol irás
-	void ReadConsoleRoutine();
-	//Konzol parancsok
-	bool ConsoleCommands(char* adat);
-	static Thread_void RunUpdateProc(void* smg);
-
-	bool Running() { return m_running; }
-	volatile bool m_running;
-
-	// Konzol irás állapota
-	string ConsoleLog;
-
-private:
-	// Mysql kapcsolat.
-	MySQLConnectionPointer m_SQLConn;
-};
-
-#define sConsole Console::getSingleton()
+//#define NULLIRC						boost::shared_ptr<IRCSession>()
+#define NULLSSO							boost::shared_ptr<Socket>()
+//#define NULLSMGR						boost::shared_ptr<SocketMgr>()
+#define NULLMSQL						boost::shared_ptr<MySQLConnection>()
+#define NULLQRL							boost::shared_ptr<QueryResult>()
+#define NULLASQ							boost::shared_ptr<ASyncQuery>()
+//#define NULLGIF						boost::shared_ptr<GitInfo>()
 
 #endif

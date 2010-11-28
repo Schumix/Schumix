@@ -18,8 +18,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SINGLETON_H
-#define _SINGLETON_H
+#ifndef _SCHUMIX_SINGLETON_H
+#define _SCHUMIX_SINGLETON_H
 
 template <class type> class Singleton
 {

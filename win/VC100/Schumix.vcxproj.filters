@@ -70,40 +70,40 @@
     <ClInclude Include="..\..\src\Calc.h">
       <Filter>Calculator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\CalcLexer.h">
+    <ClInclude Include="..\..\src\CalcLexer.hpp">
       <Filter>Calculator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\TokenQueue.h">
+    <ClInclude Include="..\..\src\TokenQueue.hpp">
       <Filter>Calculator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\VarVector.h">
+    <ClInclude Include="..\..\src\VarVector.hpp">
       <Filter>Calculator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\DefaultConfig.h">
+    <ClInclude Include="..\..\src\DefaultConfig.hpppp">
       <Filter>Config</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\SchumixConfig.h">
+    <ClInclude Include="..\..\src\shared\SchumixConfig.hpp">
       <Filter>Config</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\IRCSession.h">
+    <ClInclude Include="..\..\src\IRCSession.hpp">
       <Filter>IRC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Replies.h">
+    <ClInclude Include="..\..\src\Replies.hpp">
       <Filter>IRC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\GitInfo.h">
+    <ClInclude Include="..\..\src\GitInfo.hpp">
       <Filter>Repos\Git</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\HgInfo.h">
+    <ClInclude Include="..\..\src\HgInfo.hpp">
       <Filter>Repos\Hg</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\SvnInfo.h">
+    <ClInclude Include="..\..\src\SvnInfo.hpp">
       <Filter>Repos\SVN</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shared\Platforms.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\SharedPointer.h">
+    <ClInclude Include="..\..\src\shared\SharedPointer.hpp">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shared\Singleton.h">
@@ -115,22 +115,22 @@
     <ClInclude Include="..\..\src\shared\Cast.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Common.h">
+    <ClInclude Include="..\..\src\shared\Common.hpp">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shared\format.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Config\Config.h">
+    <ClInclude Include="..\..\src\shared\Config\Config.hpp">
       <Filter>Config</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Auth\MD5.h">
+    <ClInclude Include="..\..\src\shared\Auth\MD5.hpp">
       <Filter>Crypt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Auth\Sha1.h">
+    <ClInclude Include="..\..\src\shared\Auth\Sha1.hpp">
       <Filter>Crypt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Console.h">
+    <ClInclude Include="..\..\src\Console.hpppp">
       <Filter>Console</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shared\targetver.h">
@@ -154,40 +154,40 @@
     <ClInclude Include="..\..\src\shared\utf8.h">
       <Filter>Misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Database\Field.h">
+    <ClInclude Include="..\..\src\shared\Database\Field.hpp">
       <Filter>MySQL</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Database\MySQLConnection.h">
+    <ClInclude Include="..\..\src\shared\Database\MySQLConnection.hpp">
       <Filter>MySQL</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Database\QueryResult.h">
+    <ClInclude Include="..\..\src\shared\Database\QueryResult.hpp">
       <Filter>MySQL</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Network\Socket.h">
+    <ClInclude Include="..\..\src\shared\Network\Socket.hpp">
       <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Network\SocketMgr.h">
+    <ClInclude Include="..\..\src\shared\Network\SocketMgr.hpp">
       <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Network\SocketOps.h">
+    <ClInclude Include="..\..\src\shared\Network\SocketOps.hpppp">
       <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Threading\Guard.h">
+    <ClInclude Include="..\..\src\shared\Threading\Guard.hpp">
       <Filter>Threading</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Threading\Lock.h">
+    <ClInclude Include="..\..\src\shared\Threading\Lock.hpppp">
       <Filter>Threading</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Threading\Mutex.h">
+    <ClInclude Include="..\..\src\shared\Threading\Mutex.hpp">
       <Filter>Threading</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\shared\Threading\Thread.h">
+    <ClInclude Include="..\..\src\shared\Threading\Thread.hpp">
       <Filter>Threading</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shared\Threading.h">
       <Filter>Threading</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Vezerlo.h">
+    <ClInclude Include="..\..\src\Vezerlo.hpp">
       <Filter>Vezerlo</Filter>
     </ClInclude>
   </ItemGroup>

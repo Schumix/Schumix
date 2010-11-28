@@ -17,23 +17,27 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VAR_VECTOR_H
-#define VAR_VECTOR_H
+#ifndef _SCHUMIX_SOCKET_MGR_HPP
+#define _SCHUMIX_SOCKET_MGR_HPP
 
-struct Variable
-{
-	Variable(string s, double d = 0.0f, bool c = false);
-	double value;
-	string name;
-	bool cons;
-};
+class Socket;
 
-class VarVector: public vector<Variable>
+class SocketMgr
 {
 public:
-	double getVar(string s);
-	void setVar(string s, double d = 0.0f, bool c = false);
-	void delVar(string s);
+	SocketMgr();
+	~SocketMgr();
+
+	void AddSocket(SocketPointer pSocket);
+	void RemoveSocket(SocketPointer pSocket);
+
+protected:
+	void Update();
+	static Thread_void RunUpdateProc(void* smg);
+
+	typedef set<SocketPointer> SocketSet;
+	Mutex m_mutex;
+	SocketSet m_sockets;
 };
 
 #endif

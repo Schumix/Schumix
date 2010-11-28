@@ -22,8 +22,8 @@
 // or project specific include files that are used frequently, but
 // are changed infrequently
 //
-#ifndef STDAFX_INCLUDED_S
-#define STDAFX_INCLUDED_S
+#ifndef _SCHUMIX_STDAFX_H
+#define _SCHUMIX_STDAFX_H
 
 #pragma once
 
@@ -42,7 +42,7 @@
 using namespace std;
 using std::string;
 
-#include "shared/Common.h"
+#include "shared/Common.hpp"
 
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
@@ -90,30 +90,30 @@ inline uint32 getMSTime()
 #include <mysql/mysql.h>
 
 #include "shared/Threading.h"
-#include "shared/Log.h"
+#include "shared/Log.hpp"
 extern CLog Log;
-#include "shared/SharedPointer.h"
+#include "shared/SharedPointer.hpp"
 #include "shared/Cast.h"
 #include "shared/format.h"
 #include "shared/Singleton.h"
-#include "shared/Config/Config.h"
-#include "DefaultConfig.h"
+#include "shared/Config/Config.hpp"
+#include "DefaultConfig.hpp"
 #include "shared/SchumixConfig.h"
 #include "shared/utf8.h"
-#include "shared/Auth/MD5.h"
-#include "shared/Auth/Sha1.h"
-#include "Console.h"
-#include "shared/Database/Field.h"
-#include "shared/Database/QueryResult.h"
-#include "shared/Database/MySQLConnection.h"
-#include "SvnInfo.h"
-#include "HgInfo.h"
-#include "GitInfo.h"
-#include "Replies.h"
-#include "IRCSession.h"
-#include "shared/Network/SocketMgr.h"
-#include "shared/Network/Socket.h"
-#include "shared/Network/SocketOps.h"
-#include "Vezerlo.h"
+#include "shared/Auth/MD5.hpp"
+#include "shared/Auth/Sha1.hpp"
+#include "Console.hpp"
+#include "shared/Database/Field.hpp"
+#include "shared/Database/QueryResult.hpp"
+#include "shared/Database/MySQLConnection.hpp"
+#include "SvnInfo.hpp"
+#include "HgInfo.hpp"
+#include "GitInfo.hpp"
+#include "Replies.hpp"
+#include "IRCSession.hpp"
+#include "shared/Network/SocketMgr.hpp"
+#include "shared/Network/Socket.hpp"
+#include "shared/Network/SocketOps.hpp"
+#include "Vezerlo.hpp"
 
 #endif

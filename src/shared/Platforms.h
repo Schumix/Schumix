@@ -18,8 +18,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLATFORMS_H
-#define PLATFORMS_H
+#ifndef _SCHUMIX_PLATFORMS_H
+#define _SCHUMIX_PLATFORMS_H
 
 #define PLATFORM_WINDOWS 0
 #define PLATFORM_LINUX 1

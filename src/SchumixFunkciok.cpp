@@ -31,7 +31,7 @@ void IRCSession::Schumix(IRCMessage& recvData)
 	if(recvData.args.substr(0, vesszo) == _nick)
 	{
 		uint8 elsoszokoz = recvData.args.find(' ');
-		if(elsoszokoz == NULL)
+		if(elsoszokoz == string::npos)
 			elsoszokoz = recvData.args.length();
 
 		if(recvData.args.length() <= elsoszokoz+1)

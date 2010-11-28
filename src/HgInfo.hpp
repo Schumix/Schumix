@@ -17,17 +17,17 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SVN_INFO_H
-#define _SVN_INFO_H
+#ifndef _SCHUMIX_HG_INFO_HPP
+#define _SCHUMIX_HG_INFO_HPP
 
 class MySQLConnection;
 class IRCSession;
 
-class SvnInfo : public Singleton<SvnInfo>
+class HgInfo : public Singleton<HgInfo>
 {
 public:
-	SvnInfo(string host, string user, string password, string database);
-	~SvnInfo();
+	HgInfo(string host, string user, string password, string database);
+	~HgInfo();
 
 	void NewThread(uint32 id);
 	void StopThread(uint32 id);
@@ -41,9 +41,9 @@ protected:
 	struct MultiThread
 	{
 		uint32 _id;
-		SvnInfo* _mgr;
+		HgInfo* _mgr;
 
-		MultiThread(SvnInfo* mgr, uint32 id)
+		MultiThread(HgInfo* mgr, uint32 id)
 		{
 			_id = id;
 			_mgr = mgr;
@@ -55,8 +55,8 @@ protected:
 		}
 	};
 
-	int getrfa(uint32 id, string title);
 	string titleUrl(uint32 id);
+	string revUrl(uint32 id);
 	string authorUrl(uint32 id);
 
 	void Thread(uint32 id);
@@ -64,30 +64,31 @@ protected:
 	void Lekerdezes(uint32 id);
 	void Feltoltes(uint32 id);
 
-	string nev[MaxSvnID];
-	string url[MaxSvnID];
-	string oldal[MaxSvnID];
-	string regex[MaxSvnID];
-	string regex2[MaxSvnID];
-	uint8 engedely[MaxSvnID];
-	string account[MaxSvnID];
-	string password[MaxSvnID];
+	string nev[MaxHgID];
+	string url[MaxHgID];
+	string oldal[MaxHgID];
+	string regex[MaxHgID];
+	string regex2[MaxHgID];
+	string regex3[MaxHgID];
+	uint8 engedely[MaxHgID];
+	string account[MaxHgID];
+	string password[MaxHgID];
 
 	string _mysql[4];
-	uint32 a_rev[MaxSvnID];
-	volatile bool m_running[MaxSvnID];
+	string a_rev[MaxHgID];
+	volatile bool m_running[MaxHgID];
 	inline void lekerdezesi_ido() { Sleep(1000); }
 
 	uint16 m_Lido;
 
 private:
 	// Url kezeles
-	CURL* m_Curl[MaxSvnID];
+	CURL* m_Curl[MaxHgID];
 	// Mysql kapcsolat.
-	MySQLConnectionPointer m_SQLConn[MaxSvnID];
+	MySQLConnectionPointer m_SQLConn[MaxHgID];
 	static int writer(char* data, size_t size, size_t nmemb, string *buffer);
 };
 
-#define sSvnInfo SvnInfo::getSingleton()
+#define sHgInfo HgInfo::getSingleton()
 
 #endif

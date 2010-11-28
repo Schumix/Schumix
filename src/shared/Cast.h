@@ -17,8 +17,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CAST_H
-#define _CAST_H
+#ifndef _SCHUMIX_CAST_H
+#define _SCHUMIX_CAST_H
 
 //#define CAST(x, y) static_cast<x*>(y)
 //#undef CAST

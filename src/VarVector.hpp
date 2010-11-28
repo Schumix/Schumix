@@ -1,7 +1,6 @@
 /*
  * This file is part of Schumix.
  * 
- * Copyright (C) 2007 Burlex
  * Copyright (C) 2010 Megax <http://www.megaxx.info/>
  * 
  * Schumix is free software: you can redistribute it and/or modify
@@ -18,22 +17,23 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SOCKET_OPS_H
-#define SOCKET_OPS_H
+#ifndef _SCHUMIX_VAR_VECTOR_HPP
+#define _SCHUMIX_VAR_VECTOR_HPP
 
-namespace SocketOps
+struct Variable
 {
-	// Create file descriptor for socket i/o operations.
-	SOCKET CreateTCPFileDescriptor();
+	Variable(string s, double d = 0.0f, bool c = false);
+	double value;
+	string name;
+	bool cons;
+};
 
-	// Disable blocking send/recv calls.
-	bool Nonblocking(SOCKET fd);
-
-	// Enable blocking send/recv calls.
-	bool Blocking(SOCKET fd);
-
-	// Closes socket completely.
-	void CloseSocket(SOCKET fd);
+class VarVector: public vector<Variable>
+{
+public:
+	double getVar(string s);
+	void setVar(string s, double d = 0.0f, bool c = false);
+	void delVar(string s);
 };
 
 #endif

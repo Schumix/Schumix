@@ -18,8 +18,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _FIELD_H
-#define _FIELD_H
+#ifndef _SCHUMIX_FIELD_HPP
+#define _SCHUMIX_FIELD_HPP
 
 class Field
 {

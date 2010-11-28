@@ -19,8 +19,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __MUTEX_H
-#define __MUTEX_H
+#ifndef _SCHUMIX_MUTEX_HPP
+#define _SCHUMIX_MUTEX_HPP
 
 /// Class which implements a mutex pattern. Supports pthread and Win API threads.
 class Mutex

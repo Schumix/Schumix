@@ -17,8 +17,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _DEFAULT_CONFIG_H
-#define _DEFAULT_CONFIG_H
+#ifndef _SCHUMIX_DEFAULT_CONFIG_HPP
+#define _SCHUMIX_DEFAULT_CONFIG_HPP
 
 class DefaultConfig
 {

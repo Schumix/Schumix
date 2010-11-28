@@ -17,8 +17,8 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CALCLEXER_H
-#define CALCLEXER_H
+#ifndef _SCHUMIX_CALCLEXER_HPP
+#define _SCHUMIX_CALCLEXER_HPP
 
 struct Token
 {

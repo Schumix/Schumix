@@ -17,17 +17,17 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _HG_INFO_H
-#define _HG_INFO_H
+#ifndef _SCHUMIX_GIT_INFO_HPP
+#define _SCHUMIX_GIT_INFO_HPP
 
 class MySQLConnection;
 class IRCSession;
 
-class HgInfo : public Singleton<HgInfo>
+class GitInfo : public Singleton<GitInfo>
 {
 public:
-	HgInfo(string host, string user, string password, string database);
-	~HgInfo();
+	GitInfo(string host, string user, string password, string database);
+	~GitInfo();
 
 	void NewThread(uint32 id);
 	void StopThread(uint32 id);
@@ -41,9 +41,9 @@ protected:
 	struct MultiThread
 	{
 		uint32 _id;
-		HgInfo* _mgr;
+		GitInfo* _mgr;
 
-		MultiThread(HgInfo* mgr, uint32 id)
+		MultiThread(GitInfo* mgr, uint32 id)
 		{
 			_id = id;
 			_mgr = mgr;
@@ -64,31 +64,32 @@ protected:
 	void Lekerdezes(uint32 id);
 	void Feltoltes(uint32 id);
 
-	string nev[MaxHgID];
-	string url[MaxHgID];
-	string oldal[MaxHgID];
-	string regex[MaxHgID];
-	string regex2[MaxHgID];
-	string regex3[MaxHgID];
-	uint8 engedely[MaxHgID];
-	string account[MaxHgID];
-	string password[MaxHgID];
+	string nev[MaxGitID];
+	string url[MaxGitID];
+	string tipus[MaxGitID];
+	string oldal[MaxGitID];
+	string regex[MaxGitID];
+	string regex2[MaxGitID];
+	string regex3[MaxGitID];
+	uint8 engedely[MaxGitID];
+	string account[MaxGitID];
+	string password[MaxGitID];
 
 	string _mysql[4];
-	string a_rev[MaxHgID];
-	volatile bool m_running[MaxHgID];
+	string a_rev[MaxGitID];
+	volatile bool m_running[MaxGitID];
 	inline void lekerdezesi_ido() { Sleep(1000); }
 
 	uint16 m_Lido;
 
 private:
 	// Url kezeles
-	CURL* m_Curl[MaxHgID];
+	CURL* m_Curl[MaxGitID];
 	// Mysql kapcsolat.
-	MySQLConnectionPointer m_SQLConn[MaxHgID];
+	MySQLConnectionPointer m_SQLConn[MaxGitID];
 	static int writer(char* data, size_t size, size_t nmemb, string *buffer);
 };
 
-#define sHgInfo HgInfo::getSingleton()
+#define sGitInfo GitInfo::getSingleton()
 
 #endif
