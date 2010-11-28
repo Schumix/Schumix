@@ -230,6 +230,7 @@
     <ClCompile Include="..\..\src\HgInfo.cpp" />
     <ClCompile Include="..\..\src\IRCSession.cpp" />
     <ClCompile Include="..\..\src\MessageHandler.cpp" />
+    <ClCompile Include="..\..\src\PublicMessageHandler.cpp" />
     <ClCompile Include="..\..\src\OperatorFunkciok.cpp" />
     <ClCompile Include="..\..\src\Schumix.cpp" />
     <ClCompile Include="..\..\src\SchumixFunkciok.cpp" />

@@ -114,171 +114,6 @@ void IRCSession::Schumix(IRCMessage& recvData)
 	}
 }
 
-void IRCSession::HJoin(IRCMessage& recvData)
-{
-	if(AutoKick(recvData, "join"))
-		return;
-
-	uint8 szokoz = recvData.target.find(':');
-	string channel = recvData.target.substr(szokoz+1);
-
-	if(FSelect(MODE) == bekapcsol && FSelectChannel(MODE, channel) == bekapcsol)
-	{
-		AutoMode = true;
-		ModeChannel = channel;
-		WriteLine("NICKSERV STATUS %s", recvData.source_nick.c_str());
-	}
-#ifdef _DEBUG_MOD
-	else
-		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", MODE);
-#endif
-
-	if(FSelect(KOSZONES) == bekapcsol && FSelectChannel(KOSZONES, channel) == bekapcsol)
-	{
-		string Koszones;
-		int ido = sVezerlo.Ora();
-
-		switch(rand()%13)
-		{
-			case 0:
-				Koszones = "Hello";
-				break;
-			case 1:
-				Koszones = "Cs·Û";
-				break;
-			case 2:
-				Koszones = "Hy";
-				break;
-			case 3:
-				Koszones = "Szevasz";
-				break;
-			case 4:
-				Koszones = "‹dv";
-				break;
-			case 5:
-				Koszones = "Szervusz";
-				break;
-			case 6:
-				Koszones = "Aloha";
-				break;
-			case 7:
-				Koszones = "JÛ napot";
-				break;
-			case 8:
-				Koszones = "Szia";
-				break;
-			case 9:
-				Koszones = "Hi";
-				break;
-			case 10:
-				Koszones = "Szerbusz";
-				break;
-			case 11:
-				Koszones = "Hali";
-				break;
-			case 12:
-				Koszones = "Szeva";
-				break;
-		}
-
-		if(ido <= 9)
-			SendChatMessage(PRIVMSG, channel.c_str(), "JÛ reggelt %s", recvData.source_nick.c_str());
-		else if(ido >= 20)
-			SendChatMessage(PRIVMSG, channel.c_str(), "JÛ estÈt %s", recvData.source_nick.c_str());
-		else
-		{
-			if(Admin(recvData.source_nick))
-				SendChatMessage(PRIVMSG, channel.c_str(), "‹dv fınˆk");
-			else
-				SendChatMessage(PRIVMSG, channel.c_str(), "%s %s", Koszones.c_str(), recvData.source_nick.c_str());
-		}
-	}
-#ifdef _DEBUG_MOD
-	else
-		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", KOSZONES);
-#endif
-}
-
-void IRCSession::HLeft(IRCMessage& recvData)
-{
-	if(FSelect(KOSZONES) == bekapcsol && FSelectChannel(KOSZONES, recvData.target) == bekapcsol)
-	{
-		string elkoszones;
-
-		switch(rand()%2)
-		{
-			case 0:
-				elkoszones = "Viszl·t";
-				break;
-			case 1:
-				elkoszones = "Bye";
-				break;
-		}
-
-		if(sVezerlo.Ora() >= 20)
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "JÛÈt %s", recvData.source_nick.c_str());
-		else
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s %s", elkoszones.c_str(), recvData.source_nick.c_str());
-	}
-#ifdef _DEBUG_MOD
-	else
-		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", KOSZONES);
-#endif
-}
-
-void IRCSession::HQuit(IRCMessage& recvData)
-{
-/*	if(FSelect(KOSZONES) == bekapcsol && FSelectChannel(KOSZONES, recvData.target) == bekapcsol)
-	{
-		string elkoszones;
-
-		switch(rand()%2)
-		{
-			case 0:
-				elkoszones = "Viszl·t";
-				break;
-			case 1:
-				elkoszones = "Bye";
-				break;
-		}
-
-		if(sVezerlo.Ora() >= 20)
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "JÛÈt %s", recvData.source_nick.c_str());
-		else
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s %s", elkoszones.c_str(), recvData.source_nick.c_str());
-	}
-#ifdef _DEBUG_MOD
-	else
-		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", KOSZONES);
-#endif*/
-}
-
-void IRCSession::ReJoin(IRCMessage& recvData)
-{
-	if(FSelect(REJOIN) == bekapcsol)
-	{
-		map<string, string>::iterator itr = m_ChannelLista.begin();
-		for(; itr != m_ChannelLista.end(); itr++)
-		{
-			string join1 = itr->first;
-
-			if(FSelectChannel(REJOIN, join1) == bekapcsol)
-			{
-				string join = itr->first;
-
-				if(itr->second != "")
-					join += " " + itr->second;
-
-				WriteLine("JOIN %s", join.c_str());
-			}
-		}
-	}
-#ifdef _DEBUG_MOD
-	else
-		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", REJOIN);
-#endif
-}
-
 string IRCSession::FSelect(string nev)
 {
 	string status;
@@ -632,6 +467,61 @@ bool IRCSession::AutoKick(IRCMessage& recvData, string allapot)
 			Log.Warning("Funkcio", "A %s funkcio nem uzemel!", KICK);
 #endif
 		return false;
+	}
+
+	return false;
+}
+
+bool IRCSession::Admin(string nick)
+{
+	transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
+
+	QueryResultPointer db = m_SQLConn->Query("SELECT * FROM adminok WHERE nev = '%s'", nick.c_str());
+	if(db)
+		return true;
+
+	return false;
+}
+
+bool IRCSession::Admin(string nick, AdminFlag Flag)
+{
+	transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
+
+	QueryResultPointer db = m_SQLConn->Query("SELECT flag FROM adminok WHERE nev = '%s'", nick.c_str());
+	if(db)
+	{
+		int flag = cast_int(db->Fetch()[0].GetUInt8());
+
+		if(Flag != flag)
+			return false;
+
+		return true;
+	}
+
+	return false;
+}
+
+bool IRCSession::Admin(string nick, string Vhost, AdminFlag Flag)
+{
+	transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
+
+	QueryResultPointer db = m_SQLConn->Query("SELECT vhost, flag FROM adminok WHERE nev = '%s'", nick.c_str());
+	if(db)
+	{
+		string vhost = db->Fetch()[0].GetString();
+
+		if(Vhost != vhost)
+			return false;
+
+		int flag = cast_int(db->Fetch()[1].GetUInt8());
+
+		if(flag == 1 && Flag == NULL)
+			return true;
+
+		if(Flag != flag)
+			return false;
+
+		return true;
 	}
 
 	return false;

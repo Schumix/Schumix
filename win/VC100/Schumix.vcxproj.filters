@@ -232,6 +232,9 @@
     <ClCompile Include="..\..\src\MessageHandler.cpp">
       <Filter>IRC</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\PublicMessageHandler.cpp">
+      <Filter>IRC</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\Funkciok.cpp">
       <Filter>IRC</Filter>
     </ClCompile>

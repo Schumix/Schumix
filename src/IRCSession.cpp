@@ -363,61 +363,6 @@ int IRCSession::writer(char* data, size_t size, size_t nmemb, string *buffer)
 	return result;
 }
 
-bool IRCSession::Admin(string nick)
-{
-	transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
-
-	QueryResultPointer db = m_SQLConn->Query("SELECT * FROM adminok WHERE nev = '%s'", nick.c_str());
-	if(db)
-		return true;
-
-	return false;
-}
-
-bool IRCSession::Admin(string nick, AdminFlag Flag)
-{
-	transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
-
-	QueryResultPointer db = m_SQLConn->Query("SELECT flag FROM adminok WHERE nev = '%s'", nick.c_str());
-	if(db)
-	{
-		int flag = cast_int(db->Fetch()[0].GetUInt8());
-
-		if(Flag != flag)
-			return false;
-
-		return true;
-	}
-
-	return false;
-}
-
-bool IRCSession::Admin(string nick, string Vhost, AdminFlag Flag)
-{
-	transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
-
-	QueryResultPointer db = m_SQLConn->Query("SELECT vhost, flag FROM adminok WHERE nev = '%s'", nick.c_str());
-	if(db)
-	{
-		string vhost = db->Fetch()[0].GetString();
-
-		if(Vhost != vhost)
-			return false;
-
-		int flag = cast_int(db->Fetch()[1].GetUInt8());
-
-		if(flag == 1 && Flag == NULL)
-			return true;
-
-		if(Flag != flag)
-			return false;
-
-		return true;
-	}
-
-	return false;
-}
-
 string IRCSession::randomString(int length, bool letters, bool numbers, bool symbols)
 {
 	string str, allPossible;

@@ -199,10 +199,6 @@ protected:
 
 	// Schumix
 	void Schumix(IRCMessage& recvData);
-	void HJoin(IRCMessage& recvData);
-	void HLeft(IRCMessage& recvData);
-	void HQuit(IRCMessage& recvData);
-	void ReJoin(IRCMessage& recvData);
 	void HLUzenet(IRCMessage& recvData);
 	bool AutoKick(IRCMessage& recvData, string allapot);
 
