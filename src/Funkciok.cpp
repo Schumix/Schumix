@@ -21,28 +21,28 @@
 
 void IRCSession::Logfajl(IRCMessage& recvData)
 {
-	if(FSelect(LOG) == bekapcsol && FSelectChannel(LOG, recvData.target) == bekapcsol)
+	if(FSelect(LOG) == bekapcsol && FSelectChannel(LOG, recvData.Channel) == bekapcsol)
 	{
-		FILE* LogSzoba = fopen(format("%s/%s.log", m_LogHelye.c_str(), recvData.target.c_str()).c_str(), "a+");
+		FILE* LogSzoba = fopen(format("%s/%s.log", m_LogHelye.c_str(), recvData.GetChannel()).c_str(), "a+");
 		if(!LogSzoba || LogSzoba == NULL)
 		{
 			Log.Error("Log", "Sikertelen olvasas.\n");
 			return;
 		}
 
-		fprintf(LogSzoba, "[%i. %i. %i. %i:%i] <%s> %s\n", sVezerlo.Ev(), sVezerlo.Honap(), sVezerlo.Nap(), sVezerlo.Ora(), sVezerlo.Perc(), recvData.source_nick.c_str(), recvData.args.c_str());
+		fprintf(LogSzoba, "[%i. %i. %i. %i:%i] <%s> %s\n", sVezerlo.Ev(), sVezerlo.Honap(), sVezerlo.Nap(), sVezerlo.Ora(), sVezerlo.Perc(), recvData.GetNick(), recvData.GetArgs());
 		fclose(LogSzoba);
 	}
-	else if(cast_int(recvData.target.find("#")) == string::npos)
+	else if(cast_int(recvData.Channel.find("#")) == string::npos)
 	{
-		FILE* LogSzoba = fopen(format("%s/%s.log", m_LogHelye.c_str(), recvData.target.c_str()).c_str(), "a+");
+		FILE* LogSzoba = fopen(format("%s/%s.log", m_LogHelye.c_str(), recvData.GetChannel()).c_str(), "a+");
 		if(!LogSzoba || LogSzoba == NULL)
 		{
 			Log.Error("Log", "Sikertelen olvasas.\n");
 			return;
 		}
 
-		fprintf(LogSzoba, "[%i. %i. %i. %i:%i] <%s> %s\n", sVezerlo.Ev(), sVezerlo.Honap(), sVezerlo.Nap(), sVezerlo.Ora(), sVezerlo.Perc(), recvData.source_nick.c_str(), recvData.args.c_str());
+		fprintf(LogSzoba, "[%i. %i. %i. %i:%i] <%s> %s\n", sVezerlo.Ev(), sVezerlo.Honap(), sVezerlo.Nap(), sVezerlo.Ora(), sVezerlo.Perc(), recvData.GetNick(), recvData.GetArgs());
 		fclose(LogSzoba);
 	}
 #ifdef _DEBUG_MOD
@@ -83,16 +83,16 @@ void IRCSession::Datum(IRCMessage& recvData)
 			if(honap < 10)
 			{
 				if(nap < 10)
-					SendChatMessage(PRIVMSG, recvData.target.c_str(), "Ma %i. 0%i. 0%i. %s napja van.", sVezerlo.Ev(), honap, nap, napdb.c_str());
+					SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ma %i. 0%i. 0%i. %s napja van.", sVezerlo.Ev(), honap, nap, napdb.c_str());
 				else
-					SendChatMessage(PRIVMSG, recvData.target.c_str(), "Ma %i. 0%i. %i. %s napja van.", sVezerlo.Ev(), honap, nap, napdb.c_str());
+					SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ma %i. 0%i. %i. %s napja van.", sVezerlo.Ev(), honap, nap, napdb.c_str());
 			}
 			else
 			{
 				if(nap < 10)
-					SendChatMessage(PRIVMSG, recvData.target.c_str(), "Ma %i. %i. 0%i. %s napja van.", sVezerlo.Ev(), honap, nap, napdb.c_str());
+					SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ma %i. %i. 0%i. %s napja van.", sVezerlo.Ev(), honap, nap, napdb.c_str());
 				else
-					SendChatMessage(PRIVMSG, recvData.target.c_str(), "Ma %i. %i. %i. %s napja van.", sVezerlo.Ev(), honap, nap, napdb.c_str());
+					SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ma %i. %i. %i. %s napja van.", sVezerlo.Ev(), honap, nap, napdb.c_str());
 			}
 		}
  	}
@@ -103,21 +103,21 @@ void IRCSession::Ido(IRCMessage& recvData)
 	int perc = sVezerlo.Perc();
 
 	if(perc < 10)
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Helyi idõ: %i:0%i", sVezerlo.Ora(), perc);
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Helyi idõ: %i:0%i", sVezerlo.Ora(), perc);
 	else
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Helyi idõ: %i:%i", sVezerlo.Ora(), perc);
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Helyi idõ: %i:%i", sVezerlo.Ora(), perc);
 }
 
 void IRCSession::Keres(IRCMessage& recvData)
 {
-	if(recvData.args.length() <= firstSpace+1)
+	if(recvData.Args.length() <= firstSpace+1)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
 		return;
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
+	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -129,8 +129,8 @@ void IRCSession::Keres(IRCMessage& recvData)
 
 	if(iras == Help)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Segítség a kereséshez!");
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Funkció használata: %skeres <ide jön a kereset szöveg>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Segítség a kereséshez!");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Funkció használata: %skeres <ide jön a kereset szöveg>", m_ParancsElojel.c_str());
 	}
 	else
 	{
@@ -169,13 +169,13 @@ void IRCSession::Keres(IRCMessage& recvData)
 				string matched1(matches1[1].first, matches1[1].second);
 
 				int szokoz = matched1.find('","');
-				SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Title: %s", matched1.substr(0, szokoz).c_str());
-				SendChatMessage(PRIVMSG, recvData.target.c_str(), "2Link: 9%s", matched.c_str());
+				SendChatMessage(PRIVMSG, recvData.GetChannel(), "2Title: %s", matched1.substr(0, szokoz).c_str());
+				SendChatMessage(PRIVMSG, recvData.GetChannel(), "2Link: 9%s", matched.c_str());
 			}
 			else
 			{
 				Log.Notice("IRCSession", "Keres: Hiba a Http lekerdezesben.");
-				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hibás találat");
+				SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás találat");
 			}
 		}
 	}
@@ -185,14 +185,14 @@ void IRCSession::Keres(IRCMessage& recvData)
 
 void IRCSession::Forditas(IRCMessage& recvData)
 {
-	if(recvData.args.length() <= firstSpace+1)
+	if(recvData.Args.length() <= firstSpace+1)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
 		return;
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
+	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -202,8 +202,8 @@ void IRCSession::Forditas(IRCMessage& recvData)
 
 	if(res[1] == Help)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Segítség a fordításhoz!");
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Funkció használata: %sfordit <mirõl|mire> <szöveg>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Segítség a fordításhoz!");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Funkció használata: %sfordit <mirõl|mire> <szöveg>", m_ParancsElojel.c_str());
 	}
 	else
 	{
@@ -243,12 +243,12 @@ void IRCSession::Forditas(IRCMessage& recvData)
 				boost::regex_search(bufferdata.c_str(), matches, re);
 				string matched(matches[1].first, matches[1].second);
 
-				SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s", matched.c_str());
+				SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s", matched.c_str());
 			}
 			else
 			{
 				Log.Notice("IRCSession", "Fordit: Hiba a Http lekerdezesben.");
-				SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hibás fordítás");
+				SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás fordítás");
 			}
 		}
 	}
@@ -258,9 +258,9 @@ void IRCSession::Forditas(IRCMessage& recvData)
 
 void IRCSession::Sha1(IRCMessage& recvData)
 {
-	if(recvData.args.length() <= firstSpace+1)
+	if(recvData.Args.length() <= firstSpace+1)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
 		return;
 	}
 
@@ -268,7 +268,7 @@ void IRCSession::Sha1(IRCMessage& recvData)
 	unsigned char* eredmeny = new unsigned char[SHA_DIGEST_LENGTH+1];
 
 	sha1.Initialize();
-	sha1.UpdateData(recvData.args.substr(firstSpace+1));
+	sha1.UpdateData(recvData.Args.substr(firstSpace+1));
 	sha1.Finalize();
 	memcpy(eredmeny, sha1.GetDigest(), SHA_DIGEST_LENGTH);
 
@@ -281,14 +281,14 @@ void IRCSession::Sha1(IRCMessage& recvData)
 	string hash;
 	ss >> hash;
 
-	SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s", hash.c_str());
+	SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s", hash.c_str());
 }
 
 void IRCSession::Md5(IRCMessage& recvData)
 {
-	if(recvData.args.length() <= firstSpace+1)
+	if(recvData.Args.length() <= firstSpace+1)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
 		return;
 	}
 
@@ -296,7 +296,7 @@ void IRCSession::Md5(IRCMessage& recvData)
 	unsigned char* eredmeny = new unsigned char[MD5_DIGEST_LENGTH+1];
 
 	md5.Initialize();
-	md5.UpdateData(recvData.args.substr(firstSpace+1));
+	md5.UpdateData(recvData.Args.substr(firstSpace+1));
 	md5.Finalize();
 	memcpy(eredmeny, md5.GetDigest(), MD5_DIGEST_LENGTH);
 
@@ -309,19 +309,19 @@ void IRCSession::Md5(IRCMessage& recvData)
 	string hash;
 	ss >> hash;
 
-	SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s", hash.c_str());
+	SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s", hash.c_str());
 }
 
 void IRCSession::Xrev(IRCMessage& recvData)
 {
-	if(recvData.args.length() <= firstSpace+1)
+	if(recvData.Args.length() <= firstSpace+1)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Emulátorok: sandshroud");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Emulátorok: sandshroud");
 		return;
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
+	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -332,12 +332,12 @@ void IRCSession::Xrev(IRCMessage& recvData)
 	string iras = res[1];
 
 	if(iras == Help)
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Parancs használata: %sxrev <emulátor neve> <rev>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Parancs használata: %sxrev <emulátor neve> <rev>", m_ParancsElojel.c_str());
 	else if(iras == "sandshroud")
 	{
 		if(res.size() < 3)
 		{
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "A revision nincs megadva!");
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "A revision nincs megadva!");
 			res.clear();
 			return;
 		}
@@ -347,24 +347,24 @@ void IRCSession::Xrev(IRCMessage& recvData)
 		ss << res[2];
 		ss >> rev;
 
-		SvnSandshroud(rev, recvData.target);
+		SvnSandshroud(rev, recvData.Channel);
 	}
 	else
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Hibás név!");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás név!");
 
 	res.clear();
 }
 
 void IRCSession::Irc(IRCMessage& recvData)
 {
-	if(recvData.args.length() <= firstSpace+1)
+	if(recvData.Args.length() <= firstSpace+1)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
 		return;
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
+	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -376,8 +376,8 @@ void IRCSession::Irc(IRCMessage& recvData)
 
 	if(irc == Help)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Segítség az irc-hez!");
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Parancsok: %sirc rang | %sirc rang1 | %sirc nick | %sirc kick | %sirc owner", m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Segítség az irc-hez!");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Parancsok: %sirc rang | %sirc rang1 | %sirc nick | %sirc kick | %sirc owner", m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str());
 	}
 	else
 	{
@@ -385,7 +385,7 @@ void IRCSession::Irc(IRCMessage& recvData)
 		if(db)
 		{
 			string hasznalata = db->Fetch()[0].GetString();
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s", hasznalata.c_str());
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s", hasznalata.c_str());
 		}
 	}
 
@@ -394,27 +394,27 @@ void IRCSession::Irc(IRCMessage& recvData)
 
 void IRCSession::Szam(IRCMessage& recvData)
 {
-	if(recvData.args.length() <= firstSpace+1)
+	if(recvData.Args.length() <= firstSpace+1)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
 		return;
 	}
 
 	setConsts();
-	makepolishform(recvData.args.substr(firstSpace+1));
-	calculate(recvData.target);
+	makepolishform(recvData.Args.substr(firstSpace+1));
+	calculate(recvData.Channel);
 }
 
 void IRCSession::Uzenet(IRCMessage& recvData)
 {
-	if(recvData.args.length() <= firstSpace+1)
+	if(recvData.Args.length() <= firstSpace+1)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
 		return;
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
+	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -426,8 +426,8 @@ void IRCSession::Uzenet(IRCMessage& recvData)
 
 	if(iras == Help)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Segitség az üzenethez!");
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Funkció használata: %süzenet <ide jön a személy> <ha nem felhivás küldenél hanem saját üzenetet>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Segitség az üzenethez!");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Funkció használata: %süzenet <ide jön a személy> <ha nem felhivás küldenél hanem saját üzenetet>", m_ParancsElojel.c_str());
 	}
 	else
 	{
@@ -438,7 +438,7 @@ void IRCSession::Uzenet(IRCMessage& recvData)
 			alomany += " " + res[i];
 
 		if(resAdat == 2)
-			SendChatMessage(PRIVMSG, iras.c_str(), "Keresnek téged itt: %s", recvData.target.c_str());
+			SendChatMessage(PRIVMSG, iras.c_str(), "Keresnek téged itt: %s", recvData.GetChannel());
 		else if(resAdat >= 3)
 			SendChatMessage(PRIVMSG, iras.c_str(), "%s", alomany.substr(1).c_str());
 	}
@@ -448,14 +448,14 @@ void IRCSession::Uzenet(IRCMessage& recvData)
 
 void IRCSession::Jegyzet(IRCMessage& recvData)
 {
-	if(recvData.args.length() <= firstSpace+1)
+	if(recvData.Args.length() <= firstSpace+1)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
 		return;
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.args.substr(firstSpace+1), " ", res);
+	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -467,15 +467,15 @@ void IRCSession::Jegyzet(IRCMessage& recvData)
 
 	if(info == Help)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Alparancsok használata:");
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Jegyzet beküldése: %sjegyzet <amit feljegyeznél>", m_ParancsElojel.c_str());
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Jegyzet kiolvasása: %sjegyzet kod <kod amit kaptál>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Jegyzet beküldése: %sjegyzet <amit feljegyeznél>", m_ParancsElojel.c_str());
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Jegyzet kiolvasása: %sjegyzet kod <kod amit kaptál>", m_ParancsElojel.c_str());
 	}
 	else if(info == "kod")
 	{
 		if(res.size() < 3)
 		{
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "A kod nincs megadva!");
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "A kod nincs megadva!");
 			res.clear();
 			return;
 		}
@@ -484,7 +484,7 @@ void IRCSession::Jegyzet(IRCMessage& recvData)
 		if(db)
 		{
 			string jegyzet = db->Fetch()[0].GetString();
-			SendChatMessage(PRIVMSG, recvData.source_nick.c_str(), "Jegyzet: %s", jegyzet.c_str());
+			SendChatMessage(PRIVMSG, recvData.GetNick(), "Jegyzet: %s", jegyzet.c_str());
 		}
 	}
 	else
@@ -495,9 +495,9 @@ void IRCSession::Jegyzet(IRCMessage& recvData)
 		for(int i = 1; i < resAdat; i++)
 			alomany += " " + res[i];
 
-		string kod = randomString(10, true, true, false);
-		m_SQLConn->Query("INSERT INTO `jegyzetek`(kod, nick, jegyzet) VALUES ('%s', '%s', '%s')", kod.c_str(), recvData.source_nick.c_str(), alomany.substr(1).c_str());
-		SendChatMessage(PRIVMSG, recvData.source_nick.c_str(), "Jegyzet kodja: %s", kod.c_str());
+		string kod = RandomString(10, true, true, false);
+		m_SQLConn->Query("INSERT INTO `jegyzetek`(kod, nick, jegyzet) VALUES ('%s', '%s', '%s')", kod.c_str(), recvData.GetNick(), alomany.substr(1).c_str());
+		SendChatMessage(PRIVMSG, recvData.GetNick(), "Jegyzet kodja: %s", kod.c_str());
 	}
 
 	res.clear();
@@ -505,20 +505,20 @@ void IRCSession::Jegyzet(IRCMessage& recvData)
 
 void IRCSession::Whois(IRCMessage& recvData)
 {
-	if(recvData.args.length() <= firstSpace+1)
+	if(recvData.Args.length() <= firstSpace+1)
 	{
-		SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
 		return;
 	}
 
 	string Nick = m_NickTarolo;
-	string nick = recvData.args.substr(firstSpace+1);
+	string nick = recvData.Args.substr(firstSpace+1);
 	transform(Nick.begin(), Nick.end(), Nick.begin(), ::tolower);
 	transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
 
 	if(nick == Nick)
 		return;
 
-	m_WhoisPrivmsg = recvData.target;
-	WriteLine("WHOIS %s", recvData.args.substr(firstSpace+1).c_str());
+	m_WhoisPrivmsg = recvData.Channel;
+	WriteLine("WHOIS %s", recvData.Args.substr(firstSpace+1).c_str());
 }

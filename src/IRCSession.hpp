@@ -70,18 +70,28 @@ enum MessageType
 
 struct IRCMessage
 {
-	string hostmask;	// Egybenlévõ hostmask melybõl majd darabolodik a nick, user, host
-	string opcode;		// Opcode elnevezése vagy száma
-	string target;		// Channel név ahonét jön az adat
-	string args;		// Szöveg ami bejön
+	string Hostmask;	// Egybenlévõ hostmask melybõl majd darabolodik a nick, user, host
+	string Opcode;		// Opcode elnevezése vagy száma
+	string Channel;		// Channel név ahonét jön az adat
+	string Args;		// Szöveg ami bejön
 
 	// Bejövö adat igy darabolodik: :schumix!Schumix@schumix_host
-	string source_nick; // schumix
-	string source_user; // Schumix
-	string source_host; // schumix_host
+	string Nick; // schumix
+	string User; // Schumix
+	string Host; // schumix_host
 
 	// Minden
-	string minden;
+	string Minden;
+
+	// .c_str() hozzáadva hogy const char* legyen
+	inline const char* GetHostmask() { return Hostmask.c_str(); }
+	inline const char* GetOpcode() { return Opcode.c_str(); }
+	inline const char* GetChannel() { return Channel.c_str(); }
+	inline const char* GetArgs() { return Args.c_str(); }
+	inline const char* GetNick() { return Nick.c_str(); }
+	inline const char* GetUser() { return User.c_str(); }
+	inline const char* GetHost() { return Host.c_str(); }
+	inline const char* GetMinden() { return Minden.c_str(); }
 };
 
 class IRCSession : public Singleton<IRCSession>
@@ -111,7 +121,7 @@ public:
 	inline string GetUserName() { return m_UserName; }
 
 	// Véletlen szerû jelszó generálható vele
-	string randomString(int length, bool letters, bool numbers, bool symbols);
+	string RandomString(int length, bool letters, bool numbers, bool symbols);
 	void SocketDisconnect();
 
 	// Lehetséges kapcsolat fajták: CONN_CONNECTED, CONN_REGISTERING vagy CONN_REGISTERED
@@ -256,6 +266,7 @@ protected:
 	// Hostserv állapota
 	bool m_UseHostServ;
 	bool m_vhost;
+	bool h_Aktivitas;
 
 	// The name the server refers to itself as.
 	string m_ServerRealName;

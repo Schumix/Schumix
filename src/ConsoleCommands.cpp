@@ -270,7 +270,7 @@ bool Console::ConsoleCommands(char* adat)
 
 			string nev = res[3];
 			transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
-			string pass = sIRCSession.randomString(10, true, true, false);
+			string pass = sIRCSession.RandomString(10, true, true, false);
 
 			Sha1Hash hash;
 			unsigned char* j_hash = new unsigned char[SHA_DIGEST_LENGTH+1];

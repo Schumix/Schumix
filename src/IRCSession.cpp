@@ -147,46 +147,46 @@ void IRCSession::BejovoInfo(string SInfo)
 
 	char* hostmask = new char[256];
 	char* opcode = new char[256];
-	char* target = new char[256];
+	char* channel = new char[256];
 	char* args = new char[4096];
 
 	// Kizárja a null adatatot
 	memset(hostmask, '\0', 255);
 	memset(opcode, '\0', 255);
-	memset(target, '\0', 255);
+	memset(channel, '\0', 255);
 	memset(args, '\0', 4095);
 
-	uint8 r = sscanf(SInfo.c_str(), ":%255s %255s %255s :%4095[^\r\n]", hostmask, opcode, target, args);
+	uint8 r = sscanf(SInfo.c_str(), ":%255s %255s %255s :%4095[^\r\n]", hostmask, opcode, channel, args);
 	if(r != 4)
 		r = sscanf(SInfo.c_str(), ":%s %s %s", hostmask, opcode, args); // Parsing failed, let's go to the fallback method. :P
 
-	mess.minden = SInfo;
-	mess.hostmask = string(hostmask);
-	mess.opcode = string(opcode);
-	mess.args = string(args);
-	mess.target = string(target);
+	mess.Minden = SInfo;
+	mess.Hostmask = string(hostmask);
+	mess.Opcode = string(opcode);
+	mess.Args = string(args);
+	mess.Channel = string(channel);
 
 	delete[] hostmask;
 	delete[] opcode;
-	delete[] target;
+	delete[] channel;
 	delete[] args;
 
 	// A hostmask részeit darabolja fel.
-	uint32 pos = cast_uint32(mess.hostmask.find('!'));
-	mess.source_nick = mess.hostmask.substr(0, pos);
-	mess.source_host = mess.hostmask.substr(pos + 1);
+	uint32 pos = cast_uint32(mess.Hostmask.find('!'));
+	mess.Nick = mess.Hostmask.substr(0, pos);
+	mess.Host = mess.Hostmask.substr(pos + 1);
 
-	pos = cast_uint32(mess.source_host.find('@'));
-	mess.source_user = mess.source_host.substr(0, pos);
-	mess.source_host = mess.source_host.substr(pos + 1);
+	pos = cast_uint32(mess.Host.find('@'));
+	mess.User = mess.Host.substr(0, pos);
+	mess.Host = mess.Host.substr(pos + 1);
 
-	MessageHandlerMap::iterator itr = IRCMessageHandlerMap.find(mess.opcode);
+	MessageHandlerMap::iterator itr = IRCMessageHandlerMap.find(mess.Opcode);
 	if(itr == IRCMessageHandlerMap.end())
 	{
 		if(sConsole.GetConsoleLog() == bekapcsol)
 		{
 			// Információ melyik opcode fut le ha nincs pl használva.
-			Log.Notice("IRCSession", "Received unhandled opcode: %s", mess.opcode.c_str());
+			Log.Notice("IRCSession", "Received unhandled opcode: %s", mess.GetOpcode());
 		}
 		return;
 	}
@@ -363,7 +363,7 @@ int IRCSession::writer(char* data, size_t size, size_t nmemb, string *buffer)
 	return result;
 }
 
-string IRCSession::randomString(int length, bool letters, bool numbers, bool symbols)
+string IRCSession::RandomString(int length, bool letters, bool numbers, bool symbols)
 {
 	string str, allPossible;
 

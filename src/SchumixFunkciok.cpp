@@ -21,27 +21,27 @@
 
 void IRCSession::Schumix(IRCMessage& recvData)
 {
-	if(FSelectChannel(PARANCSOK, recvData.target) != bekapcsol)
+	if(FSelectChannel(PARANCSOK, recvData.Channel) != bekapcsol)
 		return;
 
 	string _nick = m_NickName[0];
-	int vesszo = recvData.args.find(",");
+	int vesszo = recvData.Args.find(",");
 	transform(_nick.begin(), _nick.end(), _nick.begin(), ::tolower);
 
-	if(recvData.args.substr(0, vesszo) == _nick)
+	if(recvData.Args.substr(0, vesszo) == _nick)
 	{
-		uint8 elsoszokoz = recvData.args.find(' ');
+		uint8 elsoszokoz = recvData.Args.find(' ');
 		if(elsoszokoz == string::npos)
-			elsoszokoz = recvData.args.length();
+			elsoszokoz = recvData.Args.length();
 
-		if(recvData.args.length() <= elsoszokoz+1)
+		if(recvData.Args.length() <= elsoszokoz+1)
 		{
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Nincs paraméter!");
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
 			return;
 		}
 
 		vector<string> res(1);
-		sVezerlo.split(recvData.args.substr(elsoszokoz+1), " ", res);
+		sVezerlo.split(recvData.Args.substr(elsoszokoz+1), " ", res);
 
 		if(res.size() < 2)
 		{
@@ -53,14 +53,14 @@ void IRCSession::Schumix(IRCMessage& recvData)
 
 		if(iras == "info")
 		{
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Verzió: 10%s", revision);
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Platform: %s", PLATFORM_TEXT);
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Programnyelv: c++");
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Uptime: %s", sVezerlo.GetUptimeString().c_str());
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Verzió: 10%s", revision);
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Platform: %s", PLATFORM_TEXT);
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Programnyelv: c++");
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Uptime: %s", sVezerlo.GetUptimeString().c_str());
 		}
 		else if(iras == "nick")
 		{
-			if(!Admin(recvData.source_nick, recvData.source_host, Operator))
+			if(!Admin(recvData.Nick, recvData.Host, Operator))
 				return;
 
 			if(res.size() < 3)
@@ -85,7 +85,7 @@ void IRCSession::Schumix(IRCMessage& recvData)
 		}
 		else if(iras == "ghost")
 		{
-			if(!Admin(recvData.source_nick, recvData.source_host, Operator))
+			if(!Admin(recvData.Nick, recvData.Host, Operator))
 				return;
 
 			SendChatMessage(PRIVMSG, "NickServ", "ghost %s %s", m_NickName[0].c_str(), m_NickServPassword.c_str());
@@ -93,21 +93,21 @@ void IRCSession::Schumix(IRCMessage& recvData)
 		else if(iras == "sys")
 		{
 #if PLATFORM == PLATFORM_WINDOWS
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Memoria használat: %f MB", ((sVezerlo.MemoryInfo(GetCurrentProcessId())/1024)/1024));
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Memoria használat: %f MB", ((sVezerlo.MemoryInfo(GetCurrentProcessId())/1024)/1024));
 #else
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Memoria használat: %f MB", ((sVezerlo.MemoryInfo()/1000)*0.3762));
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Memoria használat: %f MB", ((sVezerlo.MemoryInfo()/1000)*0.3762));
 #endif
 		}
 		else if(iras == "help")
 		{
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "3Parancsok: info | ghost | nick | sys");
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: info | ghost | nick | sys");
 		}
 		else
 		{
 			//számolás
 			setConsts();
-			makepolishform(recvData.args.substr(elsoszokoz+1));
-			calculate(recvData.target);
+			makepolishform(recvData.Args.substr(elsoszokoz+1));
+			calculate(recvData.Channel);
 		}
 
 		res.clear();
@@ -166,10 +166,10 @@ string IRCSession::FSelectChannel(string nev, string channel)
 
 void IRCSession::HLUzenet(IRCMessage& recvData)
 {
-	if(FSelect(HL) == bekapcsol && FSelectChannel(HL, recvData.target) == bekapcsol)
+	if(FSelect(HL) == bekapcsol && FSelectChannel(HL, recvData.Channel) == bekapcsol)
 	{
 		vector<string> res(1);
-		sVezerlo.split(recvData.args, " ", res);
+		sVezerlo.split(recvData.Args, " ", res);
 		int resAdat = res.size();
 
 		for(int i = 1; i < resAdat; i++)
@@ -184,7 +184,7 @@ void IRCSession::HLUzenet(IRCMessage& recvData)
 				if(alapot != bekapcsol)
 					return;
 
-				SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s", info.c_str());
+				SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s", info.c_str());
 				break;
 			}
 		}
@@ -426,18 +426,18 @@ bool IRCSession::AutoKick(IRCMessage& recvData, string allapot)
 {
 	if(allapot == "join")
 	{
-		uint8 szokoz = recvData.target.find(':');
-		string channel = recvData.target.substr(szokoz+1);
+		uint8 szokoz = recvData.Channel.find(':');
+		string channel = recvData.Channel.substr(szokoz+1);
 
 		if(FSelect(KICK) == bekapcsol && FSelectChannel(KICK, channel) == bekapcsol)
 		{
-			transform(recvData.source_nick.begin(), recvData.source_nick.end(), recvData.source_nick.begin(), ::tolower);
-			QueryResultPointer db = m_SQLConn->Query("SELECT channel, oka FROM kicklista WHERE nick = '%s'", recvData.source_nick.c_str());
+			transform(recvData.Nick.begin(), recvData.Nick.end(), recvData.Nick.begin(), ::tolower);
+			QueryResultPointer db = m_SQLConn->Query("SELECT channel, oka FROM kicklista WHERE nick = '%s'", recvData.GetNick());
 			if(db)
 			{
 				channel = db->Fetch()[0].GetString();
 				string oka = db->Fetch()[1].GetString();
-				WriteLine("KICK %s %s :%s", channel.c_str(), recvData.source_nick.c_str(), oka.c_str());
+				WriteLine("KICK %s %s :%s", channel.c_str(), recvData.GetNick(), oka.c_str());
 				return true;
 			}
 		}
@@ -450,15 +450,15 @@ bool IRCSession::AutoKick(IRCMessage& recvData, string allapot)
 
 	if(allapot == "privmsg")
 	{
-		if(FSelect(KICK) == bekapcsol && FSelectChannel(KICK, recvData.target) == bekapcsol)
+		if(FSelect(KICK) == bekapcsol && FSelectChannel(KICK, recvData.Channel) == bekapcsol)
 		{
-			transform(recvData.source_nick.begin(), recvData.source_nick.end(), recvData.source_nick.begin(), ::tolower);
-			QueryResultPointer db = m_SQLConn->Query("SELECT channel, oka FROM kicklista WHERE nick = '%s'", recvData.source_nick.c_str());
+			transform(recvData.Nick.begin(), recvData.Nick.end(), recvData.Nick.begin(), ::tolower);
+			QueryResultPointer db = m_SQLConn->Query("SELECT channel, oka FROM kicklista WHERE nick = '%s'", recvData.GetNick());
 			if(db)
 			{
 				string channel = db->Fetch()[0].GetString();
 				string oka = db->Fetch()[1].GetString();
-				WriteLine("KICK %s %s :%s", channel.c_str(), recvData.source_nick.c_str(), oka.c_str());
+				WriteLine("KICK %s %s :%s", channel.c_str(), recvData.GetNick(), oka.c_str());
 				return true;
 			}
 		}

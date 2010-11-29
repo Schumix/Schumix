@@ -24,7 +24,7 @@ void IRCSession::HandleSuccessfulAuth(IRCMessage& recvData)
 	// We're good to go.
 	m_ConnState = CONN_REGISTERED;
 	Log.Success("IRCSession", "A komunikacio letrejot.");
-	m_ServerRealName = recvData.hostmask;
+	m_ServerRealName = recvData.Hostmask;
 
 	// Nickserv identification
 	if(m_UseNickServ)
@@ -35,6 +35,7 @@ void IRCSession::HandleSuccessfulAuth(IRCMessage& recvData)
 
 	if(m_UseHostServ)
 	{
+		h_Aktivitas = true;
 		Log.Notice("HostServ", "HostServ bevan kapcsolva.");
 		SendChatMessage(PRIVMSG, "HostServ", "on");
 	}
@@ -47,6 +48,9 @@ void IRCSession::HandleSuccessfulAuth(IRCMessage& recvData)
 		// Kitakaritja a channel funkciokat nehogy ütközés legyen.
 		m_ChannelFunkcio.clear();
 		m_ChannelPrivmsg = m_NickTarolo;
+
+		Log.Debug("IRCSession", "Kapcsolodas a szobakhoz...");
+		bool error = false;
 
 		// Join az adatbázisban szereplõ channel-okra. Bármi hiba van a kapcsolodáskor eltárolodik a hiba oka.
 		map<string, string>::iterator itr = m_ChannelLista.begin();
@@ -84,13 +88,21 @@ void IRCSession::HandleSuccessfulAuth(IRCMessage& recvData)
 
 				if(aktivitas != "nem aktiv")
 					m_SQLConn->Query("UPDATE channel SET aktivitas = 'aktiv' WHERE szoba = '%s'", szoba.c_str());
+				else
+					error = true;
 			}
 		}
+
+		if(!error)
+			Log.Success("IRCSession", "Sikeresen kapcsolodva szobakhoz.");
+		else
+			Log.Warning("IRCSession", "Nehany kapcsolodas sikertelen!");
 	}
 }
 
 void IRCSession::HandleMotdStart(IRCMessage& recvData)
 {
+	//Log.Notice("Motd", "MOTD Start");
 	// The MOTD is coming 
 	//mHasFullMotd = false;
 	//mLastMotd = "";
@@ -102,13 +114,13 @@ void IRCSession::HandleMotd(IRCMessage& recvData)
 	//if(mHasFullMotd)
 	//	return;
 
-	//mLastMotd += recvData.args + NEWLINE;
+	//mLastMotd += recvData.Args + NEWLINE;
 }
 
 void IRCSession::HandleMotdStop(IRCMessage& recvData)
 {
 	// The MOTD is over.
-	Log.Notice("IRCSession", "Server Message of the Day received.");
+	Log.Notice("Motd", "Server Message of the Day received.");
 	//mHasFullMotd = true;
 }
 
@@ -117,17 +129,17 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 	if(sConsole.GetConsoleLog() == bekapcsol)
 	{
 		Log.Color(TRED);
-		printf("%s", recvData.source_nick.c_str());
+		printf("%s", recvData.GetNick());
 		Log.Color(TYELLOW);
 		printf(" sends notice: ");
 		Log.Color(TNORMAL);
-		printf("%s%s", recvData.args.c_str(), NEWLINE);
+		printf("%s%s", recvData.GetArgs(), NEWLINE);
 	}
 
 	if(AutoMode)
 	{
 		vector<string> res(1);
-		sVezerlo.split(recvData.args, " ", res);
+		sVezerlo.split(recvData.Args, " ", res);
 		if(res.size() < 4)
 		{
 			res.clear();
@@ -153,11 +165,14 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 
 	if(m_UseHostServ)
 	{
-		if(cast_int(recvData.args.find("Your vhost of")) != string::npos)
+		if(cast_int(recvData.Args.find("Your vhost of")) != string::npos && h_Aktivitas)
 		{
 			// Kitakaritja a channel funkciokat nehogy ütközés legyen.
 			m_ChannelFunkcio.clear();
 			m_ChannelPrivmsg = m_NickTarolo;
+
+			Log.Debug("IRCSession", "Kapcsolodas a szobakhoz...");
+			bool error = false;
 
 			// Join az adatbázisban szereplõ channel-okra. Bármi hiba van a kapcsolodáskor eltárolodik a hiba oka.
 			map<string, string>::iterator itr = m_ChannelLista.begin();
@@ -195,8 +210,17 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 
 					if(aktivitas != "nem aktiv")
 						m_SQLConn->Query("UPDATE channel SET aktivitas = 'aktiv' WHERE szoba = '%s'", szoba.c_str());
+					else
+						error = true;
 				}
 			}
+
+			if(!error)
+				Log.Success("IRCSession", "Sikeresen kapcsolodva szobakhoz.");
+			else
+				Log.Warning("IRCSession", "Nehany kapcsolodas sikertelen!");
+
+			h_Aktivitas = false;
 		}
 	}
 }
@@ -204,21 +228,21 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 void IRCSession::HandlePing(IRCMessage& recvData)
 {
 	// Ping? Pong!
-	WriteLine("PONG :%s", recvData.args.c_str());
+	WriteLine("PONG :%s", recvData.GetArgs());
 	//Log.Notice("IRCSession", "Ping? Pong!");
 }
 
 void IRCSession::HandlePong(IRCMessage& recvData)
 {
 	// Ping? Pong!
-	WriteLine("PONG :%s", recvData.args.c_str());
+	WriteLine("PONG :%s", recvData.GetArgs());
 	//Log.Notice("IRCSession", "Ping? Pong!");
 }
 
 void IRCSession::HandleKick(IRCMessage& recvData)
 {
 	vector<string> res(1);
-	sVezerlo.split(recvData.minden, " ", res);
+	sVezerlo.split(recvData.Minden, " ", res);
 
 	if(res.size() < 5)
 	{
@@ -228,7 +252,7 @@ void IRCSession::HandleKick(IRCMessage& recvData)
 
 	if(res[4] == m_NickTarolo)
 	{
-		if(FSelect(REJOIN) == bekapcsol && FSelectChannel(REJOIN, recvData.target) == bekapcsol)
+		if(FSelect(REJOIN) == bekapcsol && FSelectChannel(REJOIN, recvData.Channel) == bekapcsol)
 		{
 			map<string, string>::iterator itr = m_ChannelLista.begin();
 			for(; itr != m_ChannelLista.end(); itr++)
@@ -258,7 +282,7 @@ void IRCSession::HandleKick(IRCMessage& recvData)
 			for(int i = 5; i < resAdat; i++)
 				oka += " " + res[i];
 
-			printf("%s kickelte a kovetkezo felhasznalot: %s oka: %s\n", recvData.source_nick.c_str(), res[4].c_str(), oka.substr(2).c_str());
+			printf("%s kickelte a kovetkezo felhasznalot: %s oka: %s\n", recvData.GetNick(), res[4].c_str(), oka.substr(2).c_str());
 		}
 	}
 
@@ -271,20 +295,20 @@ void IRCSession::HandleKick(IRCMessage& recvData)
 
 void IRCSession::HandleJoin(IRCMessage& recvData)
 {
-	if(recvData.source_nick == m_NickTarolo)
+	if(recvData.Nick == m_NickTarolo)
 		return;
 
 	if(AutoKick(recvData, "join"))
 		return;
 
-	uint8 szokoz = recvData.target.find(':');
-	string channel = recvData.target.substr(szokoz+1);
+	uint8 szokoz = recvData.Channel.find(':');
+	string channel = recvData.Channel.substr(szokoz+1);
 
 	if(FSelect(MODE) == bekapcsol && FSelectChannel(MODE, channel) == bekapcsol)
 	{
 		AutoMode = true;
 		ModeChannel = channel;
-		WriteLine("NICKSERV STATUS %s", recvData.source_nick.c_str());
+		WriteLine("NICKSERV STATUS %s", recvData.GetNick());
 	}
 #ifdef _DEBUG_MOD
 	else
@@ -340,15 +364,15 @@ void IRCSession::HandleJoin(IRCMessage& recvData)
 		}
 
 		if(ido <= 9)
-			SendChatMessage(PRIVMSG, channel.c_str(), "Jó reggelt %s", recvData.source_nick.c_str());
+			SendChatMessage(PRIVMSG, channel.c_str(), "Jó reggelt %s", recvData.GetNick());
 		else if(ido >= 20)
-			SendChatMessage(PRIVMSG, channel.c_str(), "Jó estét %s", recvData.source_nick.c_str());
+			SendChatMessage(PRIVMSG, channel.c_str(), "Jó estét %s", recvData.GetNick());
 		else
 		{
-			if(Admin(recvData.source_nick))
+			if(Admin(recvData.Nick))
 				SendChatMessage(PRIVMSG, channel.c_str(), "Üdv fõnök");
 			else
-				SendChatMessage(PRIVMSG, channel.c_str(), "%s %s", Koszones.c_str(), recvData.source_nick.c_str());
+				SendChatMessage(PRIVMSG, channel.c_str(), "%s %s", Koszones.c_str(), recvData.GetNick());
 		}
 	}
 #ifdef _DEBUG_MOD
@@ -359,10 +383,10 @@ void IRCSession::HandleJoin(IRCMessage& recvData)
 
 void IRCSession::HandleLeft(IRCMessage& recvData)
 {
-	if(recvData.source_nick == m_NickTarolo)
+	if(recvData.Nick == m_NickTarolo)
 		return;
 
-	if(FSelect(KOSZONES) == bekapcsol && FSelectChannel(KOSZONES, recvData.target) == bekapcsol)
+	if(FSelect(KOSZONES) == bekapcsol && FSelectChannel(KOSZONES, recvData.Channel) == bekapcsol)
 	{
 		string elkoszones;
 
@@ -377,9 +401,9 @@ void IRCSession::HandleLeft(IRCMessage& recvData)
 		}
 
 		if(sVezerlo.Ora() >= 20)
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Jóét %s", recvData.source_nick.c_str());
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "Jóét %s", recvData.GetNick());
 		else
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s %s", elkoszones.c_str(), recvData.source_nick.c_str());
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s %s", elkoszones.c_str(), recvData.GetNick());
 	}
 #ifdef _DEBUG_MOD
 	else
@@ -389,7 +413,7 @@ void IRCSession::HandleLeft(IRCMessage& recvData)
 
 void IRCSession::HandleQuit(IRCMessage& recvData)
 {
-/*	if(FSelect(KOSZONES) == bekapcsol && FSelectChannel(KOSZONES, recvData.target) == bekapcsol)
+/*	if(FSelect(KOSZONES) == bekapcsol && FSelectChannel(KOSZONES, recvData.Channel) == bekapcsol)
 	{
 		string elkoszones;
 
@@ -404,9 +428,9 @@ void IRCSession::HandleQuit(IRCMessage& recvData)
 		}
 
 		if(sVezerlo.Ora() >= 20)
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "Jóét %s", recvData.source_nick.c_str());
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "Jóét %s", recvData.GetNick());
 		else
-			SendChatMessage(PRIVMSG, recvData.target.c_str(), "%s %s", elkoszones.c_str(), recvData.source_nick.c_str());
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s %s", elkoszones.c_str(), recvData.GetNick());
 	}
 #ifdef _DEBUG_MOD
 	else
@@ -444,11 +468,11 @@ void IRCSession::HandleMode(IRCMessage& recvData)
 {
 	if(sConsole.GetConsoleLog() == bekapcsol)
 	{
-		if(recvData.target == m_NickTarolo)
+		if(recvData.Channel == m_NickTarolo)
 			return;
 
 		vector<string> res(1);
-		sVezerlo.split(recvData.minden, " ", res);
+		sVezerlo.split(recvData.Minden, " ", res);
 		if(res.size() < 6)
 		{
 			res.clear();
@@ -457,11 +481,11 @@ void IRCSession::HandleMode(IRCMessage& recvData)
 
 		printf("Megvaltoztatta %s rangjat: ", res[5].c_str());
 		Log.Color(TBLUE);
-		printf("%s. ", recvData.source_nick.c_str());
+		printf("%s. ", recvData.GetNick());
 		Log.Color(TNORMAL);
 		printf("Helye: ");
 		Log.Color(TRED);
-		printf("%s\n", recvData.target.c_str());
+		printf("%s\n", recvData.GetChannel());
 		Log.Color(TNORMAL);
 
 		res.clear();
@@ -473,10 +497,10 @@ void IRCSession::HandleNick(IRCMessage& recvData)
 	if(sConsole.GetConsoleLog() == bekapcsol)
 	{
 		vector<string> res(1);
-		sVezerlo.split(recvData.args, ":", res);
+		sVezerlo.split(recvData.Args, ":", res);
 
 		Log.Color(TRED);
-		printf("%s", recvData.source_nick.c_str());
+		printf("%s", recvData.GetNick());
 		Log.Color(TWHITE);
 		printf(" nev cserelve erre: ");
 		Log.Color(TRED);
@@ -542,7 +566,7 @@ void IRCSession::HandleNickError(IRCMessage& recvData)
 void IRCSession::HandleNoChannelJelszo(IRCMessage& recvData)
 {
 	vector<string> res(1);
-	sVezerlo.split(recvData.minden, " ", res);
+	sVezerlo.split(recvData.Minden, " ", res);
 	if(res.size() < 5)
 	{
 		res.clear();
@@ -559,7 +583,7 @@ void IRCSession::HandleNoChannelJelszo(IRCMessage& recvData)
 void IRCSession::HandleChannelBan(IRCMessage& recvData)
 {
 	vector<string> res(1);
-	sVezerlo.split(recvData.minden, " ", res);
+	sVezerlo.split(recvData.Minden, " ", res);
 	if(res.size() < 5)
 	{
 		res.clear();
@@ -576,7 +600,7 @@ void IRCSession::HandleChannelBan(IRCMessage& recvData)
 void IRCSession::HandleWhois(IRCMessage& recvData)
 {
 	vector<string> res(1);
-	sVezerlo.split(recvData.minden, " ", res);
+	sVezerlo.split(recvData.Minden, " ", res);
 	if(res.size() < 6)
 	{
 		res.clear();
