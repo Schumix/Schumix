@@ -26,7 +26,7 @@ bool Console::ConsoleCommands(char* adat)
 	string iras = info.substr(0, szokoz);
 
 	vector<string> res(1);
-	sVezerlo.split(iras, " ", res);
+	split(iras, " ", res);
 
 	if(res.size() < 2)
 	{

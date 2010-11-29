@@ -69,7 +69,7 @@ void IRCSession::HandleSuccessfulAuth(IRCMessage& recvData)
 			{
 				string funkcio = db->Fetch()[0].GetString();
 				vector<string> res(1);
-				sVezerlo.split(funkcio, ",", res);
+				split(funkcio, ",", res);
 				int resAdat = res.size();
 
 				for(int i = 1; i < resAdat; i++)
@@ -139,7 +139,7 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 	if(AutoMode)
 	{
 		vector<string> res(1);
-		sVezerlo.split(recvData.Args, " ", res);
+		split(recvData.Args, " ", res);
 		if(res.size() < 4)
 		{
 			res.clear();
@@ -191,7 +191,7 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 				{
 					string funkcio = db->Fetch()[0].GetString();
 					vector<string> res(1);
-					sVezerlo.split(funkcio, ",", res);
+					split(funkcio, ",", res);
 					int resAdat = res.size();
 
 					for(int i = 1; i < resAdat; i++)
@@ -242,7 +242,7 @@ void IRCSession::HandlePong(IRCMessage& recvData)
 void IRCSession::HandleKick(IRCMessage& recvData)
 {
 	vector<string> res(1);
-	sVezerlo.split(recvData.Minden, " ", res);
+	split(recvData.Minden, " ", res);
 
 	if(res.size() < 5)
 	{
@@ -318,7 +318,7 @@ void IRCSession::HandleJoin(IRCMessage& recvData)
 	if(FSelect(KOSZONES) == bekapcsol && FSelectChannel(KOSZONES, channel) == bekapcsol)
 	{
 		string Koszones;
-		int ido = sVezerlo.Ora();
+		int ido = Ora();
 
 		switch(rand()%13)
 		{
@@ -400,7 +400,7 @@ void IRCSession::HandleLeft(IRCMessage& recvData)
 				break;
 		}
 
-		if(sVezerlo.Ora() >= 20)
+		if(Ora() >= 20)
 			SendChatMessage(PRIVMSG, recvData.GetChannel(), "Jóét %s", recvData.GetNick());
 		else
 			SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s %s", elkoszones.c_str(), recvData.GetNick());
@@ -427,7 +427,7 @@ void IRCSession::HandleQuit(IRCMessage& recvData)
 				break;
 		}
 
-		if(sVezerlo.Ora() >= 20)
+		if(Ora() >= 20)
 			SendChatMessage(PRIVMSG, recvData.GetChannel(), "Jóét %s", recvData.GetNick());
 		else
 			SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s %s", elkoszones.c_str(), recvData.GetNick());
@@ -472,7 +472,7 @@ void IRCSession::HandleMode(IRCMessage& recvData)
 			return;
 
 		vector<string> res(1);
-		sVezerlo.split(recvData.Minden, " ", res);
+		split(recvData.Minden, " ", res);
 		if(res.size() < 6)
 		{
 			res.clear();
@@ -497,7 +497,7 @@ void IRCSession::HandleNick(IRCMessage& recvData)
 	if(sConsole.GetConsoleLog() == bekapcsol)
 	{
 		vector<string> res(1);
-		sVezerlo.split(recvData.Args, ":", res);
+		split(recvData.Args, ":", res);
 
 		Log.Color(TRED);
 		printf("%s", recvData.GetNick());
@@ -566,7 +566,7 @@ void IRCSession::HandleNickError(IRCMessage& recvData)
 void IRCSession::HandleNoChannelJelszo(IRCMessage& recvData)
 {
 	vector<string> res(1);
-	sVezerlo.split(recvData.Minden, " ", res);
+	split(recvData.Minden, " ", res);
 	if(res.size() < 5)
 	{
 		res.clear();
@@ -583,7 +583,7 @@ void IRCSession::HandleNoChannelJelszo(IRCMessage& recvData)
 void IRCSession::HandleChannelBan(IRCMessage& recvData)
 {
 	vector<string> res(1);
-	sVezerlo.split(recvData.Minden, " ", res);
+	split(recvData.Minden, " ", res);
 	if(res.size() < 5)
 	{
 		res.clear();
@@ -600,7 +600,7 @@ void IRCSession::HandleChannelBan(IRCMessage& recvData)
 void IRCSession::HandleWhois(IRCMessage& recvData)
 {
 	vector<string> res(1);
-	sVezerlo.split(recvData.Minden, " ", res);
+	split(recvData.Minden, " ", res);
 	if(res.size() < 6)
 	{
 		res.clear();

@@ -72,19 +72,8 @@ using std::string;
 #include <dirent.h>
 #endif
 
-#if PLATFORM == PLATFORM_WINDOWS
-inline uint32 getMSTime()
-{
-	return GetTickCount();
-}
-#else
-inline uint32 getMSTime()
-{
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
-}
-#endif
+#include "Schumix.hpp"
+using namespace Schumix;
 
 #include <curl/curl.h>
 #include <mysql/mysql.h>

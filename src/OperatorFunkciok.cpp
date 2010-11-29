@@ -41,7 +41,7 @@ void IRCSession::Admin(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -216,12 +216,13 @@ void IRCSession::Hozzaferes(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
 		res.clear();
 		return;
+
 	}
 
 	QueryResultPointer db = m_SQLConn->Query("SELECT nev, jelszo FROM adminok WHERE nev = '%s'", recvData.GetNick());
@@ -271,7 +272,7 @@ void IRCSession::Ujjelszo(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 3)
 	{
@@ -345,7 +346,7 @@ void IRCSession::Funkciok(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -584,7 +585,7 @@ void IRCSession::Channel(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -712,7 +713,7 @@ void IRCSession::Sznap(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -748,7 +749,7 @@ void IRCSession::Nick(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -775,7 +776,7 @@ void IRCSession::Join(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() == 2)
 	{
@@ -803,7 +804,7 @@ void IRCSession::Left(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -827,7 +828,7 @@ void IRCSession::Kick(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -873,7 +874,7 @@ void IRCSession::Mode(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 3)
 	{
@@ -907,7 +908,7 @@ void IRCSession::HLFunkcio(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -1012,7 +1013,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -1043,7 +1044,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 				string nev = db->Fetch()[0].GetString();
 				string channel = db->Fetch()[1].GetString();
 				vector<string> reschannel(1);
-				sVezerlo.split(channel, ",", reschannel);
+				split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
 				{
@@ -1165,7 +1166,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 			{
 				string channel = db->Fetch()[0].GetString();
 				vector<string> reschannel(1);
-				sVezerlo.split(channel, ",", reschannel);
+				split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
 				{
@@ -1209,7 +1210,7 @@ void IRCSession::Svn(IRCMessage& recvData)
 			{
 				string channel = db->Fetch()[0].GetString();
 				vector<string> reschannel(1);
-				sVezerlo.split(channel, ",", reschannel);
+				split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
 				{
@@ -1252,7 +1253,7 @@ void IRCSession::Git(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -1284,7 +1285,7 @@ void IRCSession::Git(IRCMessage& recvData)
 				string tipus = db->Fetch()[1].GetString();
 				string channel = db->Fetch()[2].GetString();
 				vector<string> reschannel(1);
-				sVezerlo.split(channel, ",", reschannel);
+				split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
 				{
@@ -1437,7 +1438,7 @@ void IRCSession::Git(IRCMessage& recvData)
 			{
 				string channel = db->Fetch()[1].GetString();
 				vector<string> reschannel(1);
-				sVezerlo.split(channel, ",", reschannel);
+				split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
 				{
@@ -1490,7 +1491,7 @@ void IRCSession::Git(IRCMessage& recvData)
 			{
 				string channel = db->Fetch()[1].GetString();
 				vector<string> reschannel(1);
-				sVezerlo.split(channel, ",", reschannel);
+				split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
 				{
@@ -1533,7 +1534,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -1564,7 +1565,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 				string nev = db->Fetch()[0].GetString();
 				string channel = db->Fetch()[1].GetString();
 				vector<string> reschannel(1);
-				sVezerlo.split(channel, ",", reschannel);
+				split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
 				{
@@ -1686,7 +1687,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 			{
 				string channel = db->Fetch()[0].GetString();
 				vector<string> reschannel(1);
-				sVezerlo.split(channel, ",", reschannel);
+				split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
 				{
@@ -1730,7 +1731,7 @@ void IRCSession::Hg(IRCMessage& recvData)
 			{
 				string channel = db->Fetch()[0].GetString();
 				vector<string> reschannel(1);
-				sVezerlo.split(channel, ",", reschannel);
+				split(channel, ",", reschannel);
 
 				if(reschannel.size() < 2)
 				{
@@ -1773,7 +1774,7 @@ void IRCSession::AutoFunkcio(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{

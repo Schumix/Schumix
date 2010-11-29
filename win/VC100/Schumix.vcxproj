@@ -212,6 +212,7 @@
     <ClInclude Include="..\..\src\shared\utf8\core.h" />
     <ClInclude Include="..\..\src\shared\utf8\unchecked.h" />
     <ClInclude Include="..\..\src\shared\WinAPIExtensions.h" />
+    <ClInclude Include="..\..\src\Schumix.hpp" />
     <ClInclude Include="..\..\src\StdAfx.h" />
     <ClInclude Include="..\..\src\SvnInfo.hpp" />
     <ClInclude Include="..\..\src\TokenQueue.hpp" />

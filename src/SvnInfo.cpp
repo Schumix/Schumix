@@ -255,7 +255,7 @@ int SvnInfo::getrfa(uint32 id, string title)
 	if(oldal[id] == "toma3757")
 	{
 		vector<string> res(1);
-		sVezerlo.split(title, " ", res);
+		split(title, " ", res);
 
 		if(res.size() < 3)
 		{
@@ -280,7 +280,7 @@ int SvnInfo::getrfa(uint32 id, string title)
 	else if(oldal[id] == "arcemu" || oldal[id] == "assembla")
 	{
 		vector<string> res(1);
-		sVezerlo.split(title, "[", res);
+		split(title, "[", res);
 
 		if(res.size() < 3)
 		{
@@ -454,7 +454,7 @@ void SvnInfo::Kiiras(uint32 id)
 	if(db)
 	{
 		vector<string> reschannel(1);
-		sVezerlo.split(db->Fetch()[0].GetString(), ",", reschannel);
+		split(db->Fetch()[0].GetString(), ",", reschannel);
 
 		if(reschannel.size() < 2)
 		{
@@ -477,7 +477,7 @@ void SvnInfo::Kiiras(uint32 id)
 			else
 			{
 				vector<string> res(1);
-				sVezerlo.split(title, " ", res);
+				split(title, " ", res);
 
 				if(res.size() < 3)
 				{

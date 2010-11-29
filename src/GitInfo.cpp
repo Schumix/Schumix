@@ -435,7 +435,7 @@ void GitInfo::Kiiras(uint32 id)
 	if(db)
 	{
 		vector<string> reschannel(1);
-		sVezerlo.split(db->Fetch()[0].GetString(), ",", reschannel);
+		split(db->Fetch()[0].GetString(), ",", reschannel);
 
 		if(reschannel.size() < 2)
 		{

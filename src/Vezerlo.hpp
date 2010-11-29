@@ -26,12 +26,6 @@ public:
 	Vezerlo();
 	~Vezerlo();
 
-	int Ev();
-	int Honap();
-	int Nap();
-	int Ora();
-	int Perc();
-
 	volatile bool m_crash;
 
 	void Leallas();
@@ -47,7 +41,6 @@ public:
 
 	string urlencode(const string &c);
 	string htmldecode(string c);
-	vector<string> split(const string str, const string delim, vector<string>& result);
 
 protected:
 	// Mysql hozzáférés

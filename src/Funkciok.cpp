@@ -21,7 +21,7 @@
 
 void IRCSession::Logfajl(IRCMessage& recvData)
 {
-	if(FSelect(LOG) == bekapcsol && FSelectChannel(LOG, recvData.Channel) == bekapcsol)
+	if((FSelect(LOG) == bekapcsol && FSelectChannel(LOG, recvData.Channel) == bekapcsol) || cast_int(recvData.Channel.find("#")) == string::npos)
 	{
 		FILE* LogSzoba = fopen(format("%s/%s.log", m_LogHelye.c_str(), recvData.GetChannel()).c_str(), "a+");
 		if(!LogSzoba || LogSzoba == NULL)
@@ -30,19 +30,7 @@ void IRCSession::Logfajl(IRCMessage& recvData)
 			return;
 		}
 
-		fprintf(LogSzoba, "[%i. %i. %i. %i:%i] <%s> %s\n", sVezerlo.Ev(), sVezerlo.Honap(), sVezerlo.Nap(), sVezerlo.Ora(), sVezerlo.Perc(), recvData.GetNick(), recvData.GetArgs());
-		fclose(LogSzoba);
-	}
-	else if(cast_int(recvData.Channel.find("#")) == string::npos)
-	{
-		FILE* LogSzoba = fopen(format("%s/%s.log", m_LogHelye.c_str(), recvData.GetChannel()).c_str(), "a+");
-		if(!LogSzoba || LogSzoba == NULL)
-		{
-			Log.Error("Log", "Sikertelen olvasas.\n");
-			return;
-		}
-
-		fprintf(LogSzoba, "[%i. %i. %i. %i:%i] <%s> %s\n", sVezerlo.Ev(), sVezerlo.Honap(), sVezerlo.Nap(), sVezerlo.Ora(), sVezerlo.Perc(), recvData.GetNick(), recvData.GetArgs());
+		fprintf(LogSzoba, "[%i. %i. %i. %i:%i] <%s> %s\n", Ev(), Honap(), Nap(), Ora(), Perc(), recvData.GetNick(), recvData.GetArgs());
 		fclose(LogSzoba);
 	}
 #ifdef _DEBUG_MOD
@@ -70,8 +58,8 @@ static const char* Nevnap[12][31] = {
 
 void IRCSession::Datum(IRCMessage& recvData)
 {
-	int honap = sVezerlo.Honap();
-	int nap = sVezerlo.Nap();
+	int honap = Honap();
+	int nap = Nap();
 
 	for(uint8 x = 0; x < 12; x++)
 	{
@@ -83,16 +71,16 @@ void IRCSession::Datum(IRCMessage& recvData)
 			if(honap < 10)
 			{
 				if(nap < 10)
-					SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ma %i. 0%i. 0%i. %s napja van.", sVezerlo.Ev(), honap, nap, napdb.c_str());
+					SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ma %i. 0%i. 0%i. %s napja van.", Ev(), honap, nap, napdb.c_str());
 				else
-					SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ma %i. 0%i. %i. %s napja van.", sVezerlo.Ev(), honap, nap, napdb.c_str());
+					SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ma %i. 0%i. %i. %s napja van.", Ev(), honap, nap, napdb.c_str());
 			}
 			else
 			{
 				if(nap < 10)
-					SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ma %i. %i. 0%i. %s napja van.", sVezerlo.Ev(), honap, nap, napdb.c_str());
+					SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ma %i. %i. 0%i. %s napja van.", Ev(), honap, nap, napdb.c_str());
 				else
-					SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ma %i. %i. %i. %s napja van.", sVezerlo.Ev(), honap, nap, napdb.c_str());
+					SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ma %i. %i. %i. %s napja van.", Ev(), honap, nap, napdb.c_str());
 			}
 		}
  	}
@@ -100,12 +88,12 @@ void IRCSession::Datum(IRCMessage& recvData)
 
 void IRCSession::Ido(IRCMessage& recvData)
 {
-	int perc = sVezerlo.Perc();
+	int perc = Perc();
 
 	if(perc < 10)
-		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Helyi idõ: %i:0%i", sVezerlo.Ora(), perc);
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Helyi idõ: %i:0%i", Ora(), perc);
 	else
-		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Helyi idõ: %i:%i", sVezerlo.Ora(), perc);
+		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Helyi idõ: %i:%i", Ora(), perc);
 }
 
 void IRCSession::Keres(IRCMessage& recvData)
@@ -117,7 +105,7 @@ void IRCSession::Keres(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -192,7 +180,7 @@ void IRCSession::Forditas(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -321,7 +309,7 @@ void IRCSession::Xrev(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -364,7 +352,7 @@ void IRCSession::Irc(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -414,7 +402,7 @@ void IRCSession::Uzenet(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -455,7 +443,7 @@ void IRCSession::Jegyzet(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -477,6 +465,7 @@ void IRCSession::Jegyzet(IRCMessage& recvData)
 		{
 			SendChatMessage(PRIVMSG, recvData.GetChannel(), "A kod nincs megadva!");
 			res.clear();
+
 			return;
 		}
 

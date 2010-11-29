@@ -41,7 +41,7 @@ void IRCSession::Schumix(IRCMessage& recvData)
 		}
 
 		vector<string> res(1);
-		sVezerlo.split(recvData.Args.substr(elsoszokoz+1), " ", res);
+		split(recvData.Args.substr(elsoszokoz+1), " ", res);
 
 		if(res.size() < 2)
 		{
@@ -138,7 +138,7 @@ string IRCSession::FSelectChannel(string nev, string channel)
 		string funkciok = szobak.substr(szobaszokoz+1);
 
 		vector<string> res(1);
-		sVezerlo.split(funkciok, ":", res);
+		split(funkciok, ":", res);
 
 		if(szoba == channel)
 		{
@@ -169,7 +169,7 @@ void IRCSession::HLUzenet(IRCMessage& recvData)
 	if(FSelect(HL) == bekapcsol && FSelectChannel(HL, recvData.Channel) == bekapcsol)
 	{
 		vector<string> res(1);
-		sVezerlo.split(recvData.Args, " ", res);
+		split(recvData.Args, " ", res);
 		int resAdat = res.size();
 
 		for(int i = 1; i < resAdat; i++)
@@ -229,7 +229,7 @@ void IRCSession::SvnSandshroud(int rev, string channel)
 			string matched(matches[1].first, matches[1].second);
 
 			vector<string> res(1);
-			sVezerlo.split(matched, "\n", res);
+			split(matched, "\n", res);
 			int resAdat = res.size();
 			string alomany;
 
@@ -295,7 +295,7 @@ void IRCSession::ChannelFunkcioReload()
 		{
 			string funkciok = db->Fetch()[0].GetString();
 			vector<string> res(1);
-			sVezerlo.split(funkciok, ",", res);
+			split(funkciok, ",", res);
 			int resAdat = res.size();
 
 			for(int i = 1; i < resAdat; i++)
@@ -337,7 +337,7 @@ string IRCSession::ChannelFunkciok(string nev, string status, string channel)
 		string funkciok = szobak.substr(szobaszokoz+1);
 
 		vector<string> res(1);
-		sVezerlo.split(funkciok, ":", res);
+		split(funkciok, ":", res);
 		if(res.size() < 2)
 		{
 			res.clear();
@@ -362,7 +362,7 @@ string IRCSession::ChannelFunkciok(string nev, string status, string channel)
 		string funkciok = szobak.substr(szobaszokoz+1);
 
 		vector<string> res(1);
-		sVezerlo.split(funkciok, ":", res);
+		split(funkciok, ":", res);
 		if(res.size() < 2)
 		{
 			res.clear();
@@ -394,7 +394,7 @@ string IRCSession::ChannelFunkciokInfo(string channel)
 		string funkciok = szobak.substr(szobaszokoz+1);
 
 		vector<string> res(1);
-		sVezerlo.split(funkciok, ":", res);
+		split(funkciok, ":", res);
 
 		if(szoba == channel)
 		{

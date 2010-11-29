@@ -31,7 +31,7 @@ void IRCSession::Teszt(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -95,7 +95,7 @@ void IRCSession::Szoba(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -126,7 +126,7 @@ void IRCSession::Reload(IRCMessage& recvData)
 	}
 
 	vector<string> res(1);
-	sVezerlo.split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{

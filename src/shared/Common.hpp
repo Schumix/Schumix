@@ -91,7 +91,7 @@ typedef boost::uint64_t uint64;
 #define SI64FMTD "%I64d"
 #define snprintf _snprintf
 #define atoll __atoi64
-#define NEWLINE "\r\n"
+static const char* NEWLINE = "\r\n";
 #pragma warning(disable: 4275)
 #pragma warning(disable: 4996)
 #pragma warning(disable: 4146)
@@ -100,7 +100,7 @@ typedef boost::uint64_t uint64;
 #pragma warning(disable: 4244)
 #pragma warning(disable: 4267)
 #else
-#define NEWLINE "\n"
+static const char* NEWLINE = "\n";
 #define stricmp strcasecmp
 #define strnicmp strncasecmp
 #define I64FMT "%016llX"

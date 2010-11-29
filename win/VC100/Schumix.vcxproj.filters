@@ -196,6 +196,7 @@
       <Filter>Default</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Schumix.cpp" />
+    <ClCompile Include="..\..\src\Schumix.hpp" />
     <ClCompile Include="..\..\src\CalcLexer.cpp">
       <Filter>Calculator</Filter>
     </ClCompile>
