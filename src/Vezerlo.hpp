@@ -41,6 +41,7 @@ public:
 
 	string urlencode(const string &c);
 	string htmldecode(string c);
+	string Sha1(string Sha1);
 
 protected:
 	// Mysql hozzáférés

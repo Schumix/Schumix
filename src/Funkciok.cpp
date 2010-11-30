@@ -252,24 +252,7 @@ void IRCSession::Sha1(IRCMessage& recvData)
 		return;
 	}
 
-	Sha1Hash sha1;
-	unsigned char* eredmeny = new unsigned char[SHA_DIGEST_LENGTH+1];
-
-	sha1.Initialize();
-	sha1.UpdateData(recvData.Args.substr(firstSpace+1));
-	sha1.Finalize();
-	memcpy(eredmeny, sha1.GetDigest(), SHA_DIGEST_LENGTH);
-
-	stringstream ss;
-	const size_t len = 20;
-
-	for(size_t u = 0; u < len; ++u)
-		ss << std::hex << std::setw(2) << std::setfill('0') << cast_int(eredmeny[u]);
-
-	string hash;
-	ss >> hash;
-
-	SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s", hash.c_str());
+	SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s", sVezerlo.Sha1(recvData.Args.substr(firstSpace+1)).c_str());
 }
 
 void IRCSession::Md5(IRCMessage& recvData)

@@ -272,24 +272,7 @@ bool Console::ConsoleCommands(char* adat)
 			transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
 			string pass = sIRCSession.RandomString(10, true, true, false);
 
-			Sha1Hash hash;
-			unsigned char* j_hash = new unsigned char[SHA_DIGEST_LENGTH+1];
-
-			hash.Initialize();
-			hash.UpdateData(pass);
-			hash.Finalize();
-			memcpy(j_hash, hash.GetDigest(), SHA_DIGEST_LENGTH);
-
-			stringstream ss;
-			const size_t len = 20;
-
-			for(size_t u = 0; u < len; ++u)
-				ss << std::hex << std::setw(2) << std::setfill('0') << cast_int(j_hash[u]);
-
-			string jelszo_hash;
-			ss >> jelszo_hash;
-
-			m_SQLConn->Query("INSERT INTO `adminok`(nev, jelszo) VALUES ('%s', '%s')", nev.c_str(), jelszo_hash.c_str());
+			m_SQLConn->Query("INSERT INTO `adminok`(nev, jelszo) VALUES ('%s', '%s')", nev.c_str(), sVezerlo.Sha1(pass).c_str());
 			m_SQLConn->Query("INSERT INTO `hluzenet`(nick, alapot) VALUES ('%s', 'ki')", nev.c_str());
 
 			Log.Notice("Console", "Admin hozzaadva: %s", nev.c_str());

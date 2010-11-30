@@ -609,6 +609,28 @@ string Vezerlo::htmldecode(string c)
 	return escaped;
 }
 
+string Vezerlo::Sha1(string Sha1)
+{
+	Sha1Hash sha1;
+	unsigned char* eredmeny = new unsigned char[SHA_DIGEST_LENGTH+1];
+
+	sha1.Initialize();
+	sha1.UpdateData(Sha1);
+	sha1.Finalize();
+	memcpy(eredmeny, sha1.GetDigest(), SHA_DIGEST_LENGTH);
+
+	stringstream ss;
+	const size_t len = 20;
+
+	for(size_t u = 0; u < len; ++u)
+		ss << std::hex << std::setw(2) << std::setfill('0') << cast_int(eredmeny[u]);
+
+	string hash;
+	ss >> hash;
+
+	return hash;
+}
+
 string Vezerlo::Reload(string nev)
 {
 	transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
