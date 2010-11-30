@@ -131,7 +131,7 @@ void DefaultConfig::IrcConfig()
 	fprintf(ConfigFajl, "#         Az irc szerver kapcsolodási portja.\n");
 	fprintf(ConfigFajl, "#         Alapértelmezés: 6667\n");
 	fprintf(ConfigFajl, "#     LinesPerSecond\n");
-	fprintf(ConfigFajl, "#         Anti-flood feature. The lines the bot can send per second.\n");
+	fprintf(ConfigFajl, "#         Flood elleni védelem. Másodpercben megadva lasitja az üzenet küldését.\n");
 	fprintf(ConfigFajl, "#         Alapértelmezés: 3\n");
 	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 
@@ -192,10 +192,10 @@ void DefaultConfig::IrcConfig()
 	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 	fprintf(ConfigFajl, "# NickServ\n");
 	fprintf(ConfigFajl, "#    Enable\n");
-	fprintf(ConfigFajl, "#         Whether or not the IRC server supports NickServ and you would like to AUTH.\n");
+	fprintf(ConfigFajl, "#         Engedélyezi vagy tiltja a NickServ-hez a nick azonositoját.\n");
 	fprintf(ConfigFajl, "#         Alapértelmezés: 0\n");
 	fprintf(ConfigFajl, "#    Password\n");
-	fprintf(ConfigFajl, "#         The password for this bot's nickname with NickServ.\n");
+	fprintf(ConfigFajl, "#         Jelszó a NickServ-hez a nick azonósitáshoz.\n");
 	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 	fprintf(ConfigFajl, "<NickServ Enable=\"0\"\n");
 	fprintf(ConfigFajl, "          Password=\"jelszo\">\n\n");

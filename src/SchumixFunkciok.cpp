@@ -199,13 +199,7 @@ void IRCSession::HLUzenet(IRCMessage& recvData)
 
 void IRCSession::SvnSandshroud(int rev, string channel)
 {
-	char* url = new char[400];
-	snprintf(url, 400, "http://trac6.assembla.com/Sandshroud/changeset/%i", rev);
-	string urlcim = url;
-	delete[] url;
-
-	string commit;
-	string author;
+	string commit, author;
 
 	// commit
 	m_Curl = curl_easy_init();
@@ -213,7 +207,7 @@ void IRCSession::SvnSandshroud(int rev, string channel)
 	{
 		string bufferdata;
 
-		curl_easy_setopt(m_Curl, CURLOPT_URL, urlcim.c_str());
+		curl_easy_setopt(m_Curl, CURLOPT_URL, format("http://trac6.assembla.com/Sandshroud/changeset/%i", rev).c_str());
 		curl_easy_setopt(m_Curl, CURLOPT_WRITEFUNCTION, IRCSession::writer);
 		curl_easy_setopt(m_Curl, CURLOPT_WRITEDATA, &bufferdata);
 		CURLcode result = curl_easy_perform(m_Curl);
@@ -252,7 +246,7 @@ void IRCSession::SvnSandshroud(int rev, string channel)
 	{
 		string bufferdata;
 
-		curl_easy_setopt(m_Curl, CURLOPT_URL, urlcim.c_str());
+		curl_easy_setopt(m_Curl, CURLOPT_URL, format("http://trac6.assembla.com/Sandshroud/changeset/%i", rev).c_str());
 		curl_easy_setopt(m_Curl, CURLOPT_WRITEFUNCTION, IRCSession::writer);
 		curl_easy_setopt(m_Curl, CURLOPT_WRITEDATA, &bufferdata);
 		CURLcode result = curl_easy_perform(m_Curl);
@@ -353,10 +347,9 @@ string IRCSession::ChannelFunkciok(string nev, string status, string channel)
 		res.clear();
 	}
 
-	vector<string>::iterator it1;
-	for(it1 = m_ChannelFunkcio.begin(); it1 < m_ChannelFunkcio.end(); it1++)
+	for(it = m_ChannelFunkcio.begin(); it < m_ChannelFunkcio.end(); it++)
 	{
-		string szobak = (*it1);
+		string szobak = (*it);
 		uint32 szobaszokoz = szobak.find(".");
 		string szoba = szobak.substr(0, szobaszokoz);
 		string funkciok = szobak.substr(szobaszokoz+1);
