@@ -21,7 +21,7 @@
 
 void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 {
-	if(sConsole.GetConsoleLog() == bekapcsol)
+	if(sConsole.GetConsoleLog())
 	{
 		Log.Color(TYELLOW);
 		printf("[%s] <%s> %s%s", recvData.GetChannel(), recvData.GetNick(), recvData.GetArgs(), NEWLINE);

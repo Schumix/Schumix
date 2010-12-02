@@ -287,7 +287,6 @@ string Vezerlo::urlencode(const string &c)
 	for(int i = 0; i < max; i++)
 	{
 		if(c[i] == 'á')
-
 		{
 			escaped.append("%C3%A1");
 			continue;
@@ -394,13 +393,13 @@ string Vezerlo::urlencode(const string &c)
 		}
 
 		if((48 <= c[i] && c[i] <= 57) || //0-9
-             (65 <= c[i] && c[i] <= 90) || //abc...xyz
-             (97 <= c[i] && c[i] <= 122) || //ABC...XYZ
-             (c[i] == '~' || c[i] == '!' || c[i] == '*' || c[i] == '(' || c[i] == ')' || c[i] == '\''))
+		(65 <= c[i] && c[i] <= 90) || //abc...xyz
+		(97 <= c[i] && c[i] <= 122) || //ABC...XYZ
+		(c[i] == '~' || c[i] == '!' || c[i] == '*' || c[i] == '(' || c[i] == ')' || c[i] == '\''))
 		{
 			escaped.append(&c[i], 1);
 		}
-        else
+		else
 		{
 			escaped.append("%");
 			escaped.append(char2hex(c[i])); //converts char 255 to string "ff"
@@ -412,22 +411,22 @@ string Vezerlo::urlencode(const string &c)
 
 string Vezerlo::char2hex(char dec)
 {
-    char dig1 = (dec & 0xF0) >> 4;
-    char dig2 = (dec & 0x0F);
+	char dig1 = (dec & 0xF0) >> 4;
+	char dig2 = (dec & 0x0F);
 
-    if(0 <= dig1 && dig1 <= 9)
+	if(0 <= dig1 && dig1 <= 9)
 		dig1 += 48;    //0,48inascii
-    if(10 <= dig1 && dig1 <= 15)
+	if(10 <= dig1 && dig1 <= 15)
 		dig1 += 97-10; //a,97inascii
-    if(0 <= dig2 && dig2 <= 9)
+	if(0 <= dig2 && dig2 <= 9)
 		dig2 += 48;
-    if(10 <= dig2 && dig2 <= 15)
+	if(10 <= dig2 && dig2 <= 15)
 		dig2 += 97-10;
 
-    string r;
-    r.append(&dig1, 1);
-    r.append(&dig2, 1);
-    return r;
+	string r;
+	r.append(&dig1, 1);
+	r.append(&dig2, 1);
+	return r;
 }
 
 string Vezerlo::htmldecode(string c)
@@ -669,11 +668,14 @@ string Vezerlo::Reload(string nev)
 	}
 	else if(nev == "ircsession")
 	{
-		sIRCSession.Leallas();
-		delete IRCSession::getSingletonPtr();
+		/*sIRCSession.Leallas();
+		if(IRCSession::getSingletonPtr() != 0)
+			delete IRCSession::getSingletonPtr();
+
 		Log.Debug("Vezerlo", "IRCSession reload...");
 		m_IRCSession = new IRCSession(m_server, m_port, _mysql[0], _mysql[1], _mysql[2], _mysql[3]);
-		return "IRCSession ujraindult.";
+		return "IRCSession ujraindult.";*/
+		return "javitas alatt";
 	}
 	else if(nev == "all")
 	{
@@ -686,7 +688,9 @@ string Vezerlo::Reload(string nev)
 		m_Console->Leallas();
 		delete m_Console;
 		sIRCSession.Leallas();
-		delete IRCSession::getSingletonPtr();
+
+		//if(IRCSession::getSingletonPtr() != 0)
+			//delete IRCSession::getSingletonPtr(); javítás alatt
 
 		Log.Debug("Vezerlo", "SvnInfo reload...");
 		m_SvnInfo = new SvnInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);

@@ -73,7 +73,7 @@ void IRCSession::Schumix(IRCMessage& recvData)
 			{
 				m_NickTarolo = m_NickName[0];
 				WriteLine("NICK %s", m_NickName[0].c_str());
-				Log.Notice("NickServ", "Sending NickServ identification.");
+				Log.Notice("NickServ", "NickServ azonosito kuldese.");
 				SendChatMessage(PRIVMSG, "NickServ", "identify %s", m_NickServPassword.c_str());
 			}
 			else

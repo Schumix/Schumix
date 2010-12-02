@@ -33,7 +33,7 @@ Console::Console(string host, string user, string password, string database)
 
 	m_running = true;
 	Thread t(&RunUpdateProc, this);
-	ConsoleLog = kikapcsol;
+	ConsoleLog = Config.MainConfig.GetBoolDefault("Log", "Irclog", false);;
 
 	Log.Success("Console", "A funkcio elindult.");
 	printf("\n");

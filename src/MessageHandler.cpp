@@ -126,7 +126,7 @@ void IRCSession::HandleMotdStop(IRCMessage& recvData)
 
 void IRCSession::HandleNotice(IRCMessage& recvData)
 {
-	if(sConsole.GetConsoleLog() == bekapcsol)
+	if(sConsole.GetConsoleLog())
 	{
 		Log.Color(TRED);
 		printf("%s", recvData.GetNick());
@@ -223,6 +223,13 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 			h_Aktivitas = false;
 		}
 	}
+
+	if(cast_int(recvData.Args.find("Password incorrect.")) != string::npos)
+		Log.Error("NickServ", "NickServ azonosito jelszo hibas!");
+	else if(cast_int(recvData.Args.find("You are already identified.")) != string::npos)
+		Log.Warning("NickServ", "NickServ azonosito mar aktivalva van!");
+	else if(cast_int(recvData.Args.find("Password accepted - you are now recognized.")) != string::npos)
+		Log.Success("NickServ", "NickServ azonosito jelszo elfogadva.");
 }
 
 void IRCSession::HandlePing(IRCMessage& recvData)
@@ -268,7 +275,7 @@ void IRCSession::HandleKick(IRCMessage& recvData)
 	}
 	else
 	{
-		if(sConsole.GetConsoleLog() == bekapcsol)
+		if(sConsole.GetConsoleLog())
 		{
 			if(res.size() < 6)
 			{
@@ -466,7 +473,7 @@ void IRCSession::HandleReJoin(IRCMessage& recvData)
 
 void IRCSession::HandleMode(IRCMessage& recvData)
 {
-	if(sConsole.GetConsoleLog() == bekapcsol)
+	if(sConsole.GetConsoleLog())
 	{
 		if(recvData.Channel == m_NickTarolo)
 			return;
@@ -494,7 +501,7 @@ void IRCSession::HandleMode(IRCMessage& recvData)
 
 void IRCSession::HandleNick(IRCMessage& recvData)
 {
-	if(sConsole.GetConsoleLog() == bekapcsol)
+	if(sConsole.GetConsoleLog())
 	{
 		vector<string> res(1);
 		split(recvData.Args, ":", res);

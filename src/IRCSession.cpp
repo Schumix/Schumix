@@ -183,7 +183,7 @@ void IRCSession::BejovoInfo(string SInfo)
 	MessageHandlerMap::iterator itr = IRCMessageHandlerMap.find(mess.Opcode);
 	if(itr == IRCMessageHandlerMap.end())
 	{
-		if(sConsole.GetConsoleLog() == bekapcsol)
+		if(sConsole.GetConsoleLog())
 		{
 			// Információ melyik opcode fut le ha nincs pl használva.
 			Log.Notice("IRCSession", "Received unhandled opcode: %s", mess.GetOpcode());

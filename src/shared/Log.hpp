@@ -268,7 +268,7 @@ public:
 			j = (i <= 65) ? 65 - i : 0;
 
 			printf("* %s", *itr);
-			for( k = 0; k < j; ++k )
+			for(k = 0; k < j; ++k)
 				printf(" ");
 
 			printf(" *\n");

@@ -195,8 +195,16 @@ bool Console::ConsoleCommands(char* adat)
 			return false;
 		}
 
-		ConsoleLog = res[2];
-		Log.Notice("Console", "Console logolas %skapcsolva", res[2].c_str());
+		if(res[2] == bekapcsol)
+		{
+			ConsoleLog = true;
+			Log.Notice("Console", "Console logolas bekapcsolva.");
+		}
+		else if(res[2] == kikapcsol)
+		{
+			ConsoleLog = false;
+			Log.Notice("Console", "Console logolas kikapcsolva.");
+		}
 
 		res.clear();
 		return true;

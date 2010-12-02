@@ -90,7 +90,7 @@ DefaultConfig::DefaultConfig(string conf)
 		fprintf(ConfigFajl, "#         Meghatározza az üzemeltető nevét is azt fogja kiirni az info parancsnál.\n");
 		fprintf(ConfigFajl, "#         Alapértelmezés: Schumix\n");
 		fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
-		fprintf(ConfigFajl, "<Parancs Elojel=\"%s\">\n\n", _parancs.substr(0, szokoz).c_str());
+		fprintf(ConfigFajl, "<Parancs Elojel = \"%s\">\n\n", _parancs.substr(0, szokoz).c_str());
 		fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 		fprintf(ConfigFajl, "# LekerdezesiIdo\n");
 		fprintf(ConfigFajl, "#    Gitinfo\n");
@@ -141,15 +141,15 @@ void DefaultConfig::IrcConfig()
 	string _server = server;
 	int szokoz = _server.find("\n");
 	string host = _server.substr(0, szokoz);
-	fprintf(ConfigFajl, "<IRC Server=\"%s\"\n", host.c_str());
+	fprintf(ConfigFajl, "<IRC Server = \"%s\"\n", host.c_str());
 
 	printf("Ird be a portot: ");
 	char port[30];
 	fgets(port, 30, stdin);
 	string _port = port;
 	szokoz = _port.find("\n");
-	fprintf(ConfigFajl, "     Port=\"%s\"\n", _port.substr(0, szokoz).c_str());
-	fprintf(ConfigFajl, "     LinesPerSecond=\"3\">\n\n");
+	fprintf(ConfigFajl, "     Port = \"%s\"\n", _port.substr(0, szokoz).c_str());
+	fprintf(ConfigFajl, "     LinesPerSecond = \"3\">\n\n");
 
 	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 	fprintf(ConfigFajl, "# Log\n");
@@ -163,9 +163,13 @@ void DefaultConfig::IrcConfig()
 	fprintf(ConfigFajl, "#     Loghelye\n");
 	fprintf(ConfigFajl, "#         Meghatározza hogy a logolást hova mentse a bot.\n");
 	fprintf(ConfigFajl, "#         Alapértelmezés: szoba\n");
+	fprintf(ConfigFajl, "#     Irclog\n");
+	fprintf(ConfigFajl, "#         Ha az értéke 1-re van állitva akkor a konzolba kiirja a notice, privmsg stb adatokat.\n");
+	fprintf(ConfigFajl, "#         Alapértelmezés: 0\n");
 	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
-	fprintf(ConfigFajl, "<Log Loglevel=\"3\"\n");
-	fprintf(ConfigFajl, "     Loghelye=\"szoba\">\n\n");
+	fprintf(ConfigFajl, "<Log Loglevel = \"3\"\n");
+	fprintf(ConfigFajl, "     Loghelye = \"szoba\"\n");
+	fprintf(ConfigFajl, "     Irclog = \"0\">\n\n");
 
 	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 	fprintf(ConfigFajl, "# User\n");
@@ -185,10 +189,10 @@ void DefaultConfig::IrcConfig()
 	string _nick = nick;
 	szokoz = _nick.find("\n");
 
-	fprintf(ConfigFajl, "<User Nick=\"%s\"\n", _nick.substr(0, szokoz).c_str());
-	fprintf(ConfigFajl, "      Nick2=\"_%s\"\n", _nick.substr(0, szokoz).c_str());
-	fprintf(ConfigFajl, "      Nick3=\"__%s\"\n", _nick.substr(0, szokoz).c_str());
-	fprintf(ConfigFajl, "      Username=\"%s\"\n", _nick.substr(0, szokoz).c_str());
+	fprintf(ConfigFajl, "<User Nick = \"%s\"\n", _nick.substr(0, szokoz).c_str());
+	fprintf(ConfigFajl, "      Nick2 = \"_%s\"\n", _nick.substr(0, szokoz).c_str());
+	fprintf(ConfigFajl, "      Nick3 = \"__%s\"\n", _nick.substr(0, szokoz).c_str());
+	fprintf(ConfigFajl, "      Username = \"%s\"\n", _nick.substr(0, szokoz).c_str());
 	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 	fprintf(ConfigFajl, "# NickServ\n");
 	fprintf(ConfigFajl, "#    Enable\n");
@@ -197,8 +201,8 @@ void DefaultConfig::IrcConfig()
 	fprintf(ConfigFajl, "#    Password\n");
 	fprintf(ConfigFajl, "#         Jelszó a NickServ-hez a nick azonósitáshoz.\n");
 	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
-	fprintf(ConfigFajl, "<NickServ Enable=\"0\"\n");
-	fprintf(ConfigFajl, "          Password=\"jelszo\">\n\n");
+	fprintf(ConfigFajl, "<NickServ Enable = \"0\"\n");
+	fprintf(ConfigFajl, "          Password = \"jelszo\">\n\n");
 
 	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
 	fprintf(ConfigFajl, "# HostServ\n");
@@ -209,8 +213,8 @@ void DefaultConfig::IrcConfig()
 	fprintf(ConfigFajl, "#         Ha nincs vhost-od ted 0-ra ha van 1-re.\n");
 	fprintf(ConfigFajl, "#         Alapértelmezés: 0\n");
 	fprintf(ConfigFajl, "#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#\n");
-	fprintf(ConfigFajl, "<HostServ Enable=\"0\"\n");
- 	fprintf(ConfigFajl, "          Vhost=\"0\">\n\n");
+	fprintf(ConfigFajl, "<HostServ Enable = \"0\"\n");
+ 	fprintf(ConfigFajl, "          Vhost = \"0\">\n\n");
 }
 
 void DefaultConfig::MysqlConfig()
@@ -234,14 +238,14 @@ void DefaultConfig::MysqlConfig()
 	fgets(server, 300, stdin);
 	string _server = server;
 	int szokoz = _server.find("\n");
-	fprintf(ConfigFajl, "<MySQL Host=\"%s\"\n", _server.substr(0, szokoz).c_str());
+	fprintf(ConfigFajl, "<MySQL Host = \"%s\"\n", _server.substr(0, szokoz).c_str());
 
 	printf("Ird be a portot: ");
 	char port[30];
 	fgets(port, 30, stdin);
 	string _port = port;
 	szokoz = _port.find("\n");
-	fprintf(ConfigFajl, "       Port=\"%s\"\n", _port.substr(0, szokoz).c_str());
+	fprintf(ConfigFajl, "       Port = \"%s\"\n", _port.substr(0, szokoz).c_str());
 
 	printf("Ird be a felhasznalo: ");
 	char user[50];
@@ -249,7 +253,7 @@ void DefaultConfig::MysqlConfig()
 	string _user = user;
 	szokoz = _user.find("\n");
 
-	fprintf(ConfigFajl, "       User=\"%s\"\n", _user.substr(0, szokoz).c_str());
+	fprintf(ConfigFajl, "       User = \"%s\"\n", _user.substr(0, szokoz).c_str());
 
 	printf("Ird be a jelszo: ");
 	char pass[50];
@@ -257,7 +261,7 @@ void DefaultConfig::MysqlConfig()
 	string _pass = pass;
 	szokoz = _pass.find("\n");
 
-	fprintf(ConfigFajl, "       Password=\"%s\"\n", _pass.substr(0, szokoz).c_str());
+	fprintf(ConfigFajl, "       Password = \"%s\"\n", _pass.substr(0, szokoz).c_str());
 
 	printf("Ird be a adatbazis: ");
 	char db[50];
@@ -265,7 +269,7 @@ void DefaultConfig::MysqlConfig()
 	string _db = db;
 	szokoz = _db.find("\n");
 
-	fprintf(ConfigFajl, "       Database=\"%s\">\n\n", _db.substr(0, szokoz).c_str());
+	fprintf(ConfigFajl, "       Database = \"%s\">\n\n", _db.substr(0, szokoz).c_str());
 }
 
 int DefaultConfig::writer(char* data, size_t size, size_t nmemb, string *buffer)
