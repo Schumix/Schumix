@@ -59,25 +59,7 @@ IRCSession::IRCSession(string host, uint32 port, string sqlhost, string user, st
 	m_LastPing = getMSTime();
 
 	// Populate the giant IRCSession handler table
-	ADD_CODE(RPL_SUCCESSFUL_AUTH,	&IRCSession::HandleSuccessfulAuth)
-	ADD_CODE(RPL_MOTDSTART,			&IRCSession::HandleMotdStart)
-	ADD_CODE(RPL_MOTD,				&IRCSession::HandleMotd)
-	ADD_CODE(RPL_ENDOFMOTD,			&IRCSession::HandleMotdStop)
-	ADD_CODE(RPL_NOTICE,			&IRCSession::HandleNotice)
-	ADD_CODE(RPL_PRIVMSG,			&IRCSession::HandlePrivmsg)
-	ADD_CODE(RPL_PING,				&IRCSession::HandlePing)
-	ADD_CODE(RPL_PONG,				&IRCSession::HandlePong)
-	ADD_CODE(RPL_NICK_ERROR,		&IRCSession::HandleNickError)
-	ADD_CODE(RPL_319,				&IRCSession::HandleWhois)
-	ADD_CODE(RPL_KICK,				&IRCSession::HandleKick)
-	ADD_CODE(RPL_MODE,				&IRCSession::HandleMode)
-	ADD_CODE(RPL_JOIN,				&IRCSession::HandleJoin)
-	ADD_CODE(RPL_LEFT,				&IRCSession::HandleLeft)
-	ADD_CODE(RPL_QUIT,				&IRCSession::HandleQuit)
-	ADD_CODE(RPL_404,				&IRCSession::HandleReJoin)
-	ADD_CODE(RPL_NICK,				&IRCSession::HandleNick)
-	ADD_CODE(RPL_NoChannel_jelszo,	&IRCSession::HandleNoChannelJelszo)
-	ADD_CODE(RPL_Channel_ban,		&IRCSession::HandleChannelBan)
+	Handler();
 
 	Log.Debug("IRCSession", "Reconnect Thread indul...");
 	Thread t(&RunUpdateProc, this);
@@ -139,6 +121,34 @@ IRCSession::~IRCSession()
 #ifdef _DEBUG_MOD
 	Log.Notice("IRCSession", "~IRCSession()");
 #endif
+}
+
+void IRCSession::Handler()
+{
+	RegisterHandler(string(RPL_SUCCESSFUL_AUTH),	cast_default(IRCCallback, &IRCSession::HandleSuccessfulAuth));
+	RegisterHandler(RPL_MOTDSTART,			cast_default(IRCCallback, &IRCSession::HandleMotdStart));
+	RegisterHandler(RPL_MOTD,				cast_default(IRCCallback, &IRCSession::HandleMotd));
+	RegisterHandler(RPL_ENDOFMOTD,			cast_default(IRCCallback, &IRCSession::HandleMotdStop));
+	RegisterHandler(RPL_NOTICE,			cast_default(IRCCallback, &IRCSession::HandleNotice));
+	RegisterHandler(RPL_PRIVMSG,			cast_default(IRCCallback, &IRCSession::HandlePrivmsg));
+	RegisterHandler(RPL_PING,				cast_default(IRCCallback, &IRCSession::HandlePing));
+	RegisterHandler(RPL_PONG,				cast_default(IRCCallback, &IRCSession::HandlePong));
+	RegisterHandler(RPL_NICK_ERROR,		cast_default(IRCCallback, &IRCSession::HandleNickError));
+	RegisterHandler(RPL_WHOIS,				cast_default(IRCCallback, &IRCSession::HandleWhois));
+	RegisterHandler(RPL_KICK,				cast_default(IRCCallback, &IRCSession::HandleKick));
+	RegisterHandler(RPL_MODE,				cast_default(IRCCallback, &IRCSession::HandleMode));
+	RegisterHandler(RPL_JOIN,				cast_default(IRCCallback, &IRCSession::HandleJoin));
+	RegisterHandler(RPL_LEFT,				cast_default(IRCCallback, &IRCSession::HandleLeft));
+	RegisterHandler(RPL_QUIT,				cast_default(IRCCallback, &IRCSession::HandleQuit));
+	RegisterHandler(RPL_404,				cast_default(IRCCallback, &IRCSession::HandleReJoin));
+	RegisterHandler(RPL_NICK,				cast_default(IRCCallback, &IRCSession::HandleNick));
+	RegisterHandler(RPL_NoChannel_jelszo,	cast_default(IRCCallback, &IRCSession::HandleNoChannelJelszo));
+	RegisterHandler(RPL_Channel_ban,		cast_default(IRCCallback, &IRCSession::HandleChannelBan));
+}
+
+void IRCSession::RegisterHandler(string code, IRCCallback method)
+{
+	IRCMessageHandlerMap.insert(make_pair(code, method));
 }
 
 void IRCSession::BejovoInfo(string SInfo)
@@ -367,7 +377,7 @@ string IRCSession::RandomString(int length, bool letters, bool numbers, bool sym
 {
 	string str, allPossible;
 
-	if(letters == true)
+	if(letters)
 	{
 		for(int i = 65; i <= 90; i++)
 		{
@@ -376,13 +386,13 @@ string IRCSession::RandomString(int length, bool letters, bool numbers, bool sym
 		}
 	}
 
-	if(numbers == true)
+	if(numbers)
 	{
 		for(int i = 48; i <= 57; i++)
 			allPossible += cast_char(i);
 	}
 
-	if(symbols == true)
+	if(symbols)
 	{
 		for(int i = 33; i <= 47; i++)
 			allPossible += cast_char(i);

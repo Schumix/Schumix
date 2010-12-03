@@ -68,31 +68,9 @@ enum MessageType
 	NOTICE,
 };
 
-struct IRCMessage
-{
-	string Hostmask;	// Egybenlévõ hostmask melybõl majd darabolodik a nick, user, host
-	string Opcode;		// Opcode elnevezése vagy száma
-	string Channel;		// Channel név ahonét jön az adat
-	string Args;		// Szöveg ami bejön
-
-	// Bejövö adat igy darabolodik: :schumix!Schumix@schumix_host
-	string Nick; // schumix
-	string User; // Schumix
-	string Host; // schumix_host
-
-	// Minden
-	string Minden;
-
-	// .c_str() hozzáadva hogy const char* legyen
-	inline const char* GetHostmask() { return Hostmask.c_str(); }
-	inline const char* GetOpcode() { return Opcode.c_str(); }
-	inline const char* GetChannel() { return Channel.c_str(); }
-	inline const char* GetArgs() { return Args.c_str(); }
-	inline const char* GetNick() { return Nick.c_str(); }
-	inline const char* GetUser() { return User.c_str(); }
-	inline const char* GetHost() { return Host.c_str(); }
-	inline const char* GetMinden() { return Minden.c_str(); }
-};
+typedef void(IRCSession::*IRCCallback)(IRCMessage& recvData);
+typedef map<string, IRCCallback> MessageHandlerMap;
+extern MessageHandlerMap IRCMessageHandlerMap;
 
 class IRCSession : public Singleton<IRCSession>
 {
@@ -131,6 +109,8 @@ public:
 
 protected:
 	static Thread_void RunUpdateProc(void* smg);
+	void Handler();
+	void RegisterHandler(string code, IRCCallback method);
 
 	/*
 	 * Rehashes the schumix.conf configuration file.
@@ -309,11 +289,6 @@ private:
 	static int writer(char* data, size_t size, size_t nmemb, string *buffer);
 };
 
-typedef void(IRCSession::*IRCCallback)(IRCMessage& recvData);
-typedef map<string, IRCCallback> MessageHandlerMap;
-extern MessageHandlerMap IRCMessageHandlerMap;
-
-#define ADD_CODE(code, method) IRCMessageHandlerMap.insert(make_pair(code, method));
 #define sIRCSession IRCSession::getSingleton()
 
 #endif

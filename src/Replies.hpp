@@ -21,28 +21,54 @@
 #ifndef _SCHUMIX_REPLIES_HPP
 #define _SCHUMIX_REPLIES_HPP
 
-#define RPL_SUCCESSFUL_AUTH		"001"
-#define RPL_MOTD				"372"
-#define RPL_MOTDSTART			"375"
-#define RPL_ENDOFMOTD			"376"
-#define RPL_NOTICE				"NOTICE"
-#define RPL_PRIVMSG				"PRIVMSG"
-#define RPL_NICK				"NICK"
-#define RPL_JOIN				"JOIN"
-#define RPL_LEFT				"PART"
-#define RPL_QUIT				"QUIT"
+struct IRCMessage
+{
+	string Hostmask;	// Egybenlévő hostmask melyből majd darabolodik a nick, user, host
+	string Opcode;		// Opcode elnevezése vagy száma
+	string Channel;		// Channel név ahonét jön az adat
+	string Args;		// Szöveg ami bejön
 
-#define RPL_PING				"PING"
-#define RPL_PONG				"PONG"
+	// Bejövő adat így darabolodik: :schumix!Schumix@schumix_host
+	string Nick; // schumix
+	string User; // Schumix
+	string Host; // schumix_host
 
-#define RPL_KILL				"KILL"
-#define RPL_KICK				"KICK"
-#define RPL_MODE				"MODE"
-#define RPL_404					"404"
-#define RPL_NICK_ERROR			"433"
-#define RPL_Channel_ban			"474"
-#define RPL_NoChannel_jelszo	"475"
-#define RPL_319					"319"
+	// Minden
+	string Minden;
+
+	// .c_str() hozzáadva hogy const char* legyen
+	inline const char* GetHostmask() { return Hostmask.c_str(); }
+	inline const char* GetOpcode() { return Opcode.c_str(); }
+	inline const char* GetChannel() { return Channel.c_str(); }
+	inline const char* GetArgs() { return Args.c_str(); }
+	inline const char* GetNick() { return Nick.c_str(); }
+	inline const char* GetUser() { return User.c_str(); }
+	inline const char* GetHost() { return Host.c_str(); }
+	inline const char* GetMinden() { return Minden.c_str(); }
+};
+
+static string RPL_SUCCESSFUL_AUTH		= "001";
+static string RPL_MOTD				= "372";
+static string RPL_MOTDSTART			= "375";
+static string RPL_ENDOFMOTD			= "376";
+static string RPL_NOTICE				= "NOTICE";
+static string RPL_PRIVMSG				= "PRIVMSG";
+static string RPL_NICK				= "NICK";
+static string RPL_JOIN				= "JOIN";
+static string RPL_LEFT				= "PART";
+static string RPL_QUIT				= "QUIT";
+
+static string RPL_PING				= "PING";
+static string RPL_PONG				= "PONG";
+
+static string RPL_KILL				= "KILL";
+static string RPL_KICK				= "KICK";
+static string RPL_MODE				= "MODE";
+static string RPL_404					= "404";
+static string RPL_NICK_ERROR			= "433";
+static string RPL_Channel_ban			= "474";
+static string RPL_NoChannel_jelszo	= "475";
+static string RPL_WHOIS					= "319";
 
 /*#define RPL_ISMERETLEN			"002"
 #define RPL_ISMERETLEN1			"003"
