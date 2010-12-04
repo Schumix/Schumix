@@ -18,10 +18,9 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "StdAfx.h"
+#include "../StdAfx.h"
 
 initialiseSingleton(IRCSession);
-MessageHandlerMap IRCMessageHandlerMap;
 
 IRCSession::IRCSession(string host, uint32 port, string sqlhost, string user, string pass, string database)
 {
@@ -59,7 +58,10 @@ IRCSession::IRCSession(string host, uint32 port, string sqlhost, string user, st
 	m_LastPing = getMSTime();
 
 	// Populate the giant IRCSession handler table
-	Handler();
+	InitHandler();
+
+	Log.Debug("IRCSession", "Commands indul...");
+	m_Commands = CommandsPointer(new Commands());
 
 	Log.Debug("IRCSession", "Reconnect Thread indul...");
 	Thread t(&RunUpdateProc, this);
@@ -113,7 +115,7 @@ void IRCSession::RehashConfig(string host, string user, string pass, string data
 		Log.Success("Config", "Config adatbazis betoltve.");
 	}
 	else
-		Log.Error("Config", "Lekerdezesi hiba! Betoltes sikertelen.");
+		Log.Error("Config", "Lekerdezesi hiba! Betoltes sikertelen!");
 }
 
 IRCSession::~IRCSession()
@@ -123,32 +125,34 @@ IRCSession::~IRCSession()
 #endif
 }
 
-void IRCSession::Handler()
+void IRCSession::InitHandler()
 {
-	RegisterHandler(string(RPL_SUCCESSFUL_AUTH),	cast_default(IRCCallback, &IRCSession::HandleSuccessfulAuth));
-	RegisterHandler(RPL_MOTDSTART,			cast_default(IRCCallback, &IRCSession::HandleMotdStart));
-	RegisterHandler(RPL_MOTD,				cast_default(IRCCallback, &IRCSession::HandleMotd));
-	RegisterHandler(RPL_ENDOFMOTD,			cast_default(IRCCallback, &IRCSession::HandleMotdStop));
-	RegisterHandler(RPL_NOTICE,			cast_default(IRCCallback, &IRCSession::HandleNotice));
-	RegisterHandler(RPL_PRIVMSG,			cast_default(IRCCallback, &IRCSession::HandlePrivmsg));
-	RegisterHandler(RPL_PING,				cast_default(IRCCallback, &IRCSession::HandlePing));
-	RegisterHandler(RPL_PONG,				cast_default(IRCCallback, &IRCSession::HandlePong));
-	RegisterHandler(RPL_NICK_ERROR,		cast_default(IRCCallback, &IRCSession::HandleNickError));
-	RegisterHandler(RPL_WHOIS,				cast_default(IRCCallback, &IRCSession::HandleWhois));
-	RegisterHandler(RPL_KICK,				cast_default(IRCCallback, &IRCSession::HandleKick));
-	RegisterHandler(RPL_MODE,				cast_default(IRCCallback, &IRCSession::HandleMode));
-	RegisterHandler(RPL_JOIN,				cast_default(IRCCallback, &IRCSession::HandleJoin));
-	RegisterHandler(RPL_LEFT,				cast_default(IRCCallback, &IRCSession::HandleLeft));
-	RegisterHandler(RPL_QUIT,				cast_default(IRCCallback, &IRCSession::HandleQuit));
-	RegisterHandler(RPL_404,				cast_default(IRCCallback, &IRCSession::HandleReJoin));
-	RegisterHandler(RPL_NICK,				cast_default(IRCCallback, &IRCSession::HandleNick));
-	RegisterHandler(RPL_NoChannel_jelszo,	cast_default(IRCCallback, &IRCSession::HandleNoChannelJelszo));
-	RegisterHandler(RPL_Channel_ban,		cast_default(IRCCallback, &IRCSession::HandleChannelBan));
+	RegisterHandler(RPL_SUCCESSFUL_AUTH,    cast_default(IRCCallback, &IRCSession::HandleSuccessfulAuth));
+	RegisterHandler(RPL_MOTDSTART,          cast_default(IRCCallback, &IRCSession::HandleMotdStart));
+	RegisterHandler(RPL_MOTD,               cast_default(IRCCallback, &IRCSession::HandleMotd));
+	RegisterHandler(RPL_ENDOFMOTD,          cast_default(IRCCallback, &IRCSession::HandleMotdStop));
+	RegisterHandler(RPL_NOTICE,             cast_default(IRCCallback, &IRCSession::HandleNotice));
+	RegisterHandler(RPL_PRIVMSG,            cast_default(IRCCallback, &IRCSession::HandlePrivmsg));
+	RegisterHandler(RPL_PING,               cast_default(IRCCallback, &IRCSession::HandlePing));
+	RegisterHandler(RPL_PONG,               cast_default(IRCCallback, &IRCSession::HandlePong));
+	RegisterHandler(RPL_NICK_ERROR,         cast_default(IRCCallback, &IRCSession::HandleNickError));
+	RegisterHandler(RPL_WHOIS,              cast_default(IRCCallback, &IRCSession::HandleWhois));
+	RegisterHandler(RPL_KICK,               cast_default(IRCCallback, &IRCSession::HandleKick));
+	RegisterHandler(RPL_MODE,               cast_default(IRCCallback, &IRCSession::HandleMode));
+	RegisterHandler(RPL_JOIN,               cast_default(IRCCallback, &IRCSession::HandleJoin));
+	RegisterHandler(RPL_LEFT,               cast_default(IRCCallback, &IRCSession::HandleLeft));
+	RegisterHandler(RPL_QUIT,               cast_default(IRCCallback, &IRCSession::HandleQuit));
+	RegisterHandler(RPL_404,                cast_default(IRCCallback, &IRCSession::HandleReJoin));
+	RegisterHandler(RPL_NICK,               cast_default(IRCCallback, &IRCSession::HandleNick));
+	RegisterHandler(RPL_NoChannel_jelszo,   cast_default(IRCCallback, &IRCSession::HandleNoChannelJelszo));
+	RegisterHandler(RPL_Channel_ban,        cast_default(IRCCallback, &IRCSession::HandleChannelBan));
+
+	Log.Notice("IRCSession", "Osszes IRC handler regisztralva.");
 }
 
 void IRCSession::RegisterHandler(string code, IRCCallback method)
 {
-	IRCMessageHandlerMap.insert(make_pair(code, method));
+	MessageHandlerMap.insert(make_pair(code, method));
 }
 
 void IRCSession::BejovoInfo(string SInfo)
@@ -190,8 +194,8 @@ void IRCSession::BejovoInfo(string SInfo)
 	mess.User = mess.Host.substr(0, pos);
 	mess.Host = mess.Host.substr(pos + 1);
 
-	MessageHandlerMap::iterator itr = IRCMessageHandlerMap.find(mess.Opcode);
-	if(itr == IRCMessageHandlerMap.end())
+	map<string, IRCCallback>::iterator itr = MessageHandlerMap.find(mess.Opcode);
+	if(itr == MessageHandlerMap.end())
 	{
 		if(sConsole.GetConsoleLog())
 		{
@@ -249,6 +253,7 @@ void IRCSession::ReConnect()
 	{
 		if(!Running())
 			break;
+
 
 		if(FSelect(RECONNECT) == bekapcsol)
 		{

@@ -23,11 +23,15 @@
 class Socket;
 class MySQLConnection;
 class QueryResult;
+class Commands;
+class CommandMgr;
 struct ASyncQuery;
 
 typedef boost::shared_ptr<Socket> SocketPointer;
 typedef boost::shared_ptr<MySQLConnection> MySQLConnectionPointer;
 typedef boost::shared_ptr<QueryResult> QueryResultPointer;
+typedef boost::shared_ptr<Commands> CommandsPointer;
+typedef boost::shared_ptr<CommandMgr> CommandMgrPointer;
 typedef boost::shared_ptr<ASyncQuery> ASyncQueryPointer;
 
 //#define NULLIRC						boost::shared_ptr<IRCSession>()

@@ -17,12 +17,12 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "StdAfx.h"
+#include "../StdAfx.h"
 
-initialiseSingleton(GitInfo);
-boost::mutex g_mutex;
+initialiseSingleton(HgInfo);
+boost::mutex h_mutex;
 
-GitInfo::GitInfo(string host, string user, string password, string database)
+HgInfo::HgInfo(string host, string user, string password, string database)
 {
 	_mysql[0] = host;
 	_mysql[1] = user;
@@ -34,14 +34,14 @@ GitInfo::GitInfo(string host, string user, string password, string database)
 	m_SQLConn[0]->kiiras = false;
 
 	if(!m_SQLConn[0]->GetSqlError())
-		Log.Notice("GitInfo", "Mysql adatbazishoz sikeres a kapcsolodas.");
+		Log.Notice("HgInfo", "Mysql adatbazishoz sikeres a kapcsolodas.");
 	else
-		Log.Error("GitInfo", "Mysql adatbazishoz sikertelen a kapcsolodas.");
+		Log.Error("HgInfo", "Mysql adatbazishoz sikertelen a kapcsolodas.");
 
 	uint32 Threadszam = NULL;
-	m_Lido = cast_uint16(Config.MainConfig.GetIntDefault("LekerdezesiIdo", "Gitinfo", 15));
+	m_Lido = cast_uint16(Config.MainConfig.GetIntDefault("LekerdezesiIdo", "Hginfo", 15));
 
-	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT id FROM gitinfo");
+	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT id FROM hginfo");
 	if(adatbazis)
 	{
 		do 
@@ -57,44 +57,51 @@ GitInfo::GitInfo(string host, string user, string password, string database)
 	}
 
 	string status;
-	Log.Debug("GitInfo", "%u Thread indult el.", Threadszam);
+	Log.Debug("HgInfo", "%u Thread indult el.", Threadszam);
 
-	QueryResultPointer db = m_SQLConn[0]->Query("SELECT funkcio_status FROM schumix WHERE funkcio_nev = 'git'");
+	QueryResultPointer db = m_SQLConn[0]->Query("SELECT funkcio_status FROM schumix WHERE funkcio_nev = 'hg'");
 	if(db)
 		status = db->Fetch()[0].GetString();
 
 	if(status == bekapcsol)
-		Log.Success("GitInfo", "A funkcio elindult.");
+		Log.Success("HgInfo", "A funkcio elindult.");
 	else
-		Log.Warning("GitInfo", "Az %s funkcio nem uzemel!", GIT);
+		Log.Warning("HgInfo", "Az %s funkcio nem uzemel!", HG);
 
 	printf("\n");
 }
 
-GitInfo::~GitInfo()
+HgInfo::~HgInfo()
 {
 #ifdef _DEBUG_MOD
-	Log.Notice("GitInfo", "~GitInfo()");
+	Log.Notice("HgInfo", "~HgInfo()");
 #endif
 }
 
-void GitInfo::Feltoltes(uint32 id)
+void HgInfo::Feltoltes(uint32 id)
 {
 	int szam = 1;
 
-	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT * FROM gitinfo WHERE id = '%u'", id);
+	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT * FROM hginfo WHERE id = '%u'", id);
 	if(adatbazis)
 	{
 		nev[id] = adatbazis->Fetch()[szam++].GetString();
-		tipus[id] = adatbazis->Fetch()[szam++].GetString();
 		url[id] = adatbazis->Fetch()[szam++].GetString();
 		oldal[id] = adatbazis->Fetch()[szam++].GetString();
 
-		if(oldal[id] == "github")
+		if(oldal[id] == "google")
 		{
-			regex[id] = "<link\\stype=.text/html.\\srel=\\S+.\\shref=.(\\S+)/>\\s*<title>(.*)</title>";
+			regex[id] = "/>\\s*<title>(.*)</title>";
 			regex2[id] = "<author>\\s*<name>(.+)</name>";
-			regex3[id] = "<entry>\\s*<id>\\S+\\Commit/(.+)</id>";
+			string neve = nev[id];
+			transform(neve.begin(), neve.end(), neve.begin(), ::tolower);
+			regex3[id] = "<id>http://code.google.com/feeds/p/" + neve + "/hgchanges/basic/(.+)</id>";
+		}
+		else if(oldal[id] == "bitbucket")
+		{
+			regex[id] = "<item>\\s*<title>(.*)</title>";
+			regex2[id] = "<author>(.+)</author>";
+			regex3[id] = "<link>http://bitbucket.org/skyne/neocore/changeset/(.+)</link>\\s*<description>";
 		}
 
 		engedely[id] = adatbazis->Fetch()[szam++].GetUInt8();
@@ -103,38 +110,38 @@ void GitInfo::Feltoltes(uint32 id)
 	}
 }
 
-void GitInfo::NewThread(uint32 id)
+void HgInfo::NewThread(uint32 id)
 {
-	if(id >= MaxGitID)
+	if(id >= MaxHgID)
 		return;
 
-	Log.Notice("GitInfo", "New thread: %s %s", nev[id].c_str(), tipus[id].c_str());
+	Log.Notice("HgInfo", "New thread: %s", nev[id].c_str());
 	Feltoltes(id);
 
 	m_running[id] = true;
 	MultiThread Mt(this, id);
 	boost::thread t(Mt);
 
-	Log.Success("GitInfo", "Thread indult: %s %s", nev[id].c_str(), tipus[id].c_str());
+	Log.Success("HgInfo", "Thread indult: %s", nev[id].c_str());
 }
 
-void GitInfo::StopThread(uint32 id)
+void HgInfo::StopThread(uint32 id)
 {
-	if(id >= MaxGitID)
+	if(id >= MaxHgID)
 		return;
 
 	m_running[id] = false;
 	MultiThread Mt(this, id);
 	boost::thread t(Mt);
 
-	Log.Success("GitInfo", "Thread leallt: %s %s", nev[id].c_str(), tipus[id].c_str());
+	Log.Success("HgInfo", "Thread leallt: %s", nev[id].c_str());
 }
 
-void GitInfo::ReloadAllThread()
+void HgInfo::ReloadAllThread()
 {
 	uint32 Threadszam = NULL;
 
-	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT id FROM gitinfo");
+	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT id FROM hginfo");
 	if(adatbazis)
 	{
 		do 
@@ -145,11 +152,11 @@ void GitInfo::ReloadAllThread()
 		} while(adatbazis->NextRow());
 	}
 
-	Log.Notice("GitInfo", "Reload %u threads.", Threadszam);
+	Log.Notice("HgInfo", "Reload %u threads.", Threadszam);
 	Threadszam = NULL;
 	Sleep(2000);
 
-	QueryResultPointer adatbazis1 = m_SQLConn[0]->Query("SELECT id FROM gitinfo");
+	QueryResultPointer adatbazis1 = m_SQLConn[0]->Query("SELECT id FROM hginfo");
 	if(adatbazis1)
 	{
 		do 
@@ -164,15 +171,15 @@ void GitInfo::ReloadAllThread()
 		} while(adatbazis1->NextRow());
 	}
 
-	Log.Success("GitInfo", "%u Thread indult ujra.", Threadszam);
+	Log.Success("HgInfo", "%u Thread indult ujra.", Threadszam);
 }
 
-void GitInfo::ReloadThread(uint32 id)
+void HgInfo::ReloadThread(uint32 id)
 {
-	if(id >= MaxGitID)
+	if(id >= MaxHgID)
 		return;
 
-	Log.Notice("GitInfo", "Reload thread: %s %s", nev[id].c_str(), tipus[id].c_str());
+	Log.Notice("HgInfo", "Reload thread: %s", nev[id].c_str());
 	m_running[id] = false;
 	Sleep(2000);
 
@@ -182,10 +189,10 @@ void GitInfo::ReloadThread(uint32 id)
 	MultiThread Mt(this, id);
 	boost::thread t(Mt);
 
-	Log.Success("GitInfo", "Thread ujraindult: %s %s", nev[id].c_str(), tipus[id].c_str());
+	Log.Success("HgInfo", "Thread ujraindult: %s", nev[id].c_str());
 }
 
-void GitInfo::Thread(uint32 id)
+void HgInfo::Thread(uint32 id)
 {
 	m_SQLConn[id] = MySQLConnectionPointer(new MySQLConnection(_mysql[0], _mysql[1], _mysql[2]));
 	m_SQLConn[id]->UseDatabase(_mysql[3]);
@@ -199,7 +206,7 @@ void GitInfo::Thread(uint32 id)
 		if(!Running(id))
 			break;
 
-		QueryResultPointer db = m_SQLConn[id]->Query("SELECT funkcio_status FROM schumix WHERE funkcio_nev = 'git'");
+		QueryResultPointer db = m_SQLConn[id]->Query("SELECT funkcio_status FROM schumix WHERE funkcio_nev = 'hg'");
 		if(db)
 			status = db->Fetch()[0].GetString();
 
@@ -225,12 +232,12 @@ void GitInfo::Thread(uint32 id)
 	}
 
 #ifdef _DEBUG_MOD
-	Log.Warning("GitInfo", "Thread leallt: %s %s", nev[id].c_str(), tipus[id].c_str());
+	Log.Warning("HgInfo", "Thread leallt: %s", nev[id].c_str());
 #endif
 	ThreadExit(0);
 }
 
-int GitInfo::writer(char* data, size_t size, size_t nmemb, string *buffer)
+int HgInfo::writer(char* data, size_t size, size_t nmemb, string *buffer)
 {
 	int result = NULL;
 
@@ -242,7 +249,7 @@ int GitInfo::writer(char* data, size_t size, size_t nmemb, string *buffer)
 	return result;
 }
 
-string GitInfo::titleUrl(uint32 id)
+string HgInfo::titleUrl(uint32 id)
 {
 	m_Curl[id] = curl_easy_init();
 	if(m_Curl[id])
@@ -255,14 +262,14 @@ string GitInfo::titleUrl(uint32 id)
 			curl_easy_setopt(m_Curl[id], CURLOPT_URL, url[id].c_str());
 			curl_easy_setopt(m_Curl[id], CURLOPT_USERNAME, account[id].c_str());
 			curl_easy_setopt(m_Curl[id], CURLOPT_PASSWORD, password[id].c_str());
-			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEFUNCTION, GitInfo::writer);
+			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEFUNCTION, HgInfo::writer);
 			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEDATA, &bufferdata);
 			result = curl_easy_perform(m_Curl[id]);
 		}
 		else
 		{
 			curl_easy_setopt(m_Curl[id], CURLOPT_URL, url[id].c_str());
-			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEFUNCTION, GitInfo::writer);
+			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEFUNCTION, HgInfo::writer);
 			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEDATA, &bufferdata);
 			result = curl_easy_perform(m_Curl[id]);
 		}
@@ -275,7 +282,7 @@ string GitInfo::titleUrl(uint32 id)
 			boost::cmatch matches;
 
 			boost::regex_search(bufferdata.c_str(), matches, re);
-			string matched(matches[2].first, matches[2].second);
+			string matched(matches[1].first, matches[1].second);
 			if(matched == "")
 				return "nincs adat";
 
@@ -287,7 +294,7 @@ string GitInfo::titleUrl(uint32 id)
 		}
 		else
 		{
-			Log.Error("GitInfo", "Title: Hiba a Http lekerdezesben. %s %s thread", nev[id].c_str(), tipus[id].c_str());
+			Log.Error("HgInfo", "Title: Hiba a Http lekerdezesben. %s thread", nev[id].c_str());
 			return "nincs adat";
 		}
 	}
@@ -295,7 +302,7 @@ string GitInfo::titleUrl(uint32 id)
 	return "nincs adat";
 }
 
-string GitInfo::revUrl(uint32 id)
+string HgInfo::revUrl(uint32 id)
 {
 	m_Curl[id] = curl_easy_init();
 	if(m_Curl[id])
@@ -308,14 +315,14 @@ string GitInfo::revUrl(uint32 id)
 			curl_easy_setopt(m_Curl[id], CURLOPT_URL, url[id].c_str());
 			curl_easy_setopt(m_Curl[id], CURLOPT_USERNAME, account[id].c_str());
 			curl_easy_setopt(m_Curl[id], CURLOPT_PASSWORD, password[id].c_str());
-			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEFUNCTION, GitInfo::writer);
+			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEFUNCTION, HgInfo::writer);
 			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEDATA, &bufferdata);
 			result = curl_easy_perform(m_Curl[id]);
 		}
 		else
 		{
 			curl_easy_setopt(m_Curl[id], CURLOPT_URL, url[id].c_str());
-			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEFUNCTION, GitInfo::writer);
+			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEFUNCTION, HgInfo::writer);
 			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEDATA, &bufferdata);
 			result = curl_easy_perform(m_Curl[id]);
 		}
@@ -332,7 +339,7 @@ string GitInfo::revUrl(uint32 id)
 			if(matched == "")
 				return "nincs adat";
 
-			int szokoz = matched.find("</id>");
+			int szokoz = matched.find("</");
 			if(szokoz == string::npos)
 				return "nincs adat";
 
@@ -340,7 +347,7 @@ string GitInfo::revUrl(uint32 id)
 		}
 		else
 		{
-			Log.Error("GitInfo", "Rev: Hiba a Http lekerdezesben. %s %s thread", nev[id].c_str(), tipus[id].c_str());
+			Log.Error("HgInfo", "Rev: Hiba a Http lekerdezesben. %s thread", nev[id].c_str());
 			return "nincs adat";
 		}
 	}
@@ -348,7 +355,7 @@ string GitInfo::revUrl(uint32 id)
 	return "nincs adat";
 }
 
-string GitInfo::authorUrl(uint32 id)
+string HgInfo::authorUrl(uint32 id)
 {
 	m_Curl[id] = curl_easy_init();
 	if(m_Curl[id])
@@ -361,14 +368,14 @@ string GitInfo::authorUrl(uint32 id)
 			curl_easy_setopt(m_Curl[id], CURLOPT_URL, url[id].c_str());
 			curl_easy_setopt(m_Curl[id], CURLOPT_USERNAME, account[id].c_str());
 			curl_easy_setopt(m_Curl[id], CURLOPT_PASSWORD, password[id].c_str());
-			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEFUNCTION, GitInfo::writer);
+			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEFUNCTION, HgInfo::writer);
 			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEDATA, &bufferdata);
 			result = curl_easy_perform(m_Curl[id]);
 		}
 		else
 		{
 			curl_easy_setopt(m_Curl[id], CURLOPT_URL, url[id].c_str());
-			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEFUNCTION, GitInfo::writer);
+			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEFUNCTION, HgInfo::writer);
 			curl_easy_setopt(m_Curl[id], CURLOPT_WRITEDATA, &bufferdata);
 			result = curl_easy_perform(m_Curl[id]);
 		}
@@ -385,7 +392,7 @@ string GitInfo::authorUrl(uint32 id)
 			if(matched == "")
 				return "nincs adat";
 
-			int szokoz = matched.find("</name>");
+			int szokoz = matched.find("</");
 			if(szokoz == string::npos)
 				return "nincs adat";
 
@@ -393,7 +400,7 @@ string GitInfo::authorUrl(uint32 id)
 		}
 		else
 		{
-			Log.Error("GitInfo", "Author: Hiba a Http lekerdezesben. %s %s thread", nev[id].c_str(), tipus[id].c_str());
+			Log.Error("HgInfo", "Author: Hiba a Http lekerdezesben. %s thread", nev[id].c_str());
 			return "nincs adat";
 		}
 	}
@@ -401,9 +408,9 @@ string GitInfo::authorUrl(uint32 id)
 	return "nincs adat";
 }
 
-void GitInfo::Lekerdezes(uint32 id)
+void HgInfo::Lekerdezes(uint32 id)
 {
-	boost::details::pool::guard<boost::mutex> g(g_mutex);
+	boost::details::pool::guard<boost::mutex> g(h_mutex);
 	string rev = revUrl(id);
 	if(rev == "nincs adat")
 		return;
@@ -411,9 +418,9 @@ void GitInfo::Lekerdezes(uint32 id)
 	a_rev[id] = rev;
 }
 
-void GitInfo::Kiiras(uint32 id)
+void HgInfo::Kiiras(uint32 id)
 {
-	boost::details::pool::guard<boost::mutex> g(g_mutex);
+	boost::details::pool::guard<boost::mutex> g(h_mutex);
 	string rev = revUrl(id);
 	if(rev == "nincs adat")
 		return;
@@ -431,7 +438,7 @@ void GitInfo::Kiiras(uint32 id)
 	if(author == "nincs adat")
 		return;
 
-	QueryResultPointer db = m_SQLConn[id]->Query("SELECT channel FROM gitinfo WHERE id = '%u'", id);
+	QueryResultPointer db = m_SQLConn[id]->Query("SELECT channel FROM hginfo WHERE nev = '%s'", nev[id].c_str());
 	if(db)
 	{
 		vector<string> reschannel(1);
@@ -447,10 +454,21 @@ void GitInfo::Kiiras(uint32 id)
 
 		for(int y = 1; y < resChannel; y++)
 		{
-			string kiiras = sVezerlo.htmldecode(title);
+			if(oldal[id] == "google")
+			{
+				uint8 szokoz = title.find(':');
+				string kiiras = sVezerlo.htmldecode(title.substr(szokoz+1));
 
-			sIRCSession.SendChatMessage(PRIVMSG, reschannel[y].c_str(), "3%s 7%s Revision: 10%s by %s", nev[id].c_str(), tipus[id].c_str(), rev.substr(0, 10).c_str(), author.c_str());
-			sIRCSession.SendChatMessage(PRIVMSG, reschannel[y].c_str(), "3%s Info: %s", nev[id].c_str(), kiiras.c_str());
+				sIRCSession.SendChatMessage(PRIVMSG, reschannel[y].c_str(), "3%s Revision: 10%s by %s", nev[id].c_str(), rev.substr(0, 10).c_str(), author.c_str());
+				sIRCSession.SendChatMessage(PRIVMSG, reschannel[y].c_str(), "3%s Info:%s", nev[id].c_str(), kiiras.c_str());
+			}
+			else if(oldal[id] == "bitbucket")
+			{
+				string kiiras = sVezerlo.htmldecode(title);
+
+				sIRCSession.SendChatMessage(PRIVMSG, reschannel[y].c_str(), "3%s Revision: 10%s by %s", nev[id].c_str(), rev.substr(0, 10).c_str(), author.c_str());
+				sIRCSession.SendChatMessage(PRIVMSG, reschannel[y].c_str(), "3%s Info: %s", nev[id].c_str(), kiiras.c_str());
+			}
 
 			Sleep(1000);
 		}
@@ -459,9 +477,9 @@ void GitInfo::Kiiras(uint32 id)
 	}
 }
 
-void GitInfo::Leallas()
+void HgInfo::Leallas()
 {
-	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT id FROM gitinfo");
+	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT id FROM hginfo");
 	if(adatbazis)
 	{
 		do 
@@ -471,5 +489,5 @@ void GitInfo::Leallas()
 		} while(adatbazis->NextRow());
 	}
 
-	Log.Notice("GitInfo", "GitInfo leallt.");
+	Log.Notice("HgInfo", "HgInfo leallt.");
 }

@@ -42,7 +42,7 @@
 using namespace std;
 using std::string;
 
-#include "shared/Common.hpp"
+#include "Shared/Common.hpp"
 
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
@@ -55,12 +55,12 @@ using std::string;
 
 #if PLATFORM == PLATFORM_WINDOWS
 #include <tchar.h>
-#include "shared/targetver.h"
+#include "Shared/targetver.h"
 #include <WinSock2.h>
 #include <Windows.h>
 #include <Psapi.h>
-#include "shared/WinAPIExtensions.h"
-#include "shared/dirent.h"
+#include "Shared/WinAPIExtensions.h"
+#include "Shared/dirent.h"
 #else
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -78,31 +78,33 @@ using namespace Schumix;
 #include <curl/curl.h>
 #include <mysql/mysql.h>
 
-#include "shared/Threading.h"
-#include "shared/Log.hpp"
+#include "Shared/Threading.h"
+#include "Shared/Log.hpp"
 extern CLog Log;
-#include "shared/SharedPointer.hpp"
-#include "shared/Cast.h"
-#include "shared/format.h"
-#include "shared/Singleton.h"
-#include "shared/Config/Config.hpp"
-#include "DefaultConfig.hpp"
-#include "shared/SchumixConfig.h"
-#include "shared/utf8.h"
-#include "shared/Auth/MD5.hpp"
-#include "shared/Auth/Sha1.hpp"
-#include "Console.hpp"
-#include "shared/Database/Field.hpp"
-#include "shared/Database/QueryResult.hpp"
-#include "shared/Database/MySQLConnection.hpp"
-#include "SvnInfo.hpp"
-#include "HgInfo.hpp"
-#include "GitInfo.hpp"
-#include "Replies.hpp"
-#include "IRCSession.hpp"
-#include "shared/Network/SocketMgr.hpp"
-#include "shared/Network/Socket.hpp"
-#include "shared/Network/SocketOps.hpp"
-#include "Vezerlo.hpp"
+#include "Shared/SharedPointer.hpp"
+#include "Shared/Cast.h"
+#include "Shared/format.h"
+#include "Shared/Singleton.h"
+#include "Shared/Config/Config.hpp"
+#include "DefaultConfig/DefaultConfig.hpp"
+#include "Shared/SchumixConfig.h"
+#include "Shared/utf8.h"
+#include "Shared/Auth/MD5.hpp"
+#include "Shared/Auth/Sha1.hpp"
+#include "Console/Console.hpp"
+#include "Shared/Database/Field.hpp"
+#include "Shared/Database/QueryResult.hpp"
+#include "Shared/Database/MySQLConnection.hpp"
+#include "Rss/SvnInfo.hpp"
+#include "Rss/HgInfo.hpp"
+#include "Rss/GitInfo.hpp"
+#include "IRC/Replies.hpp"
+#include "IRC/IRCSession.hpp"
+#include "Commands/Commands.hpp"
+#include "Commands/CommandMgr.hpp"
+#include "Shared/Network/SocketMgr.hpp"
+#include "Shared/Network/Socket.hpp"
+#include "Shared/Network/SocketOps.hpp"
+#include "Vezerlo/Vezerlo.hpp"
 
 #endif

@@ -43,6 +43,8 @@ public:
 	string htmldecode(string c);
 	string Sha1(string Sha1);
 
+	inline MySQLConnectionPointer GetSQLConn() { return m_SQLConn; }
+
 protected:
 	// Mysql hozzáférés
 	string _mysql[4];

@@ -35,7 +35,7 @@
 #define TKN_TERMINATION string("TKN_TERMINATION")
 #define TKN_NEXT_LINE string("TKN_NEXT_LINE")
 
-#include "StdAfx.h"
+#include "../StdAfx.h"
 #include "VarVector.hpp"
 #include "CalcLexer.hpp"
 #include "TokenQueue.hpp"

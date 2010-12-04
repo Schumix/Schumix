@@ -17,7 +17,7 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "StdAfx.h"
+#include "../StdAfx.h"
 
 void IRCSession::Schumix(IRCMessage& recvData)
 {
@@ -60,7 +60,7 @@ void IRCSession::Schumix(IRCMessage& recvData)
 		}
 		else if(iras == "nick")
 		{
-			if(!Admin(recvData.Nick, recvData.Host, Operator))
+			if(!m_Commands->Admin(recvData.Nick, recvData.Host, Operator))
 				return;
 
 			if(res.size() < 3)
@@ -85,7 +85,7 @@ void IRCSession::Schumix(IRCMessage& recvData)
 		}
 		else if(iras == "ghost")
 		{
-			if(!Admin(recvData.Nick, recvData.Host, Operator))
+			if(!m_Commands->Admin(recvData.Nick, recvData.Host, Operator))
 				return;
 
 			SendChatMessage(PRIVMSG, "NickServ", "ghost %s %s", m_NickName[0].c_str(), m_NickServPassword.c_str());
@@ -112,6 +112,26 @@ void IRCSession::Schumix(IRCMessage& recvData)
 
 		res.clear();
 	}
+}
+
+void IRCSession::Logfajl(IRCMessage& recvData)
+{
+	if((FSelect(LOG) == bekapcsol && FSelectChannel(LOG, recvData.Channel) == bekapcsol) || cast_int(recvData.Channel.find("#")) == string::npos)
+	{
+		FILE* LogSzoba = fopen(format("%s/%s.log", m_LogHelye.c_str(), recvData.GetChannel()).c_str(), "a+");
+		if(!LogSzoba || LogSzoba == NULL)
+		{
+			Log.Error("Log", "Sikertelen olvasas.\n");
+			return;
+		}
+
+		fprintf(LogSzoba, "[%i. %i. %i. %i:%i] <%s> %s\n", Ev(), Honap(), Nap(), Ora(), Perc(), recvData.GetNick(), recvData.GetArgs());
+		fclose(LogSzoba);
+	}
+#ifdef _DEBUG_MOD
+	else
+		Log.Warning("Funkcio", "A %s funkcio nem uzemel!", LOG);
+#endif
 }
 
 string IRCSession::FSelect(string nev)
@@ -465,57 +485,3 @@ bool IRCSession::AutoKick(IRCMessage& recvData, string allapot)
 	return false;
 }
 
-bool IRCSession::Admin(string nick)
-{
-	transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
-
-	QueryResultPointer db = m_SQLConn->Query("SELECT * FROM adminok WHERE nev = '%s'", nick.c_str());
-	if(db)
-		return true;
-
-	return false;
-}
-
-bool IRCSession::Admin(string nick, AdminFlag Flag)
-{
-	transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
-
-	QueryResultPointer db = m_SQLConn->Query("SELECT flag FROM adminok WHERE nev = '%s'", nick.c_str());
-	if(db)
-	{
-		int flag = cast_int(db->Fetch()[0].GetUInt8());
-
-		if(Flag != flag)
-			return false;
-
-		return true;
-	}
-
-	return false;
-}
-
-bool IRCSession::Admin(string nick, string Vhost, AdminFlag Flag)
-{
-	transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
-
-	QueryResultPointer db = m_SQLConn->Query("SELECT vhost, flag FROM adminok WHERE nev = '%s'", nick.c_str());
-	if(db)
-	{
-		string vhost = db->Fetch()[0].GetString();
-
-		if(Vhost != vhost)
-			return false;
-
-		int flag = cast_int(db->Fetch()[1].GetUInt8());
-
-		if(flag == 1 && Flag == NULL)
-			return true;
-
-		if(Flag != flag)
-			return false;
-
-		return true;
-	}
-
-	return false;
-}

@@ -17,25 +17,17 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "StdAfx.h"
+#include "../StdAfx.h"
 
 initialiseSingleton(Console);
 
-Console::Console(string host, string user, string password, string database)
+Console::Console()
 {
-	m_SQLConn = MySQLConnectionPointer(new MySQLConnection(host, user, password));
-	m_SQLConn->UseDatabase(database);
-
-	if(!m_SQLConn->GetSqlError())
-		Log.Notice("Console", "Mysql adatbazishoz sikeres a kapcsolodas.");
-	else
-		Log.Error("Console", "Mysql adatbazishoz sikertelen a kapcsolodas.");
-
 	m_running = true;
 	Thread t(&RunUpdateProc, this);
 	ConsoleLog = Config.MainConfig.GetBoolDefault("Log", "Irclog", false);;
 
-	Log.Success("Console", "A funkcio elindult.");
+	Log.Notice("Console", "Console elindult.");
 	printf("\n");
 }
 
@@ -55,7 +47,7 @@ void Console::ReadConsoleRoutine()
 		if(!Running())
 			break;
 
-		QueryResultPointer db = m_SQLConn->Query("SELECT irc_cim FROM schumix WHERE entry = '1'");
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT irc_cim FROM schumix WHERE entry = '1'");
 		if(db)
 		{
 			char* txt = new char[2048];

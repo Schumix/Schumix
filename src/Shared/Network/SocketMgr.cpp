@@ -67,7 +67,7 @@ void SocketMgr::Update()
 	tv.tv_sec = NULL;
 	tv.tv_usec = 10000; // 10ms
 	
-	Log.Success("SocketMgr", "SocketMgr elindult.");
+	Log.Notice("SocketMgr", "SocketMgr elindult.");
 
 	while(sSocket.Running())
 	{

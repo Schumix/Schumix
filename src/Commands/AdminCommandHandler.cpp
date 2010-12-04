@@ -17,21 +17,21 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "StdAfx.h"
+#include "../StdAfx.h"
 
-void IRCSession::Teszt(IRCMessage& recvData)
+void CommandMgr::HandleTeszt(CommandMessage& recvData)
 {
-	if(!Admin(recvData.Nick, recvData.Host, Administrator))
+	if(!sCommands.Admin(recvData.Nick, recvData.Host, Administrator))
 		return;
 
-	if(recvData.Args.length() <= firstSpace+1)
+	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
-		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
 		return;
 	}
 
 	vector<string> res(1);
-	split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(recvData.firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -71,8 +71,6 @@ void IRCSession::Teszt(IRCMessage& recvData)
 	}
 	else
 	{
-		printf("%s\n", recvData.GetHostmask());
-		printf("%s\n", recvData.GetOpcode());
 		printf("%s\n", recvData.GetChannel());
 		printf("%s\n", recvData.GetArgs());
 		printf("%s\n", recvData.GetNick());
@@ -83,19 +81,19 @@ void IRCSession::Teszt(IRCMessage& recvData)
 	res.clear();
 }
 
-void IRCSession::Szoba(IRCMessage& recvData)
+void CommandMgr::HandleSzoba(CommandMessage& recvData)
 {
-	if(!Admin(recvData.Nick, recvData.Host, Administrator))
+	if(!sCommands.Admin(recvData.Nick, recvData.Host, Administrator))
 		return;
 
-	if(recvData.Args.length() <= firstSpace+1)
+	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
-		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
 		return;
 	}
 
 	vector<string> res(1);
-	split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(recvData.firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -105,28 +103,28 @@ void IRCSession::Szoba(IRCMessage& recvData)
 
 	if(res[1] == Help)
 	{
-		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Segitség a konzol szoba váltásához!");
-		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Funkció használata: %sszoba <ide jön a szoba>", m_ParancsElojel.c_str());
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Segitség a konzol szoba váltásához!");
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Funkció használata: %sszoba <ide jön a szoba>", sIRCSession.GetParancsElojel());
 	}
 	else
-		m_SQLConn->Query("UPDATE schumix SET irc_cim = '%s' WHERE entry = '1'", res[1].c_str());
+		sVezerlo.GetSQLConn()->Query("UPDATE schumix SET irc_cim = '%s' WHERE entry = '1'", res[1].c_str());
 
 	res.clear();
 }
 
-void IRCSession::Reload(IRCMessage& recvData)
+void CommandMgr::HandleReload(CommandMessage& recvData)
 {
-	if(!Admin(recvData.Nick, recvData.Host, Administrator))
+	if(!sCommands.Admin(recvData.Nick, recvData.Host, Administrator))
 		return;
 
-	if(recvData.Args.length() <= firstSpace+1)
+	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
-		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
 		return;
 	}
 
 	vector<string> res(1);
-	split(recvData.Args.substr(firstSpace+1), " ", res);
+	split(recvData.Args.substr(recvData.firstSpace+1), " ", res);
 
 	if(res.size() < 2)
 	{
@@ -138,24 +136,24 @@ void IRCSession::Reload(IRCMessage& recvData)
 
 	if(info == Help)
 	{
-		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
-		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Reload: %sreload <nev>", m_ParancsElojel.c_str());
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Reload: %sreload <nev>", sIRCSession.GetParancsElojel());
 	}
 	else if(info == INFO)
-		SendChatMessage(PRIVMSG, recvData.GetChannel(), "Most újraindithatóak: IRCSession, SvnInfo, GitInfo, HgInfo, Console");
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Most újraindithatóak: IRCSession, SvnInfo, GitInfo, HgInfo, Console");
 	else
-		SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s", sVezerlo.Reload(info).c_str());
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s", sVezerlo.Reload(info).c_str());
 
 	res.clear();
 }
 
-void IRCSession::Kikapcsolas(IRCMessage& recvData)
+void CommandMgr::HandleKikapcsolas(CommandMessage& recvData)
 {
-	if(!Admin(recvData.Nick, recvData.Host, Administrator))
+	if(!sCommands.Admin(recvData.Nick, recvData.Host, Administrator))
 		return;
 
-	SendChatMessage(PRIVMSG, recvData.GetChannel(), "Viszlát :(");
-	WriteLine("QUIT :%s leallitott parancsal.", recvData.GetNick());
+	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Viszlát :(");
+	sIRCSession.WriteLine("QUIT :%s leallitott parancsal.", recvData.GetNick());
 	Sleep(1000);
 	sVezerlo.Leallas();
 }

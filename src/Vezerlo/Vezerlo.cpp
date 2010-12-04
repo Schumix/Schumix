@@ -17,7 +17,7 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "StdAfx.h"
+#include "../StdAfx.h"
 
 initialiseSingleton(Vezerlo);
 
@@ -78,7 +78,7 @@ Vezerlo::Vezerlo()
 	m_HgInfo = new HgInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
 
 	Log.Debug("Vezerlo", "Console indul...");
-	m_Console = new Console(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+	m_Console = new Console();
 
 
 	Log.Debug("Vezerlo", "IRCSession indul...");
@@ -663,7 +663,7 @@ string Vezerlo::Reload(string nev)
 		m_Console->Leallas();
 		delete m_Console;
 		Log.Debug("Vezerlo", "Console reload...");
-		m_Console = new Console(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+		m_Console = new Console();
 		return "Console ujraindult.";
 	}
 	else if(nev == "ircsession")
@@ -702,10 +702,10 @@ string Vezerlo::Reload(string nev)
 		m_HgInfo = new HgInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
 
 		Log.Debug("Vezerlo", "Console reload...");
-		m_Console = new Console(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+		m_Console = new Console();
 
-		Log.Debug("Vezerlo", "IRCSession reload...");
-		m_IRCSession = new IRCSession(m_server, m_port, _mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+		/*Log.Debug("Vezerlo", "IRCSession reload...");
+		m_IRCSession = new IRCSession(m_server, m_port, _mysql[0], _mysql[1], _mysql[2], _mysql[3]);*/
 		return "Minden ujraindult.";
 	}
 

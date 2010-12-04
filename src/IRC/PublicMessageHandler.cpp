@@ -17,7 +17,7 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "StdAfx.h"
+#include "../StdAfx.h"
 
 void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 {
@@ -60,13 +60,9 @@ void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 		if(recvData.Args.substr(0, 1) != m_ParancsElojel)
 			return;
 
-		firstSpace = recvData.Args.find(' ');
-		if(firstSpace == string::npos)
-			firstSpace = recvData.Args.length();
+		sCommandMgr.BejovoInfo(recvData);
 
-		string cmd = recvData.Args.substr(1, firstSpace - 1);
-		transform(cmd.begin(), cmd.end(), cmd.begin(), ::tolower);
-
+/*
 		// parancsok
 		if(cmd == "xbot") // id 1
 		{
@@ -74,13 +70,16 @@ void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: %sinfo | %shelp | %sxrev | %sido | %sdatum | %sirc | %sroll | %sszam | %skeres | %sfordit | %ssha1 | %smd5 | %suzenet | %swhois | %sjegyzet", m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str(), m_ParancsElojel.c_str());
 			SendChatMessage(PRIVMSG, recvData.GetChannel(), "Programmed by: 3Csaba");
 			return;
-		}
+		}*/
+
+		/*Commands cb = itr->second;
+		(this->*cb)(mess);*/
 
 		// Admin parancsok
-		if(cmd == "admin") // id 2
-			Admin(recvData);
+		//if(cmd == "admin") // id 2
+			//Admin(recvData);
 
-		// Hozzáférés az admin parancsokhoz
+/*		// Hozzáférés az admin parancsokhoz
 		if(cmd == "hozzaferes") // id 3
 			Hozzaferes(recvData);
 
@@ -115,12 +114,6 @@ void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 		if(cmd == "info") // id 8
 		{
 			SendChatMessage(PRIVMSG, recvData.GetChannel(), "Programozóm: Csaba, Twl és Scymex. Üzemeltető: %s.", m_Uzemelteto.c_str());
-			return;
-		}
-
-		if(cmd == "online") // id 9
-		{
-			SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nem üzemel a funkció!");
 			return;
 		}
 
@@ -241,7 +234,7 @@ void IRCSession::HandlePrivmsg(IRCMessage& recvData)
 
 		// Bot leállitása
 		if(cmd == "kikapcs") // id 38
-			Kikapcsolas(recvData);
+			Kikapcsolas(recvData);*/
 	}
 #ifdef _DEBUG_MOD
 	else

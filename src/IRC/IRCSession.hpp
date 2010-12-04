@@ -69,8 +69,6 @@ enum MessageType
 };
 
 typedef void(IRCSession::*IRCCallback)(IRCMessage& recvData);
-typedef map<string, IRCCallback> MessageHandlerMap;
-extern MessageHandlerMap IRCMessageHandlerMap;
 
 class IRCSession : public Singleton<IRCSession>
 {
@@ -97,6 +95,9 @@ public:
 	inline SocketPointer GetSocket() { return m_Socket; }
 	inline string GetNickTarolo() { return m_NickTarolo; }
 	inline string GetUserName() { return m_UserName; }
+	inline const char* GetParancsElojel() { return m_ParancsElojel.c_str(); }
+	inline map<string, string> GetChannelLista() { return m_ChannelLista; }
+	inline const char* GetUzemelteto() { return m_Uzemelteto.c_str(); }
 
 	// Véletlen szerû jelszó generálható vele
 	string RandomString(int length, bool letters, bool numbers, bool symbols);
@@ -107,10 +108,32 @@ public:
 	// Class leállása
 	void Leallas();
 
+	// Számologép
+	void setConsts();
+	void makepolishform(string szam);
+	void calculate(string privmsg);
+
+	// Channel funkciók beazonostásához való fv-k
+	string FSelect(string nev);
+	string FSelectChannel(string nev, string channel);
+
+	void ChannelFunkcioReload();
+	void ChannelListaReload();
+	string ChannelFunkciok(string nev, string status, string channel);
+	string ChannelFunkciokInfo(string channel);
+
+	// Channel meghatárózás hova kell irni az adatott
+	string m_ChannelPrivmsg;
+	// Whois channel meghatárózás hova kell irni az adatott
+	string m_WhoisPrivmsg;
+
+	// Éppen használatban lévõ nick
+	string m_NickTarolo;
+
+	void SvnSandshroud(int rev, string channel);
+
 protected:
 	static Thread_void RunUpdateProc(void* smg);
-	void Handler();
-	void RegisterHandler(string code, IRCCallback method);
 
 	/*
 	 * Rehashes the schumix.conf configuration file.
@@ -127,6 +150,9 @@ protected:
 	 */
 
 	void Update();
+
+	void InitHandler();
+	void RegisterHandler(string code, IRCCallback method);
 
 	/* Message Handlers
 	 * --------------------------------
@@ -152,66 +178,12 @@ protected:
 	void HandleChannelBan(IRCMessage& recvData);
 	void HandleWhois(IRCMessage& recvData);
 
-	// Funkciok
 	void Logfajl(IRCMessage& recvData);
-	void Admin(IRCMessage& recvData);
-	void Hozzaferes(IRCMessage& recvData);
-	void Ujjelszo(IRCMessage& recvData);
-	void Datum(IRCMessage& recvData);
-	void Ido(IRCMessage& recvData);
-	void Funkciok(IRCMessage& recvData);
-	void Keres(IRCMessage& recvData);
-	void Forditas(IRCMessage& recvData);
-	void Teszt(IRCMessage& recvData);
-	void Sha1(IRCMessage& recvData);
-	void Md5(IRCMessage& recvData);
-	void Channel(IRCMessage& recvData);
-	void Sznap(IRCMessage& recvData);
-	void Xrev(IRCMessage& recvData);
-	void Szoba(IRCMessage& recvData);
-	void Irc(IRCMessage& recvData);
-	void Szam(IRCMessage& recvData);
-	void Nick(IRCMessage& recvData);
-	void Join(IRCMessage& recvData);
-	void Left(IRCMessage& recvData);
-	void Kick(IRCMessage& recvData);
-	void Mode(IRCMessage& recvData);
-	void Uzenet(IRCMessage& recvData);
-	void HLFunkcio(IRCMessage& recvData);
-	void Svn(IRCMessage& recvData);
-	void Git(IRCMessage& recvData);
-	void Hg(IRCMessage& recvData);
-	void Jegyzet(IRCMessage& recvData);
-	void Reload(IRCMessage& recvData);
-	void Whois(IRCMessage& recvData);
-	void AutoFunkcio(IRCMessage& recvData);
-	void Kikapcsolas(IRCMessage& recvData);
 
 	// Schumix
 	void Schumix(IRCMessage& recvData);
 	void HLUzenet(IRCMessage& recvData);
 	bool AutoKick(IRCMessage& recvData, string allapot);
-
-	// Számologép
-	void setConsts();
-	void makepolishform(string szam);
-	void calculate(string privmsg);
-
-	// Channel funkciók beazonostásához való fv-k
-	string FSelect(string nev);
-	string FSelectChannel(string nev, string channel);
-
-	// Adminok megállapitása
-	bool Admin(string nick);
-	bool Admin(string nick, AdminFlag Flag);
-	bool Admin(string nick, string Vhost, AdminFlag Flag);
-
-	void SvnSandshroud(int rev, string channel);
-
-	void ChannelFunkcioReload();
-	void ChannelListaReload();
-	string ChannelFunkciok(string nev, string status, string channel);
-	string ChannelFunkciokInfo(string channel);
 
 	// Újra kapcsolodási szál
 	void ReConnect();
@@ -231,13 +203,8 @@ protected:
 
 	// Felhasználó név
 	string m_UserName;
-	// Éppen használatban lévõ nick
-	string m_NickTarolo;
 	// Configból olvasható három nick név
 	string m_NickName[3];
-
-	// Channel meghatárózás hova kell irni az adatott
-	string m_ChannelPrivmsg;
 
 	// Nickserv Module
 	bool m_UseNickServ;
@@ -261,11 +228,6 @@ protected:
 	// Whether or not the mLastMotd variable is populated fully.
 	//bool mHasFullMotd;
 
-	// Szoköz a parancsoknál
-	uint8 firstSpace;
-	// Whois channel meghatárózás hova kell irni az adatott
-	string m_WhoisPrivmsg;
-
 	// Parancs elõjelét tárólja
 	string m_ParancsElojel;
 	// Az üzemeltetõ nevét tárólja
@@ -286,6 +248,11 @@ private:
 	SocketPointer m_Socket;
 	// Mysql kapcsolat.
 	MySQLConnectionPointer m_SQLConn;
+
+	CommandsPointer m_Commands;
+
+	map<string, IRCCallback> MessageHandlerMap;
+
 	static int writer(char* data, size_t size, size_t nmemb, string *buffer);
 };
 

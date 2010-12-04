@@ -17,7 +17,7 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "StdAfx.h"
+#include "../StdAfx.h"
 
 DefaultConfig::DefaultConfig(string conf)
 {

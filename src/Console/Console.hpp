@@ -26,7 +26,7 @@ class IRCSession;
 class Console : public Singleton<Console>
 {
 public:
-	Console(string host, string user, string password, string database);
+	Console();
 	~Console();
 
 	inline bool GetConsoleLog() { return ConsoleLog; }
@@ -45,10 +45,6 @@ protected:
 
 	// Konzol irás állapota
 	bool ConsoleLog;
-
-private:
-	// Mysql kapcsolat.
-	MySQLConnectionPointer m_SQLConn;
 };
 
 #define sConsole Console::getSingleton()

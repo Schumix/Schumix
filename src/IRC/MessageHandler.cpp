@@ -17,7 +17,7 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "StdAfx.h"
+#include "../StdAfx.h"
 
 void IRCSession::HandleSuccessfulAuth(IRCMessage& recvData)
 {
@@ -376,7 +376,7 @@ void IRCSession::HandleJoin(IRCMessage& recvData)
 			SendChatMessage(PRIVMSG, channel.c_str(), "Jó estét %s", recvData.GetNick());
 		else
 		{
-			if(Admin(recvData.Nick))
+			if(m_Commands->Admin(recvData.Nick))
 				SendChatMessage(PRIVMSG, channel.c_str(), "Üdv fõnök");
 			else
 				SendChatMessage(PRIVMSG, channel.c_str(), "%s %s", Koszones.c_str(), recvData.GetNick());
