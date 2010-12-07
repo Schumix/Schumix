@@ -22,12 +22,26 @@
 initialiseSingleton(SvnInfo);
 boost::mutex s_mutex;
 
-SvnInfo::SvnInfo()
+SvnInfo::SvnInfo(string host, string user, string password, string database)
 {
+	_mysql[0] = host;
+	_mysql[1] = user;
+	_mysql[2] = password;
+	_mysql[3] = database;
+
+	m_SQLConn[0] = MySQLConnectionPointer(new MySQLConnection(_mysql[0], _mysql[1], _mysql[2]));
+	m_SQLConn[0]->UseDatabase(_mysql[3]);
+	m_SQLConn[0]->kiiras = false;
+
+	if(!m_SQLConn[0]->GetSqlError())
+		Log.Notice("SvnInfo", "Mysql adatbazishoz sikeres a kapcsolodas.");
+	else
+		Log.Error("SvnInfo", "Mysql adatbazishoz sikertelen a kapcsolodas.");
+
 	uint32 Threadszam = NULL;
 	m_Lido = cast_uint16(Config.MainConfig.GetIntDefault("LekerdezesiIdo", "Svninfo", 15));
 
-	QueryResultPointer adatbazis = sVezerlo.GetSQLConn()->Query("SELECT * FROM svninfo");
+	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT * FROM svninfo");
 	if(adatbazis)
 	{
 		do 
@@ -45,7 +59,7 @@ SvnInfo::SvnInfo()
 	string status;
 	Log.Debug("SvnInfo", "%u Thread indult el.", Threadszam);
 
-	QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT funkcio_status FROM schumix WHERE funkcio_nev = 'svn'");
+	QueryResultPointer db = m_SQLConn[0]->Query("SELECT funkcio_status FROM schumix WHERE funkcio_nev = 'svn'");
 	if(db)
 		status = db->Fetch()[0].GetString();
 
@@ -68,7 +82,7 @@ void SvnInfo::Feltoltes(uint32 id)
 {
 	int szam = 1;
 
-	QueryResultPointer adatbazis = sVezerlo.GetSQLConn()->Query("SELECT * FROM svninfo WHERE id = '%u'", id);
+	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT * FROM svninfo WHERE id = '%u'", id);
 	if(adatbazis)
 	{
 		nev[id] = adatbazis->Fetch()[szam++].GetString();
@@ -128,7 +142,7 @@ void SvnInfo::ReloadAllThread()
 {
 	uint32 Threadszam = NULL;
 
-	QueryResultPointer adatbazis = sVezerlo.GetSQLConn()->Query("SELECT id FROM svninfo");
+	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT id FROM svninfo");
 	if(adatbazis)
 	{
 		do 
@@ -143,7 +157,7 @@ void SvnInfo::ReloadAllThread()
 	Threadszam = NULL;
 	Sleep(2000);
 
-	QueryResultPointer adatbazis1 = sVezerlo.GetSQLConn()->Query("SELECT id FROM svninfo");
+	QueryResultPointer adatbazis1 = m_SQLConn[0]->Query("SELECT id FROM svninfo");
 	if(adatbazis1)
 	{
 		do 
@@ -181,6 +195,9 @@ void SvnInfo::ReloadThread(uint32 id)
 
 void SvnInfo::Thread(uint32 id)
 {
+	m_SQLConn[id] = MySQLConnectionPointer(new MySQLConnection(_mysql[0], _mysql[1], _mysql[2]));
+	m_SQLConn[id]->UseDatabase(_mysql[3]);
+
 	string status;
 	bool kilepes = false;
 	Lekerdezes(id);
@@ -190,7 +207,7 @@ void SvnInfo::Thread(uint32 id)
 		if(!Running(id))
 			break;
 
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT funkcio_status FROM schumix WHERE funkcio_nev = 'svn'");
+		QueryResultPointer db = m_SQLConn[id]->Query("SELECT funkcio_status FROM schumix WHERE funkcio_nev = 'svn'");
 		if(db)
 			status = db->Fetch()[0].GetString();
 
@@ -433,7 +450,7 @@ void SvnInfo::Kiiras(uint32 id)
 	if(author == "nincs adat")
 		return;
 
-	QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT channel FROM svninfo WHERE nev = '%s'", nev[id].c_str());
+	QueryResultPointer db = m_SQLConn[id]->Query("SELECT channel FROM svninfo WHERE nev = '%s'", nev[id].c_str());
 	if(db)
 	{
 		vector<string> reschannel(1);
@@ -491,7 +508,7 @@ void SvnInfo::Kiiras(uint32 id)
 
 void SvnInfo::Leallas()
 {
-	QueryResultPointer adatbazis = sVezerlo.GetSQLConn()->Query("SELECT id FROM svninfo");
+	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT id FROM svninfo");
 	if(adatbazis)
 	{
 		do 

@@ -26,7 +26,7 @@ class IRCSession;
 class SvnInfo : public Singleton<SvnInfo>
 {
 public:
-	SvnInfo();
+	SvnInfo(string host, string user, string password, string database);
 	~SvnInfo();
 
 	void NewThread(uint32 id);
@@ -73,6 +73,7 @@ protected:
 	string account[MaxSvnID];
 	string password[MaxSvnID];
 
+	string _mysql[4];
 	uint32 a_rev[MaxSvnID];
 	volatile bool m_running[MaxSvnID];
 	inline void lekerdezesi_ido() { Sleep(1000); }
@@ -82,6 +83,8 @@ protected:
 private:
 	// Url kezeles
 	CURL* m_Curl[MaxSvnID];
+	// Mysql kapcsolat.
+	MySQLConnectionPointer m_SQLConn[MaxSvnID];
 	static int writer(char* data, size_t size, size_t nmemb, string *buffer);
 };
 
