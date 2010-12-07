@@ -62,9 +62,9 @@ void IRCSession::HandleSuccessfulAuth(IRCMessage& recvData)
 				join += " " + itr->second;
 
 			WriteLine("JOIN %s", join.c_str());
-			m_SQLConn->Query("UPDATE channel SET aktivitas = '', error = '' WHERE szoba = '%s'", szoba.c_str());
+			sVezerlo.GetSQLConn()->Query("UPDATE channel SET aktivitas = '', error = '' WHERE szoba = '%s'", szoba.c_str());
 
-			QueryResultPointer db = m_SQLConn->Query("SELECT funkciok FROM channel WHERE szoba = '%s'", szoba.c_str());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT funkciok FROM channel WHERE szoba = '%s'", szoba.c_str());
 			if(db)
 			{
 				string funkcio = db->Fetch()[0].GetString();
@@ -81,13 +81,13 @@ void IRCSession::HandleSuccessfulAuth(IRCMessage& recvData)
 				res.clear();
 			}
 
-			QueryResultPointer db1 = m_SQLConn->Query("SELECT aktivitas FROM channel WHERE szoba = '%s'", szoba.c_str());
+			QueryResultPointer db1 = sVezerlo.GetSQLConn()->Query("SELECT aktivitas FROM channel WHERE szoba = '%s'", szoba.c_str());
 			if(db1)
 			{
 				string aktivitas = db1->Fetch()[0].GetString();
 
 				if(aktivitas != "nem aktiv")
-					m_SQLConn->Query("UPDATE channel SET aktivitas = 'aktiv' WHERE szoba = '%s'", szoba.c_str());
+					sVezerlo.GetSQLConn()->Query("UPDATE channel SET aktivitas = 'aktiv' WHERE szoba = '%s'", szoba.c_str());
 				else
 					error = true;
 			}
@@ -149,7 +149,7 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 		if(res[3] == "3")
 		{
 			transform(res[2].begin(), res[2].end(), res[2].begin(), ::tolower);
-			QueryResultPointer db = m_SQLConn->Query("SELECT rang FROM modelista WHERE nick = '%s' AND channel = '%s'", res[2].c_str(), ModeChannel.c_str());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT rang FROM modelista WHERE nick = '%s' AND channel = '%s'", res[2].c_str(), ModeChannel.c_str());
 			if(db)
 			{
 				string rang = db->Fetch()[0].GetString();
@@ -184,9 +184,9 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 					join += " " + itr->second;
 
 				WriteLine("JOIN %s", join.c_str());
-				m_SQLConn->Query("UPDATE channel SET aktivitas = '', error = '' WHERE szoba = '%s'", szoba.c_str());
+				sVezerlo.GetSQLConn()->Query("UPDATE channel SET aktivitas = '', error = '' WHERE szoba = '%s'", szoba.c_str());
 
-				QueryResultPointer db = m_SQLConn->Query("SELECT funkciok FROM channel WHERE szoba = '%s'", szoba.c_str());
+				QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT funkciok FROM channel WHERE szoba = '%s'", szoba.c_str());
 				if(db)
 				{
 					string funkcio = db->Fetch()[0].GetString();
@@ -203,13 +203,13 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 					res.clear();
 				}
 
-				QueryResultPointer db1 = m_SQLConn->Query("SELECT aktivitas FROM channel WHERE szoba = '%s'", szoba.c_str());
+				QueryResultPointer db1 = sVezerlo.GetSQLConn()->Query("SELECT aktivitas FROM channel WHERE szoba = '%s'", szoba.c_str());
 				if(db1)
 				{
 					string aktivitas = db1->Fetch()[0].GetString();
 
 					if(aktivitas != "nem aktiv")
-						m_SQLConn->Query("UPDATE channel SET aktivitas = 'aktiv' WHERE szoba = '%s'", szoba.c_str());
+						sVezerlo.GetSQLConn()->Query("UPDATE channel SET aktivitas = 'aktiv' WHERE szoba = '%s'", szoba.c_str());
 					else
 						error = true;
 				}
@@ -580,7 +580,7 @@ void IRCSession::HandleNoChannelJelszo(IRCMessage& recvData)
 		return;
 	}
 
-	m_SQLConn->Query("UPDATE channel SET aktivitas = 'nem aktiv', error = 'hibas channel jelszo' WHERE szoba = '%s'", res[4].c_str());
+	sVezerlo.GetSQLConn()->Query("UPDATE channel SET aktivitas = 'nem aktiv', error = 'hibas channel jelszo' WHERE szoba = '%s'", res[4].c_str());
 	SendChatMessage(PRIVMSG, m_ChannelPrivmsg.c_str(), "%s: hibás channel jelszó", res[4].c_str());
 	m_ChannelPrivmsg = m_NickTarolo;
 
@@ -597,7 +597,7 @@ void IRCSession::HandleChannelBan(IRCMessage& recvData)
 		return;
 	}
 
-	m_SQLConn->Query("UPDATE channel SET aktivitas = 'nem aktiv', error = 'channel ban' WHERE szoba = '%s'", res[4].c_str());
+	sVezerlo.GetSQLConn()->Query("UPDATE channel SET aktivitas = 'nem aktiv', error = 'channel ban' WHERE szoba = '%s'", res[4].c_str());
 	SendChatMessage(PRIVMSG, m_ChannelPrivmsg.c_str(), "%s: channel ban", res[4].c_str());
 	m_ChannelPrivmsg = m_NickTarolo;
 

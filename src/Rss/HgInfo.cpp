@@ -22,26 +22,12 @@
 initialiseSingleton(HgInfo);
 boost::mutex h_mutex;
 
-HgInfo::HgInfo(string host, string user, string password, string database)
+HgInfo::HgInfo()
 {
-	_mysql[0] = host;
-	_mysql[1] = user;
-	_mysql[2] = password;
-	_mysql[3] = database;
-
-	m_SQLConn[0] = MySQLConnectionPointer(new MySQLConnection(_mysql[0], _mysql[1], _mysql[2]));
-	m_SQLConn[0]->UseDatabase(_mysql[3]);
-	m_SQLConn[0]->kiiras = false;
-
-	if(!m_SQLConn[0]->GetSqlError())
-		Log.Notice("HgInfo", "Mysql adatbazishoz sikeres a kapcsolodas.");
-	else
-		Log.Error("HgInfo", "Mysql adatbazishoz sikertelen a kapcsolodas.");
-
 	uint32 Threadszam = NULL;
 	m_Lido = cast_uint16(Config.MainConfig.GetIntDefault("LekerdezesiIdo", "Hginfo", 15));
 
-	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT id FROM hginfo");
+	QueryResultPointer adatbazis = sVezerlo.GetSQLConn()->Query("SELECT id FROM hginfo");
 	if(adatbazis)
 	{
 		do 
@@ -59,7 +45,7 @@ HgInfo::HgInfo(string host, string user, string password, string database)
 	string status;
 	Log.Debug("HgInfo", "%u Thread indult el.", Threadszam);
 
-	QueryResultPointer db = m_SQLConn[0]->Query("SELECT funkcio_status FROM schumix WHERE funkcio_nev = 'hg'");
+	QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT funkcio_status FROM schumix WHERE funkcio_nev = 'hg'");
 	if(db)
 		status = db->Fetch()[0].GetString();
 
@@ -82,7 +68,7 @@ void HgInfo::Feltoltes(uint32 id)
 {
 	int szam = 1;
 
-	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT * FROM hginfo WHERE id = '%u'", id);
+	QueryResultPointer adatbazis = sVezerlo.GetSQLConn()->Query("SELECT * FROM hginfo WHERE id = '%u'", id);
 	if(adatbazis)
 	{
 		nev[id] = adatbazis->Fetch()[szam++].GetString();
@@ -141,7 +127,7 @@ void HgInfo::ReloadAllThread()
 {
 	uint32 Threadszam = NULL;
 
-	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT id FROM hginfo");
+	QueryResultPointer adatbazis = sVezerlo.GetSQLConn()->Query("SELECT id FROM hginfo");
 	if(adatbazis)
 	{
 		do 
@@ -156,7 +142,7 @@ void HgInfo::ReloadAllThread()
 	Threadszam = NULL;
 	Sleep(2000);
 
-	QueryResultPointer adatbazis1 = m_SQLConn[0]->Query("SELECT id FROM hginfo");
+	QueryResultPointer adatbazis1 = sVezerlo.GetSQLConn()->Query("SELECT id FROM hginfo");
 	if(adatbazis1)
 	{
 		do 
@@ -194,9 +180,6 @@ void HgInfo::ReloadThread(uint32 id)
 
 void HgInfo::Thread(uint32 id)
 {
-	m_SQLConn[id] = MySQLConnectionPointer(new MySQLConnection(_mysql[0], _mysql[1], _mysql[2]));
-	m_SQLConn[id]->UseDatabase(_mysql[3]);
-
 	string status;
 	bool kilepes = false;
 	Lekerdezes(id);
@@ -206,7 +189,7 @@ void HgInfo::Thread(uint32 id)
 		if(!Running(id))
 			break;
 
-		QueryResultPointer db = m_SQLConn[id]->Query("SELECT funkcio_status FROM schumix WHERE funkcio_nev = 'hg'");
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT funkcio_status FROM schumix WHERE funkcio_nev = 'hg'");
 		if(db)
 			status = db->Fetch()[0].GetString();
 
@@ -438,7 +421,7 @@ void HgInfo::Kiiras(uint32 id)
 	if(author == "nincs adat")
 		return;
 
-	QueryResultPointer db = m_SQLConn[id]->Query("SELECT channel FROM hginfo WHERE nev = '%s'", nev[id].c_str());
+	QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT channel FROM hginfo WHERE nev = '%s'", nev[id].c_str());
 	if(db)
 	{
 		vector<string> reschannel(1);
@@ -479,7 +462,7 @@ void HgInfo::Kiiras(uint32 id)
 
 void HgInfo::Leallas()
 {
-	QueryResultPointer adatbazis = m_SQLConn[0]->Query("SELECT id FROM hginfo");
+	QueryResultPointer adatbazis = sVezerlo.GetSQLConn()->Query("SELECT id FROM hginfo");
 	if(adatbazis)
 	{
 		do 

@@ -69,20 +69,19 @@ Vezerlo::Vezerlo()
 	_HookSignals();
 
 	Log.Debug("Vezerlo", "SvnInfo indul...");
-	m_SvnInfo = new SvnInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+	m_SvnInfo = new SvnInfo();
 
 	Log.Debug("Vezerlo", "GitInfo indul...");
-	m_GitInfo = new GitInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+	m_GitInfo = new GitInfo();
 
 	Log.Debug("Vezerlo", "HgInfo indul...");
-	m_HgInfo = new HgInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+	m_HgInfo = new HgInfo();
 
 	Log.Debug("Vezerlo", "Console indul...");
 	m_Console = new Console();
 
-
 	Log.Debug("Vezerlo", "IRCSession indul...");
-	m_IRCSession = new IRCSession(m_server, m_port, _mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+	m_IRCSession = new IRCSession(m_server, m_port);
 
 	_UnhookSignals();
 
@@ -639,7 +638,7 @@ string Vezerlo::Reload(string nev)
 		m_SvnInfo->Leallas();
 		delete m_SvnInfo;
 		Log.Debug("Vezerlo", "SvnInfo reload...");
-		m_SvnInfo = new SvnInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+		m_SvnInfo = new SvnInfo();
 		return "SvnInfo ujraindult.";
 	}
 	else if(nev == "gitinfo")
@@ -647,7 +646,7 @@ string Vezerlo::Reload(string nev)
 		m_GitInfo->Leallas();
 		delete m_GitInfo;
 		Log.Debug("Vezerlo", "GitInfo reload...");
-		m_GitInfo = new GitInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+		m_GitInfo = new GitInfo();
 		return "GitInfo ujraindult.";
 	}
 	else if(nev == "hginfo")
@@ -655,7 +654,7 @@ string Vezerlo::Reload(string nev)
 		m_HgInfo->Leallas();
 		delete m_HgInfo;
 		Log.Debug("Vezerlo", "HgInfo reload...");
-		m_HgInfo = new HgInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+		m_HgInfo = new HgInfo();
 		return "HgInfo ujraindult.";
 	}
 	else if(nev == "console")
@@ -673,7 +672,7 @@ string Vezerlo::Reload(string nev)
 			delete IRCSession::getSingletonPtr();
 
 		Log.Debug("Vezerlo", "IRCSession reload...");
-		m_IRCSession = new IRCSession(m_server, m_port, _mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+		m_IRCSession = new IRCSession(m_server, m_port);
 		return "IRCSession ujraindult.";*/
 		return "javitas alatt";
 	}
@@ -693,19 +692,19 @@ string Vezerlo::Reload(string nev)
 			//delete IRCSession::getSingletonPtr(); javítás alatt
 
 		Log.Debug("Vezerlo", "SvnInfo reload...");
-		m_SvnInfo = new SvnInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+		m_SvnInfo = new SvnInfo();
 
 		Log.Debug("Vezerlo", "GitInfo reload...");
-		m_GitInfo = new GitInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+		m_GitInfo = new GitInfo();
 
 		Log.Debug("Vezerlo", "HgInfo reload...");
-		m_HgInfo = new HgInfo(_mysql[0], _mysql[1], _mysql[2], _mysql[3]);
+		m_HgInfo = new HgInfo();
 
 		Log.Debug("Vezerlo", "Console reload...");
 		m_Console = new Console();
 
 		/*Log.Debug("Vezerlo", "IRCSession reload...");
-		m_IRCSession = new IRCSession(m_server, m_port, _mysql[0], _mysql[1], _mysql[2], _mysql[3]);*/
+		m_IRCSession = new IRCSession(m_server, m_port);*/
 		return "Minden ujraindult.";
 	}
 

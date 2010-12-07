@@ -73,7 +73,7 @@ typedef void(IRCSession::*IRCCallback)(IRCMessage& recvData);
 class IRCSession : public Singleton<IRCSession>
 {
 public:
-	IRCSession(string host, uint32 port, string sqlhost, string user, string pass, string database);
+	IRCSession(string host, uint32 port);
 	~IRCSession();
 
 	/*
@@ -138,7 +138,7 @@ protected:
 	/*
 	 * Rehashes the schumix.conf configuration file.
 	 */
-	void RehashConfig(string host, string user, string pass, string database);
+	void RehashConfig();
 
 	/*
 	 * Bejövö információ az irc szerver felõl. Szétosztja az opcodes-nek az adatokat stb.
@@ -198,9 +198,6 @@ protected:
 	// Configból származó port
 	uint32 m_Port;
 
-	// Mysql hozzáférés
-	string _mysql[4];
-
 	// Felhasználó név
 	string m_UserName;
 	// Configból olvasható három nick név
@@ -244,10 +241,9 @@ protected:
 private:
 	// Url kezeles
 	CURL* m_Curl;
+	Mutex m_mutex;
 	// Socket kapcsolat.
 	SocketPointer m_Socket;
-	// Mysql kapcsolat.
-	MySQLConnectionPointer m_SQLConn;
 
 	CommandsPointer m_Commands;
 

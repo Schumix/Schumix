@@ -26,7 +26,7 @@ class IRCSession;
 class HgInfo : public Singleton<HgInfo>
 {
 public:
-	HgInfo(string host, string user, string password, string database);
+	HgInfo();
 	~HgInfo();
 
 	void NewThread(uint32 id);
@@ -74,7 +74,6 @@ protected:
 	string account[MaxHgID];
 	string password[MaxHgID];
 
-	string _mysql[4];
 	string a_rev[MaxHgID];
 	volatile bool m_running[MaxHgID];
 	inline void lekerdezesi_ido() { Sleep(1000); }
@@ -84,8 +83,6 @@ protected:
 private:
 	// Url kezeles
 	CURL* m_Curl[MaxHgID];
-	// Mysql kapcsolat.
-	MySQLConnectionPointer m_SQLConn[MaxHgID];
 	static int writer(char* data, size_t size, size_t nmemb, string *buffer);
 };
 

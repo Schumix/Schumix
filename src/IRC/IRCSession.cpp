@@ -22,7 +22,7 @@
 
 initialiseSingleton(IRCSession);
 
-IRCSession::IRCSession(string host, uint32 port, string sqlhost, string user, string pass, string database)
+IRCSession::IRCSession(string host, uint32 port)
 {
 	m_Host = host;
 	m_Port = port;
@@ -37,7 +37,7 @@ IRCSession::IRCSession(string host, uint32 port, string sqlhost, string user, st
 	else
 		Log.Success("IRCSession", "Kapcsolodas ide: %s sikeres.", host.c_str());
 
-	RehashConfig(sqlhost, user, pass, database);
+	RehashConfig();
 	printf("\n");
 
 	m_NickTarolo = m_NickName[0];
@@ -70,22 +70,8 @@ IRCSession::IRCSession(string host, uint32 port, string sqlhost, string user, st
 	Update();
 }
 
-void IRCSession::RehashConfig(string host, string user, string pass, string database)
+void IRCSession::RehashConfig()
 {
-	// Mysql Config
-	_mysql[0] = host;
-	_mysql[1] = user;
-	_mysql[2] = pass;
-	_mysql[3] = database;
-
-	m_SQLConn = MySQLConnectionPointer(new MySQLConnection(_mysql[0], _mysql[1], _mysql[2]));
-	m_SQLConn->UseDatabase(_mysql[3]);
-
-	if(!m_SQLConn->GetSqlError())
-		Log.Notice("IRCSession", "Mysql adatbazishoz sikeres a kapcsolodas.");
-	else
-		Log.Error("IRCSession", "Mysql adatbazishoz sikertelen a kapcsolodas.");
-
 	m_LogHelye = Config.MainConfig.GetStringDefault("Log", "Loghelye", "szoba");
 
 	// Irc Config
@@ -101,7 +87,7 @@ void IRCSession::RehashConfig(string host, string user, string pass, string data
 	m_ParancsElojel = Config.MainConfig.GetStringDefault("Parancs", "Elojel", "&");
 	m_Uzemelteto = Config.MainConfig.GetStringDefault("Parancs", "Uzemelteto", "Schumix");
 
-	QueryResultPointer db = m_SQLConn->Query("SELECT szoba, jelszo FROM channel");
+	QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT szoba, jelszo FROM channel");
 	if(db)
 	{
 		do 
@@ -300,6 +286,7 @@ void IRCSession::ReConnect()
 
 void IRCSession::SendChatMessage(MessageType type, const char * target, const char * format, ...)
 {
+	m_mutex.Acquire();
 	char* obuf = new char[65536];
 	va_list ap;
 
@@ -321,11 +308,14 @@ void IRCSession::SendChatMessage(MessageType type, const char * target, const ch
 
 	oss = oss + " " + target + " :" + obuf + NEWLINE;
 	delete[] obuf;
+	m_mutex.Release();
+
 	WriteLine(oss.c_str());
 }
 
 void IRCSession::WriteLine(const char * format, ...)
 {
+	m_mutex.Acquire();
 	char* obuf = new char[65536];
 	va_list ap;
 
@@ -343,10 +333,12 @@ void IRCSession::WriteLine(const char * format, ...)
 	delete[] obuf;
 
 	m_Socket->SendLine(send);
+	m_mutex.Release();
 }
 
 void IRCSession::WriteLineForce(const char * format, ...)
 {
+	m_mutex.Acquire();
 	char* obuf = new char[65536];
 	va_list ap;
 
@@ -364,6 +356,7 @@ void IRCSession::WriteLineForce(const char * format, ...)
 	delete[] obuf;
 
 	m_Socket->SendForcedLine(send);
+	m_mutex.Release();
 }
 
 int IRCSession::writer(char* data, size_t size, size_t nmemb, string *buffer)

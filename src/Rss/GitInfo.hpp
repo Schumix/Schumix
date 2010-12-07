@@ -26,7 +26,7 @@ class IRCSession;
 class GitInfo : public Singleton<GitInfo>
 {
 public:
-	GitInfo(string host, string user, string password, string database);
+	GitInfo();
 	~GitInfo();
 
 	void NewThread(uint32 id);
@@ -75,7 +75,6 @@ protected:
 	string account[MaxGitID];
 	string password[MaxGitID];
 
-	string _mysql[4];
 	string a_rev[MaxGitID];
 	volatile bool m_running[MaxGitID];
 	inline void lekerdezesi_ido() { Sleep(1000); }
@@ -85,8 +84,6 @@ protected:
 private:
 	// Url kezeles
 	CURL* m_Curl[MaxGitID];
-	// Mysql kapcsolat.
-	MySQLConnectionPointer m_SQLConn[MaxGitID];
 	static int writer(char* data, size_t size, size_t nmemb, string *buffer);
 };
 

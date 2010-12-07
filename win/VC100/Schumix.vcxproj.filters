@@ -62,43 +62,13 @@
     <Filter Include="Vezerlo">
       <UniqueIdentifier>{7145549b-d889-4ed6-a65c-9ec18b44e994}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Commands">
+      <UniqueIdentifier>{24fe8ed4-bfda-4e6b-8987-3177e1dd20e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\StdAfx.h">
       <Filter>Default</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Calc.h">
-      <Filter>Calculator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\CalcLexer.hpp">
-      <Filter>Calculator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TokenQueue.hpp">
-      <Filter>Calculator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\VarVector.hpp">
-      <Filter>Calculator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\DefaultConfig.hpp">
-      <Filter>Config</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\shared\SchumixConfig.hpp">
-      <Filter>Config</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\IRCSession.hpp">
-      <Filter>IRC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Replies.hpp">
-      <Filter>IRC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\GitInfo.hpp">
-      <Filter>Repos\Git</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\HgInfo.hpp">
-      <Filter>Repos\Hg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\SvnInfo.hpp">
-      <Filter>Repos\SVN</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shared\Platforms.h">
       <Filter>Common</Filter>
@@ -130,17 +100,11 @@
     <ClInclude Include="..\..\src\shared\Auth\Sha1.hpp">
       <Filter>Crypt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Console.hpp">
-      <Filter>Console</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\shared\targetver.h">
       <Filter>Default</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shared\dirent.h">
       <Filter>Directory</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\shared\Log.h">
-      <Filter>Logging</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shared\utf8\checked.h">
       <Filter>Misc\utf8</Filter>
@@ -187,8 +151,52 @@
     <ClInclude Include="..\..\src\shared\Threading.h">
       <Filter>Threading</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Vezerlo.hpp">
+    <ClInclude Include="..\..\src\shared\SchumixConfig.h" />
+    <ClInclude Include="..\..\src\Schumix.hpp" />
+    <ClInclude Include="..\..\src\IRC\IRCSession.hpp">
+      <Filter>IRC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\IRC\Replies.hpp">
+      <Filter>IRC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Console\Console.hpp">
+      <Filter>Console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Vezerlo\Vezerlo.hpp">
       <Filter>Vezerlo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Rss\GitInfo.hpp">
+      <Filter>Repos\Git</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Rss\HgInfo.hpp">
+      <Filter>Repos\Hg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Rss\SvnInfo.hpp">
+      <Filter>Repos\SVN</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\DefaultConfig\DefaultConfig.hpp">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Calculator\Calc.h">
+      <Filter>Calculator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Calculator\CalcLexer.hpp">
+      <Filter>Calculator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Calculator\TokenQueue.hpp">
+      <Filter>Calculator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Calculator\VarVector.hpp">
+      <Filter>Calculator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Commands\CommandMgr.hpp">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Commands\Commands.hpp">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shared\Log.hpp">
+      <Filter>Logging</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -196,55 +204,6 @@
       <Filter>Default</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Schumix.cpp" />
-    <ClCompile Include="..\..\src\Schumix.hpp" />
-    <ClCompile Include="..\..\src\CalcLexer.cpp">
-      <Filter>Calculator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Calkulator.cpp">
-      <Filter>Calculator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TokenQueue.cpp">
-      <Filter>Calculator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\VarVector.cpp">
-      <Filter>Calculator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\DefaultConfig.cpp">
-      <Filter>Config</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\IRCSession.cpp">
-      <Filter>IRC</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\GitInfo.cpp">
-      <Filter>Repos\Git</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\HgInfo.cpp">
-      <Filter>Repos\Hg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\SvnInfo.cpp">
-      <Filter>Repos\SVN</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Console.cpp">
-      <Filter>Console</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ConsoleCommands.cpp">
-      <Filter>Console</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\MessageHandler.cpp">
-      <Filter>IRC</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\PublicMessageHandler.cpp">
-      <Filter>IRC</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Funkciok.cpp">
-      <Filter>IRC</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\AdminFunkciok.cpp">
-      <Filter>IRC</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\OperatorFunkciok.cpp">
-      <Filter>IRC</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shared\Config\Config.cpp">
       <Filter>Config</Filter>
     </ClCompile>
@@ -272,11 +231,73 @@
     <ClCompile Include="..\..\src\shared\Network\SocketOpsWin32.cpp">
       <Filter>Socket</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\SchumixFunkciok.cpp">
+    <ClCompile Include="..\..\src\IRC\IRCSession.cpp">
       <Filter>IRC</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Vezerlo.cpp">
+    <ClCompile Include="..\..\src\IRC\MessageHandler.cpp">
+      <Filter>IRC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IRC\PublicMessageHandler.cpp">
+      <Filter>IRC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IRC\SchumixFunkciok.cpp">
+      <Filter>IRC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Console\Console.cpp">
+      <Filter>Console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Console\ConsoleCommands.cpp">
+      <Filter>Console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Vezerlo\Vezerlo.cpp">
       <Filter>Vezerlo</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Rss\GitInfo.cpp">
+      <Filter>Repos\Git</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Rss\HgInfo.cpp">
+      <Filter>Repos\Hg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Rss\SvnInfo.cpp">
+      <Filter>Repos\SVN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\DefaultConfig\DefaultConfig.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Calculator\CalcLexer.cpp">
+      <Filter>Calculator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Calculator\Calkulator.cpp">
+      <Filter>Calculator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Calculator\TokenQueue.cpp">
+      <Filter>Calculator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Calculator\VarVector.cpp">
+      <Filter>Calculator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Commands\AdminCommandHandler.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Commands\CommandHandler.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Commands\CommandMgr.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Commands\Commands.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Commands\OperatorCommandHandler.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Commands\PublicCommandHandler.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\src\resources.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

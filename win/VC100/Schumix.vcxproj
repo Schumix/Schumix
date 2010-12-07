@@ -86,7 +86,7 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
-	<IncludePath>..\..\dep\VC\include\;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\dep\VC\include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -175,14 +175,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\Calc.h" />
-    <ClInclude Include="..\..\src\CalcLexer.hpp" />
-    <ClInclude Include="..\..\src\Console.hpp" />
-    <ClInclude Include="..\..\src\DefaultConfig.hpp" />
-    <ClInclude Include="..\..\src\GitInfo.hpp" />
-    <ClInclude Include="..\..\src\HgInfo.hpp" />
-    <ClInclude Include="..\..\src\IRCSession.hpp" />
-    <ClInclude Include="..\..\src\Replies.hpp" />
+    <ClInclude Include="..\..\src\Calculator\Calc.h" />
+    <ClInclude Include="..\..\src\Calculator\CalcLexer.hpp" />
+    <ClInclude Include="..\..\src\Calculator\TokenQueue.hpp" />
+    <ClInclude Include="..\..\src\Calculator\VarVector.hpp" />
+    <ClInclude Include="..\..\src\Commands\CommandMgr.hpp" />
+    <ClInclude Include="..\..\src\Commands\Commands.hpp" />
+    <ClInclude Include="..\..\src\Console\Console.hpp" />
+    <ClInclude Include="..\..\src\DefaultConfig\DefaultConfig.hpp" />
+    <ClInclude Include="..\..\src\IRC\IRCSession.hpp" />
+    <ClInclude Include="..\..\src\IRC\Replies.hpp" />
+    <ClInclude Include="..\..\src\Rss\GitInfo.hpp" />
+    <ClInclude Include="..\..\src\Rss\HgInfo.hpp" />
+    <ClInclude Include="..\..\src\Rss\SvnInfo.hpp" />
     <ClInclude Include="..\..\src\shared\Auth\MD5.hpp" />
     <ClInclude Include="..\..\src\shared\Auth\Sha1.hpp" />
     <ClInclude Include="..\..\src\shared\Cast.h" />
@@ -214,27 +219,30 @@
     <ClInclude Include="..\..\src\shared\WinAPIExtensions.h" />
     <ClInclude Include="..\..\src\Schumix.hpp" />
     <ClInclude Include="..\..\src\StdAfx.h" />
-    <ClInclude Include="..\..\src\SvnInfo.hpp" />
-    <ClInclude Include="..\..\src\TokenQueue.hpp" />
-    <ClInclude Include="..\..\src\VarVector.hpp" />
-    <ClInclude Include="..\..\src\Vezerlo.hpp" />
+    <ClInclude Include="..\..\src\Vezerlo\Vezerlo.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\AdminFunkciok.cpp" />
-    <ClCompile Include="..\..\src\CalcLexer.cpp" />
-    <ClCompile Include="..\..\src\Calkulator.cpp" />
-    <ClCompile Include="..\..\src\Console.cpp" />
-    <ClCompile Include="..\..\src\ConsoleCommands.cpp" />
-    <ClCompile Include="..\..\src\DefaultConfig.cpp" />
-    <ClCompile Include="..\..\src\Funkciok.cpp" />
-    <ClCompile Include="..\..\src\GitInfo.cpp" />
-    <ClCompile Include="..\..\src\HgInfo.cpp" />
-    <ClCompile Include="..\..\src\IRCSession.cpp" />
-    <ClCompile Include="..\..\src\MessageHandler.cpp" />
-    <ClCompile Include="..\..\src\PublicMessageHandler.cpp" />
-    <ClCompile Include="..\..\src\OperatorFunkciok.cpp" />
+    <ClCompile Include="..\..\src\Calculator\CalcLexer.cpp" />
+    <ClCompile Include="..\..\src\Calculator\Calkulator.cpp" />
+    <ClCompile Include="..\..\src\Calculator\TokenQueue.cpp" />
+    <ClCompile Include="..\..\src\Calculator\VarVector.cpp" />
+    <ClCompile Include="..\..\src\Commands\AdminCommandHandler.cpp" />
+    <ClCompile Include="..\..\src\Commands\CommandHandler.cpp" />
+    <ClCompile Include="..\..\src\Commands\CommandMgr.cpp" />
+    <ClCompile Include="..\..\src\Commands\Commands.cpp" />
+    <ClCompile Include="..\..\src\Commands\OperatorCommandHandler.cpp" />
+    <ClCompile Include="..\..\src\Commands\PublicCommandHandler.cpp" />
+    <ClCompile Include="..\..\src\Console\Console.cpp" />
+    <ClCompile Include="..\..\src\Console\ConsoleCommands.cpp" />
+    <ClCompile Include="..\..\src\DefaultConfig\DefaultConfig.cpp" />
+    <ClCompile Include="..\..\src\IRC\IRCSession.cpp" />
+    <ClCompile Include="..\..\src\IRC\MessageHandler.cpp" />
+    <ClCompile Include="..\..\src\IRC\PublicMessageHandler.cpp" />
+    <ClCompile Include="..\..\src\IRC\SchumixFunkciok.cpp" />
+    <ClCompile Include="..\..\src\Rss\GitInfo.cpp" />
+    <ClCompile Include="..\..\src\Rss\HgInfo.cpp" />
+    <ClCompile Include="..\..\src\Rss\SvnInfo.cpp" />
     <ClCompile Include="..\..\src\Schumix.cpp" />
-    <ClCompile Include="..\..\src\SchumixFunkciok.cpp" />
     <ClCompile Include="..\..\src\shared\Auth\MD5.cpp" />
     <ClCompile Include="..\..\src\shared\Auth\Sha1.cpp" />
     <ClCompile Include="..\..\src\shared\Config\Config.cpp" />
@@ -245,10 +253,10 @@
     <ClCompile Include="..\..\src\shared\Network\SocketOpsLinux.cpp" />
     <ClCompile Include="..\..\src\shared\Network\SocketOpsWin32.cpp" />
     <ClCompile Include="..\..\src\StdAfx.cpp" />
-    <ClCompile Include="..\..\src\SvnInfo.cpp" />
-    <ClCompile Include="..\..\src\TokenQueue.cpp" />
-    <ClCompile Include="..\..\src\VarVector.cpp" />
-    <ClCompile Include="..\..\src\Vezerlo.cpp" />
+    <ClCompile Include="..\..\src\Vezerlo\Vezerlo.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\src\resources.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

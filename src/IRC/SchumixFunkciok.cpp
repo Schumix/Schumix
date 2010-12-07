@@ -138,7 +138,7 @@ string IRCSession::FSelect(string nev)
 {
 	string status;
 
-	QueryResultPointer db = m_SQLConn->Query("SELECT funkcio_status FROM schumix WHERE funkcio_nev = '%s'", nev.c_str());
+	QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT funkcio_status FROM schumix WHERE funkcio_nev = '%s'", nev.c_str());
 	if(db)
 		status = db->Fetch()[0].GetString();
 
@@ -195,7 +195,7 @@ void IRCSession::HLUzenet(IRCMessage& recvData)
 		for(int i = 1; i < resAdat; i++)
 		{
 			transform(res[i].begin(), res[i].end(), res[i].begin(), ::tolower);
-			QueryResultPointer db = m_SQLConn->Query("SELECT info, alapot FROM hluzenet WHERE nick = '%s'", res[i].c_str());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT info, alapot FROM hluzenet WHERE nick = '%s'", res[i].c_str());
 			if(db)
 			{
 				string info = db->Fetch()[0].GetString();
@@ -304,7 +304,7 @@ void IRCSession::ChannelFunkcioReload()
 	{
 		string szoba = itr->first;
 
-		QueryResultPointer db = m_SQLConn->Query("SELECT funkciok FROM channel WHERE szoba = '%s'", szoba.c_str());
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT funkciok FROM channel WHERE szoba = '%s'", szoba.c_str());
 		if(db)
 		{
 			string funkciok = db->Fetch()[0].GetString();
@@ -326,7 +326,7 @@ void IRCSession::ChannelFunkcioReload()
 void IRCSession::ChannelListaReload()
 {
 	m_ChannelLista.clear();
-	QueryResultPointer db = m_SQLConn->Query("SELECT szoba, jelszo FROM channel");
+	QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT szoba, jelszo FROM channel");
 	if(db)
 	{
 		do 
@@ -445,7 +445,7 @@ bool IRCSession::AutoKick(IRCMessage& recvData, string allapot)
 		if(FSelect(KICK) == bekapcsol && FSelectChannel(KICK, channel) == bekapcsol)
 		{
 			transform(recvData.Nick.begin(), recvData.Nick.end(), recvData.Nick.begin(), ::tolower);
-			QueryResultPointer db = m_SQLConn->Query("SELECT channel, oka FROM kicklista WHERE nick = '%s'", recvData.GetNick());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT channel, oka FROM kicklista WHERE nick = '%s'", recvData.GetNick());
 			if(db)
 			{
 				channel = db->Fetch()[0].GetString();
@@ -466,7 +466,7 @@ bool IRCSession::AutoKick(IRCMessage& recvData, string allapot)
 		if(FSelect(KICK) == bekapcsol && FSelectChannel(KICK, recvData.Channel) == bekapcsol)
 		{
 			transform(recvData.Nick.begin(), recvData.Nick.end(), recvData.Nick.begin(), ::tolower);
-			QueryResultPointer db = m_SQLConn->Query("SELECT channel, oka FROM kicklista WHERE nick = '%s'", recvData.GetNick());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT channel, oka FROM kicklista WHERE nick = '%s'", recvData.GetNick());
 			if(db)
 			{
 				string channel = db->Fetch()[0].GetString();
