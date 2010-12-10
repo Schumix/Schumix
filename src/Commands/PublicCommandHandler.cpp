@@ -32,15 +32,6 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Fõ parancsom: %sxbot", sIRCSession.GetParancsElojel());
 }
 
-void CommandMgr::HandleSzinek(CommandMessage& recvData)
-{
-	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
-		return;
-
-	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "1teszt1 2teszt2 3teszt3 4teszt4 5teszt5 6teszt6 7teszt7 8teszt8");
-	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "9teszt9 10teszt10 11teszt11 12teszt12 13teszt13 14teszt14 15teszt15");
-}
-
 void CommandMgr::HandleInfo(CommandMessage& recvData)
 {
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Programozóm: Csaba, Twl és Scymex. Üzemeltetõ: %s.", sIRCSession.GetUzemelteto());
@@ -169,7 +160,7 @@ void CommandMgr::HandleKeres(CommandMessage& recvData)
 				boost::regex_search(bufferdata.c_str(), matches1, re1);
 				string matched1(matches1[1].first, matches1[1].second);
 
-				int szokoz = matched1.find('","');
+				int szokoz = matched1.find("\",\"");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "2Title: %s", matched1.substr(0, szokoz).c_str());
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "2Link: 9%s", matched.c_str());
 			}

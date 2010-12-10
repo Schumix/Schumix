@@ -424,7 +424,7 @@ void SvnInfo::Lekerdezes(uint32 id)
 		return;
 
 	int rev = getrfa(id, title);
-	if(rev == NULL)
+	if(rev == cast_uint32(0))
 		return;
 
 	a_rev[id] = cast_uint32(rev);
@@ -438,7 +438,7 @@ void SvnInfo::Kiiras(uint32 id)
 		return;
 
 	int rev = getrfa(id, title);
-	if(rev == NULL)
+	if(rev == cast_uint32(0))
 		return;
 
 	if(rev == a_rev[id])

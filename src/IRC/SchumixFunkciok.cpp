@@ -76,19 +76,14 @@ void IRCSession::Schumix(IRCMessage& recvData)
 				Log.Notice("NickServ", "NickServ azonosito kuldese.");
 				SendChatMessage(PRIVMSG, "NickServ", "identify %s", m_NickServPassword.c_str());
 			}
+			else if(res[2] == "ghost")
+				SendChatMessage(PRIVMSG, "NickServ", "ghost %s %s", m_NickName[0].c_str(), m_NickServPassword.c_str());
 			else
 			{
 				string nick = res[2];
 				m_NickTarolo = nick;
 				WriteLine("NICK %s", nick.c_str());
 			}
-		}
-		else if(iras == "ghost")
-		{
-			if(!m_Commands->Admin(recvData.Nick, recvData.Host, Operator))
-				return;
-
-			SendChatMessage(PRIVMSG, "NickServ", "ghost %s %s", m_NickName[0].c_str(), m_NickServPassword.c_str());
 		}
 		else if(iras == "sys")
 		{
@@ -99,9 +94,7 @@ void IRCSession::Schumix(IRCMessage& recvData)
 #endif
 		}
 		else if(iras == "help")
-		{
-			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: info | ghost | nick | sys");
-		}
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: info | nick | sys");
 		else
 		{
 			//számolás

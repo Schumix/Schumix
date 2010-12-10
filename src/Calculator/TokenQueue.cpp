@@ -47,7 +47,7 @@ Token TokenQueue::get()
 
 bool TokenStack::empty()
 {
-	return inptr <= NULL;
+	return inptr <= 0;
 }
 
 Token TokenStack::get()

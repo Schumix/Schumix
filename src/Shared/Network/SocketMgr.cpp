@@ -89,7 +89,7 @@ void SocketMgr::Update()
 				max_fd = (*itr)->m_fd + 1;
 #endif
 
-			if((*itr)->m_outBuf.size() > NULL)
+			if((*itr)->m_outBuf.size() > 0)
 				FD_SET((*itr)->m_fd, &write_set);
 			else
 				FD_SET((*itr)->m_fd, &read_set);
@@ -113,7 +113,7 @@ void SocketMgr::Update()
 			if(FD_ISSET(s->m_fd, &read_set))
 			{
 				res = recv(s->m_fd, buffer, 65000, 0);
-				if(res <= NULL)
+				if(res <= 0)
 				{
 					s->m_fd = NULL;
 					continue;
@@ -125,7 +125,7 @@ void SocketMgr::Update()
 			if(FD_ISSET(s->m_fd, &write_set) && s->m_outBuf.size())
 			{
 				res = send(s->m_fd, s->m_outBuf.c_str(), s->m_outBuf.size(), 0);
-				if(res <= NULL)
+				if(res <= 0)
 				{
 					s->m_fd = NULL;
 					continue;

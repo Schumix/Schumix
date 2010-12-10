@@ -266,6 +266,15 @@ void CommandMgr::HandleUjjelszo(CommandMessage& recvData)
 	res.clear();
 }
 
+void CommandMgr::HandleSzinek(CommandMessage& recvData)
+{
+	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
+		return;
+
+	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "1teszt1 2teszt2 3teszt3 4teszt4 5teszt5 6teszt6 7teszt7 8teszt8");
+	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "9teszt9 10teszt10 11teszt11 12teszt12 13teszt13 14teszt14 15teszt15");
+}
+
 void CommandMgr::HandleFunkciok(CommandMessage& recvData)
 {
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
@@ -1366,7 +1375,6 @@ void CommandMgr::HandleGit(CommandMessage& recvData)
 				res.clear();
 				return;
 			}
-
 
 			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id, channel FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", res[2].c_str(), res[3].c_str());
 			if(db)

@@ -28,13 +28,13 @@ public:
 	MD5Hash();
 	~MD5Hash();
 
-	void UpdateData(const uint8 *dta, int len);
-	void UpdateData(const std::string &str);
+	void UpdateData(const string &str);
+	void UpdateData(const uint8* dta, int len);
 
 	void Initialize();
 	void Finalize();
 
-	uint8 *GetDigest(void) { return mDigest; };
+	uint8* GetDigest(void) { return mDigest; };
 	int GetLength(void) { return MD5_DIGEST_LENGTH; };
 
 private:

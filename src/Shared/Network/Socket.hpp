@@ -40,7 +40,7 @@ public:
 
 	bool Connect(string host, uint32 port);
 	void Disconnect();
-	bool IsConnected() { return m_fd != NULL; }
+	bool IsConnected() { return m_fd != -1; }
 
 	void SendLine(string line);
 	void SendForcedLine(string line);

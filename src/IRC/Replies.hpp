@@ -47,28 +47,28 @@ struct IRCMessage
 	inline const char* GetMinden() { return Minden.c_str(); }
 };
 
-static string RPL_SUCCESSFUL_AUTH		= "001";
-static string RPL_MOTD				= "372";
-static string RPL_MOTDSTART			= "375";
-static string RPL_ENDOFMOTD			= "376";
-static string RPL_NOTICE				= "NOTICE";
-static string RPL_PRIVMSG				= "PRIVMSG";
-static string RPL_NICK				= "NICK";
-static string RPL_JOIN				= "JOIN";
-static string RPL_LEFT				= "PART";
-static string RPL_QUIT				= "QUIT";
+static string RPL_SUCCESSFUL_AUTH  = "001";
+static string RPL_MOTD             = "372";
+static string RPL_MOTDSTART        = "375";
+static string RPL_ENDOFMOTD        = "376";
+static string RPL_NOTICE           = "NOTICE";
+static string RPL_PRIVMSG          = "PRIVMSG";
+static string RPL_NICK             = "NICK";
+static string RPL_JOIN             = "JOIN";
+static string RPL_LEFT             = "PART";
+static string RPL_QUIT             = "QUIT";
 
-static string RPL_PING				= "PING";
-static string RPL_PONG				= "PONG";
+static string RPL_PING             = "PING";
+static string RPL_PONG             = "PONG";
 
-static string RPL_KILL				= "KILL";
-static string RPL_KICK				= "KICK";
-static string RPL_MODE				= "MODE";
-static string RPL_404					= "404";
-static string RPL_NICK_ERROR			= "433";
-static string RPL_Channel_ban			= "474";
-static string RPL_NoChannel_jelszo	= "475";
-static string RPL_WHOIS					= "319";
+static string RPL_KILL             = "KILL";
+static string RPL_KICK             = "KICK";
+static string RPL_MODE             = "MODE";
+static string RPL_404              = "404";
+static string RPL_NICK_ERROR       = "433";
+static string RPL_Channel_ban      = "474";
+static string RPL_NoChannel_jelszo = "475";
+static string RPL_WHOIS            = "319";
 
 /*#define RPL_ISMERETLEN			"002"
 #define RPL_ISMERETLEN1			"003"

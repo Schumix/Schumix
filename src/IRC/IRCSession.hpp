@@ -58,14 +58,14 @@ enum Conn
 
 enum AdminFlag
 {
-	Operator		= 0,
-	Administrator	= 1
+	Operator      = 0,
+	Administrator = 1
 };
 
 enum MessageType
 {
 	PRIVMSG,
-	NOTICE,
+	NOTICE
 };
 
 typedef void(IRCSession::*IRCCallback)(IRCMessage& recvData);

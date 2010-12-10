@@ -54,7 +54,7 @@ DefaultConfig::DefaultConfig(string conf)
 					return;
 				}
 
-				fprintf(ConfigFajl, bufferdata.c_str());
+				fprintf(ConfigFajl, "%s", bufferdata.c_str());
 				fclose(ConfigFajl);
 			}
 			else

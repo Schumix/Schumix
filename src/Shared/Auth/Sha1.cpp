@@ -29,14 +29,14 @@ Sha1Hash::~Sha1Hash()
 
 }
 
+void Sha1Hash::UpdateData(const string &str)
+{
+	UpdateData((uint8*)str.c_str(), cast_int(str.length()));
+}
+
 void Sha1Hash::UpdateData(const uint8* dta, int len)
 {
 	SHA1_Update(&mC, dta, len);
-}
-
-void Sha1Hash::UpdateData(const std::string &str)
-{
-	UpdateData((uint8*)str.c_str(), cast_int(str.length()));
 }
 
 void Sha1Hash::Initialize()

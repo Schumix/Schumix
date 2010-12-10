@@ -22,7 +22,7 @@
 #define _SCHUMIX_GUARD_HPP
 
 /************************************************************************/
-/* Guard class, unlocks mutex on destroy								*/
+/* Guard class, unlocks mutex on destroy                                */
 /************************************************************************/
 // crossplatform :)
 

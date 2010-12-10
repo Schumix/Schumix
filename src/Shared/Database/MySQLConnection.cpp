@@ -53,7 +53,7 @@ void MySQLConnection::Execute(string query)
 	//dunno what it does ...leaving untouched 
 	int result = mysql_query(handle, query.c_str());
 
-	if(result > NULL)
+	if(result > 0)
 	{
 		uint32 errnom = mysql_errno(handle);
 		const char * reason = mysql_error(handle);
@@ -110,7 +110,7 @@ QueryResultPointer MySQLConnection::Query(const char * query, ...)
 	uint32 uRows = cast_uint32(mysql_affected_rows(handle));
 	uint32 uFields = cast_uint32(mysql_field_count(handle));
 
-	if(uRows == NULL || uFields == NULL || pRes == NULL)
+	if(uRows == cast_uint32(0) || uFields == cast_uint32(0) || pRes == NULL)
 	{
 		if(pRes != NULL)
 			mysql_free_result(pRes);
@@ -128,7 +128,7 @@ string MySQLConnection::EscapeString(string Escape)
 {
 	char a2[16384] = {0};
 	const char* ret;
-	if(mysql_real_escape_string(handle, a2, Escape.c_str(), (unsigned long)Escape.length()) == NULL)
+	if(mysql_real_escape_string(handle, a2, Escape.c_str(), cast_uint32(Escape.length())) == cast_uint32(0))
 		ret = Escape.c_str();
 	else
 		ret = a2;

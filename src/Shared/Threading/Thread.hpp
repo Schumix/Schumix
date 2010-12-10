@@ -54,7 +54,7 @@ public:
 		pthread_attr_t attr;
 		pthread_attr_init(&attr);
 		pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM);
-		//pthread_attr_setdetachedstate( &attr, PTHREAD_CREATE_DETACHED );
+		//pthread_attr_setdetachedstate(&attr, PTHREAD_CREATE_DETACHED);
 		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 		pthread_create(&m_thread, &attr, start_routine, threadParam);
 		pthread_attr_destroy(&attr);
