@@ -194,7 +194,7 @@ void CommandMgr::HandleHozzaferes(CommandMessage& recvData)
 
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetNick(), "Nincs paraméter!");
 		return;
 	}
 
@@ -208,19 +208,18 @@ void CommandMgr::HandleHozzaferes(CommandMessage& recvData)
 
 	}
 
-	QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT nev, jelszo FROM adminok WHERE nev = '%s'", recvData.GetNick());
+	QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT jelszo FROM adminok WHERE nev = '%s'", recvData.GetNick());
 	if(db)
 	{
-		string Nev = db->Fetch()[0].GetString();
-		string JelszoSql = db->Fetch()[1].GetString();
+		string JelszoSql = db->Fetch()[0].GetString();
 
 		if(JelszoSql == sVezerlo.Sha1(res[1]))
 		{
-			sVezerlo.GetSQLConn()->Query("UPDATE adminok SET vhost = '%s' WHERE nev = '%s'", recvData.GetHost(), Nev.c_str());
-			sIRCSession.SendChatMessage(PRIVMSG, Nev.c_str(), "Hozzáférés engedélyezve");
+			sVezerlo.GetSQLConn()->Query("UPDATE adminok SET vhost = '%s' WHERE nev = '%s'", recvData.GetHost(), recvData.GetNick());
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetNick(), "Hozzáférés engedélyezve");
 		}
 		else
-			sIRCSession.SendChatMessage(PRIVMSG, Nev.c_str(), "Hozzáférés megtagadva");
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetNick(), "Hozzáférés megtagadva");
 	}
 
 	res.clear();
@@ -233,7 +232,7 @@ void CommandMgr::HandleUjjelszo(CommandMessage& recvData)
 
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetNick(), "Nincs paraméter!");
 		return;
 	}
 
@@ -250,17 +249,16 @@ void CommandMgr::HandleUjjelszo(CommandMessage& recvData)
 	QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT nev, jelszo FROM adminok WHERE nev = '%s'", recvData.GetNick());
 	if(db)
 	{
-		string Nev = db->Fetch()[0].GetString();
-		string JelszoSql = db->Fetch()[1].GetString();
+		string JelszoSql = db->Fetch()[0].GetString();
 		string ujjelszo = res[2];
 
 		if(JelszoSql == sVezerlo.Sha1(res[1]))
 		{
-			sVezerlo.GetSQLConn()->Query("UPDATE adminok SET jelszo = '%s' WHERE nev = '%s'", sVezerlo.Sha1(ujjelszo).c_str(), Nev.c_str());
-			sIRCSession.SendChatMessage(PRIVMSG, Nev.c_str(), "Jelszó sikeresen meg lett változtatva erre: %s", ujjelszo.c_str());
+			sVezerlo.GetSQLConn()->Query("UPDATE adminok SET jelszo = '%s' WHERE nev = '%s'", sVezerlo.Sha1(ujjelszo).c_str(), recvData.GetNick());
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetNick(), "Jelszó sikeresen meg lett változtatva erre: %s", ujjelszo.c_str());
 		}
 		else
-			sIRCSession.SendChatMessage(PRIVMSG, Nev.c_str(), "A mostani jelszó nem egyezik, modósitás megtagadva");
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetNick(), "A mostani jelszó nem egyezik, modósitás megtagadva");
 	}
 
 	res.clear();

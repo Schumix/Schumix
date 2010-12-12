@@ -24,23 +24,23 @@
 class Field
 {
 public:
-	void SetValue(char* value) { mValue = value; }
+	void SetValue(char* value) { m_Value = value; }
 
-	const char* GetString() { return mValue; }
-	float GetFloat() { return mValue ? cast_float(atof(mValue)) : 0.0f; }
-	bool GetBool() { return mValue ? atoi(mValue) > 0 : false; }
-	int8 GetInt8() { return mValue ? cast_int8(atol(mValue)) : cast_int8(0); }
-	int16 GetInt32() { return mValue ? cast_int16(atol(mValue)) : cast_int16(0); }
-	//int32 GetInt32() { return mValue ? cast_int32(atol(mValue)) : NULL; }
-	uint8 GetUInt8() { return mValue ? cast_uint8(atol(mValue)) : cast_uint8(0); }
-	uint16 GetUInt16() { return mValue ? cast_uint16(atol(mValue)) : cast_uint16(0); }
-	uint32 GetUInt32() { return mValue ? cast_uint32(atol(mValue)) : cast_uint32(0); }
+	const char* GetString() { return m_Value; }
+	float GetFloat() { return m_Value ? cast_float(atof(m_Value)) : 0.0f; }
+	bool GetBool() { return m_Value ? atoi(m_Value) > 0 : false; }
+	int8 GetInt8() { return m_Value ? cast_int8(atol(m_Value)) : cast_int8(0); }
+	int16 GetInt16() { return m_Value ? cast_int16(atol(m_Value)) : cast_int16(0); }
+	//int32 GetInt32() { return m_Value ? cast_int32(atol(m_Value)) : NULL; }
+	uint8 GetUInt8() { return m_Value ? cast_uint8(atol(m_Value)) : cast_uint8(0); }
+	uint16 GetUInt16() { return m_Value ? cast_uint16(atol(m_Value)) : cast_uint16(0); }
+	uint32 GetUInt32() { return m_Value ? cast_uint32(atol(m_Value)) : cast_uint32(0); }
 	uint64 GetUInt64()
 	{
-		if(mValue)
+		if(m_Value)
 		{
 			uint64 value;
-			sscanf(mValue, I64FMTD, &value);
+			sscanf(m_Value, I64FMTD, &value);
 			return value;
 		}
 		else
@@ -48,7 +48,7 @@ public:
 	}
 
 private:
-	char* mValue;
+	char* m_Value;
 };
 
 #endif

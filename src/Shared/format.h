@@ -31,7 +31,7 @@
 // Both MSVC seems to use the non-standard vsnprintf
 // so we are using vscprintf to determine buffer size, however
 // only MSVC7 and up headers include vscprintf for some reason.
-inline string vformat(const char *fmt, va_list argPtr)
+inline string vformat(const char* fmt, va_list argPtr)
 {
 	// We draw the line at a 1MB string.
 	const int maxSize = 1000000;
@@ -73,7 +73,7 @@ inline string vformat(const char *fmt, va_list argPtr)
 
 #elif defined(_MSC_VER) && (_MSC_VER < 1300) && (WIN32)
 
-inline string vformat(const char *fmt, va_list argPtr)
+inline string vformat(const char* fmt, va_list argPtr)
 {
 	// We draw the line at a 1MB string.
 	const int maxSize = 1000000;
