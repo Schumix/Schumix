@@ -66,7 +66,7 @@ void CommandMgr::HandleAdmin(CommandMessage& recvData)
 		string nev = recvData.Nick;
 		transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
 
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT flag FROM adminok WHERE nev = '%s'", nev.c_str());
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT flag FROM adminok WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(nev).c_str());
 		if(db)
 			flag = cast_int(db->Fetch()[0].GetUInt8());
 		else
@@ -108,8 +108,8 @@ void CommandMgr::HandleAdmin(CommandMessage& recvData)
 		transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
 		string pass = sIRCSession.RandomString(10, true, true, false);
 
-		sVezerlo.GetSQLConn()->Query("INSERT INTO `adminok`(nev, jelszo) VALUES ('%s', '%s')", nev.c_str(), sVezerlo.Sha1(pass).c_str());
-		sVezerlo.GetSQLConn()->Query("INSERT INTO `hluzenet`(nick, alapot) VALUES ('%s', 'ki')", nev.c_str());
+		sVezerlo.GetSQLConn()->Query("INSERT INTO `adminok`(nev, jelszo) VALUES ('%s', '%s')", sVezerlo.GetSQLConn()->EscapeString(nev).c_str(), sVezerlo.Sha1(pass).c_str());
+		sVezerlo.GetSQLConn()->Query("INSERT INTO `hluzenet`(nick, alapot) VALUES ('%s', 'ki')", sVezerlo.GetSQLConn()->EscapeString(nev).c_str());
 
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Admin hozzáadva: %s", nev.c_str());
 		sIRCSession.SendChatMessage(PRIVMSG, nev.c_str(), "Mostantól Schumix adminja vagy. A te mostani jelszavad: %s", pass.c_str());
@@ -134,8 +134,8 @@ void CommandMgr::HandleAdmin(CommandMessage& recvData)
 			return;
 		}
 
-		sVezerlo.GetSQLConn()->Query("DELETE FROM `adminok` WHERE nev = '%s'", nev.c_str());
-		sVezerlo.GetSQLConn()->Query("DELETE FROM `hluzenet` WHERE nick = '%s'", nev.c_str());
+		sVezerlo.GetSQLConn()->Query("DELETE FROM `adminok` WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(nev).c_str());
+		sVezerlo.GetSQLConn()->Query("DELETE FROM `hluzenet` WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(nev).c_str());
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Admin törölve: %s", nev.c_str());
 	}
 	else if(iras == "rang")
@@ -177,7 +177,7 @@ void CommandMgr::HandleAdmin(CommandMessage& recvData)
 
 		if(rang == Administrator || rang == Operator)
 		{
-			sVezerlo.GetSQLConn()->Query("UPDATE adminok SET flag = '%i' WHERE nev = '%s'", rang, nev.c_str());
+			sVezerlo.GetSQLConn()->Query("UPDATE adminok SET flag = '%i' WHERE nev = '%s'", rang, sVezerlo.GetSQLConn()->EscapeString(nev).c_str());
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rang sikeresen modósitva.");
 		}
 		else
@@ -370,7 +370,7 @@ void CommandMgr::HandleFunkciok(CommandMessage& recvData)
 					for(int i = 3; i < resAdat; i++)
 					{
 						alomany += ", " + res[i];
-						sVezerlo.GetSQLConn()->Query("UPDATE schumix SET funkcio_status = '%s' WHERE funkcio_nev = '%s'", status.c_str(), res[i].c_str());
+						sVezerlo.GetSQLConn()->Query("UPDATE schumix SET funkcio_status = '%s' WHERE funkcio_nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(status).c_str(), sVezerlo.GetSQLConn()->EscapeString(res[i]).c_str());
 					}
 
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s: %skapcsolva", alomany.substr(2).c_str(), status.c_str());
@@ -379,7 +379,7 @@ void CommandMgr::HandleFunkciok(CommandMessage& recvData)
 				{
 					string nev = res[3];
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s: %skapcsolva", nev.c_str(), status.c_str());
-					sVezerlo.GetSQLConn()->Query("UPDATE schumix SET funkcio_status = '%s' WHERE funkcio_nev = '%s'", status.c_str(), nev.c_str());
+					sVezerlo.GetSQLConn()->Query("UPDATE schumix SET funkcio_status = '%s' WHERE funkcio_nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(status).c_str(), sVezerlo.GetSQLConn()->EscapeString(nev).c_str());
 				}
 			}
 		}
@@ -428,7 +428,7 @@ void CommandMgr::HandleFunkciok(CommandMessage& recvData)
 				for(int i = 4; i < resAdat; i++)
 				{
 					alomany += ", " + res[i];
-					sVezerlo.GetSQLConn()->Query("UPDATE channel SET funkciok = '%s' WHERE szoba = '%s'", sIRCSession.ChannelFunkciok(res[i], status, channel).c_str(), channel.c_str());
+					sVezerlo.GetSQLConn()->Query("UPDATE channel SET funkciok = '%s' WHERE szoba = '%s'", sIRCSession.ChannelFunkciok(res[i], status, channel).c_str(), sVezerlo.GetSQLConn()->EscapeString(channel).c_str());
 
 					sIRCSession.ChannelFunkcioReload();
 				}
@@ -438,7 +438,7 @@ void CommandMgr::HandleFunkciok(CommandMessage& recvData)
 			else
 			{
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s: %skapcsolva", res[4].c_str(), status.c_str());
-				sVezerlo.GetSQLConn()->Query("UPDATE channel SET funkciok = '%s' WHERE szoba = '%s'", sIRCSession.ChannelFunkciok(res[4], status, channel).c_str(), channel.c_str());
+				sVezerlo.GetSQLConn()->Query("UPDATE channel SET funkciok = '%s' WHERE szoba = '%s'", sIRCSession.ChannelFunkciok(res[4], status, channel).c_str(), sVezerlo.GetSQLConn()->EscapeString(channel).c_str());
 				sIRCSession.ChannelFunkcioReload();
 			}
 		}
@@ -461,7 +461,7 @@ void CommandMgr::HandleFunkciok(CommandMessage& recvData)
 			for(; itr != sIRCSession.GetChannelLista().end(); itr++)
 			{
 				string szoba = itr->first;
-				sVezerlo.GetSQLConn()->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, KICK, MODE, szoba.c_str());
+				sVezerlo.GetSQLConn()->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, KICK, MODE, sVezerlo.GetSQLConn()->EscapeString(szoba).c_str());
 			}
 
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Sikeresen frissitve minden channelen a funkciók.");
@@ -470,7 +470,7 @@ void CommandMgr::HandleFunkciok(CommandMessage& recvData)
 		else
 		{
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Sikeresen frissitve %s channel funkciók.", res[2].c_str());
-			sVezerlo.GetSQLConn()->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, KICK, MODE, res[2].c_str());
+			sVezerlo.GetSQLConn()->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, KICK, MODE, sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 			sIRCSession.ChannelFunkcioReload();
 		}
 	}
@@ -557,16 +557,16 @@ void CommandMgr::HandleChannel(CommandMessage& recvData)
 		{
 			string jelszo = res[3];
 			sIRCSession.WriteLine("JOIN %s %s", szoba.c_str(), jelszo.c_str());
-			sVezerlo.GetSQLConn()->Query("INSERT INTO `channel`(szoba, jelszo) VALUES ('%s', '%s')", szoba.c_str(), jelszo.c_str());
-			sVezerlo.GetSQLConn()->Query("UPDATE channel SET aktivitas = 'aktiv' WHERE szoba = '%s'", szoba.c_str());
+			sVezerlo.GetSQLConn()->Query("INSERT INTO `channel`(szoba, jelszo) VALUES ('%s', '%s')", sVezerlo.GetSQLConn()->EscapeString(szoba).c_str(), sVezerlo.GetSQLConn()->EscapeString(jelszo).c_str());
+			sVezerlo.GetSQLConn()->Query("UPDATE channel SET aktivitas = 'aktiv' WHERE szoba = '%s'", sVezerlo.GetSQLConn()->EscapeString(szoba).c_str());
 
 			sIRCSession.m_ChannelPrivmsg = recvData.Channel;
 		}
 		else
 		{
 			sIRCSession.WriteLine("JOIN %s", szoba.c_str());
-			sVezerlo.GetSQLConn()->Query("INSERT INTO `channel`(szoba, jelszo) VALUES ('%s', '')", szoba.c_str());
-			sVezerlo.GetSQLConn()->Query("UPDATE channel SET aktivitas = 'aktiv' WHERE szoba = '%s'", szoba.c_str());
+			sVezerlo.GetSQLConn()->Query("INSERT INTO `channel`(szoba, jelszo) VALUES ('%s', '')", sVezerlo.GetSQLConn()->EscapeString(szoba).c_str());
+			sVezerlo.GetSQLConn()->Query("UPDATE channel SET aktivitas = 'aktiv' WHERE szoba = '%s'", sVezerlo.GetSQLConn()->EscapeString(szoba).c_str());
 
 			sIRCSession.m_ChannelPrivmsg = recvData.Channel;
 		}
@@ -587,7 +587,7 @@ void CommandMgr::HandleChannel(CommandMessage& recvData)
 
 		string szoba = res[2];
 		sIRCSession.WriteLine("PART %s", szoba.c_str());
-		sVezerlo.GetSQLConn()->Query("DELETE FROM `channel` WHERE szoba = '%s'", szoba.c_str());
+		sVezerlo.GetSQLConn()->Query("DELETE FROM `channel` WHERE szoba = '%s'", sVezerlo.GetSQLConn()->EscapeString(szoba).c_str());
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Channel eltávolítva: %s", szoba.c_str());
 
 		sIRCSession.ChannelListaReload();
@@ -662,7 +662,7 @@ void CommandMgr::HandleSznap(CommandMessage& recvData)
 		return;
 	}
 
-	QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT nev, honap, honap1, nap FROM sznap WHERE nev = '%s'", res[1].c_str());
+	QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT nev, honap, honap1, nap FROM sznap WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[1]).c_str());
 	if(db)
 	{
 		string nev = db->Fetch()[0].GetString();
@@ -921,7 +921,7 @@ void CommandMgr::HandleHLFunkcio(CommandMessage& recvData)
 
 		string nev = recvData.Nick;
 		transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
-		sVezerlo.GetSQLConn()->Query("UPDATE `hluzenet` SET `alapot` = '%s' WHERE nick = '%s'", res[2].c_str(), nev.c_str());
+		sVezerlo.GetSQLConn()->Query("UPDATE `hluzenet` SET `alapot` = '%s' WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str(), nev.c_str());
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s: %skapcsolva", nev.c_str(), res[2].c_str());
 	}
 	else
@@ -934,7 +934,7 @@ void CommandMgr::HandleHLFunkcio(CommandMessage& recvData)
 
 		string nev = recvData.Nick;
 		transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
-		sVezerlo.GetSQLConn()->Query("UPDATE `hluzenet` SET `info` = '%s', `alapot` = 'be' WHERE nick = '%s'", alomany.substr(1).c_str(), nev.c_str());
+		sVezerlo.GetSQLConn()->Query("UPDATE `hluzenet` SET `info` = '%s', `alapot` = 'be' WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(alomany.substr(1)).c_str(), nev.c_str());
 		sVezerlo.GetSQLConn()->Query("UPDATE `schumix` SET `funkcio_status` = 'be' WHERE funkcio_nev = '%s'", HL);
 
 		res.clear();
@@ -1030,7 +1030,7 @@ void CommandMgr::HandleSvn(CommandMessage& recvData)
 			return;
 		}
 
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM svninfo WHERE nev = '%s'", res[2].c_str());
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM svninfo WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 		if(db)
 		{
 			sSvnInfo.NewThread(db->Fetch()[0].GetUInt32());
@@ -1048,7 +1048,7 @@ void CommandMgr::HandleSvn(CommandMessage& recvData)
 			return;
 		}
 
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM svninfo WHERE nev = '%s'", res[2].c_str());
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM svninfo WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 		if(db)
 		{
 			sSvnInfo.StopThread(db->Fetch()[0].GetUInt32());
@@ -1073,7 +1073,7 @@ void CommandMgr::HandleSvn(CommandMessage& recvData)
 		}
 		else
 		{
-			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM svninfo WHERE nev = '%s'", res[2].c_str());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM svninfo WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 			if(db)
 			{
 				sSvnInfo.ReloadThread(db->Fetch()[0].GetUInt32());
@@ -1101,7 +1101,7 @@ void CommandMgr::HandleSvn(CommandMessage& recvData)
 				return;
 			}
 
-			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT channel FROM svninfo WHERE nev = '%s'", res[2].c_str());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT channel FROM svninfo WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 			if(db)
 			{
 				string channel = db->Fetch()[0].GetString();
@@ -1123,7 +1123,7 @@ void CommandMgr::HandleSvn(CommandMessage& recvData)
 				adat += "," + res[3];
 
 				reschannel.clear();
-				sVezerlo.GetSQLConn()->Query("UPDATE svninfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), res[2].c_str());
+				sVezerlo.GetSQLConn()->Query("UPDATE svninfo SET channel = '%s' WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(adat).c_str(), sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Channel sikeresen hozzáadva.");
 			}
 			else
@@ -1145,7 +1145,7 @@ void CommandMgr::HandleSvn(CommandMessage& recvData)
 				return;
 			}
 
-			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT channel FROM svninfo WHERE nev = '%s'", res[2].c_str());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT channel FROM svninfo WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 			if(db)
 			{
 				string channel = db->Fetch()[0].GetString();
@@ -1170,7 +1170,7 @@ void CommandMgr::HandleSvn(CommandMessage& recvData)
 				}
 
 				reschannel.clear();
-				sVezerlo.GetSQLConn()->Query("UPDATE svninfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), res[2].c_str());
+				sVezerlo.GetSQLConn()->Query("UPDATE svninfo SET channel = '%s' WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(adat).c_str(), sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Channel sikeresen törölve.");
 			}
 			else
@@ -1281,7 +1281,7 @@ void CommandMgr::HandleGit(CommandMessage& recvData)
 			return;
 		}
 
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", res[2].c_str(), res[3].c_str());
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str(), sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str());
 		if(db)
 		{
 			sGitInfo.NewThread(db->Fetch()[0].GetUInt32());
@@ -1306,7 +1306,7 @@ void CommandMgr::HandleGit(CommandMessage& recvData)
 			return;
 		}
 
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", res[2].c_str(), res[3].c_str());
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str(), sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str());
 		if(db)
 		{
 			sGitInfo.StopThread(db->Fetch()[0].GetUInt32());
@@ -1338,7 +1338,7 @@ void CommandMgr::HandleGit(CommandMessage& recvData)
 				return;
 			}
 
-			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", res[2].c_str(), res[3].c_str());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str(), sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str());
 			if(db)
 			{
 				sGitInfo.ReloadThread(db->Fetch()[0].GetUInt32());
@@ -1373,7 +1373,7 @@ void CommandMgr::HandleGit(CommandMessage& recvData)
 				return;
 			}
 
-			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id, channel FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", res[2].c_str(), res[3].c_str());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id, channel FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str(), sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str());
 			if(db)
 			{
 				string channel = db->Fetch()[1].GetString();
@@ -1395,7 +1395,7 @@ void CommandMgr::HandleGit(CommandMessage& recvData)
 				adat += "," + res[4];
 
 				reschannel.clear();
-				sVezerlo.GetSQLConn()->Query("UPDATE gitinfo SET channel = '%s' WHERE id = '%u'", adat.c_str(), db->Fetch()[0].GetUInt32());
+				sVezerlo.GetSQLConn()->Query("UPDATE gitinfo SET channel = '%s' WHERE id = '%u'", sVezerlo.GetSQLConn()->EscapeString(adat).c_str(), db->Fetch()[0].GetUInt32());
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Channel sikeresen hozzáadva.");
 			}
 			else
@@ -1425,7 +1425,7 @@ void CommandMgr::HandleGit(CommandMessage& recvData)
 				return;
 			}
 
-			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id, channel FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", res[2].c_str(), res[3].c_str());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id, channel FROM gitinfo WHERE nev = '%s' AND tipus = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str(), sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str());
 			if(db)
 			{
 				string channel = db->Fetch()[1].GetString();
@@ -1450,7 +1450,7 @@ void CommandMgr::HandleGit(CommandMessage& recvData)
 				}
 
 				reschannel.clear();
-				sVezerlo.GetSQLConn()->Query("UPDATE gitinfo SET channel = '%s' WHERE id = '%u'", adat.c_str(), db->Fetch()[0].GetUInt32());
+				sVezerlo.GetSQLConn()->Query("UPDATE gitinfo SET channel = '%s' WHERE id = '%u'", sVezerlo.GetSQLConn()->EscapeString(adat).c_str(), db->Fetch()[0].GetUInt32());
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Channel sikeresen törölve.");
 			}
 			else
@@ -1550,7 +1550,7 @@ void CommandMgr::HandleHg(CommandMessage& recvData)
 			return;
 		}
 
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM hginfo WHERE nev = '%s'", res[2].c_str());
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM hginfo WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 		if(db)
 		{
 			sHgInfo.NewThread(db->Fetch()[0].GetUInt32());
@@ -1568,7 +1568,7 @@ void CommandMgr::HandleHg(CommandMessage& recvData)
 			return;
 		}
 
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM hginfo WHERE nev = '%s'", res[2].c_str());
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM hginfo WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 		if(db)
 		{
 			sHgInfo.StopThread(db->Fetch()[0].GetUInt32());
@@ -1593,7 +1593,7 @@ void CommandMgr::HandleHg(CommandMessage& recvData)
 		}
 		else
 		{
-			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM hginfo WHERE nev = '%s'", res[2].c_str());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT id FROM hginfo WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 			if(db)
 			{
 				sHgInfo.ReloadThread(db->Fetch()[0].GetUInt32());
@@ -1621,7 +1621,7 @@ void CommandMgr::HandleHg(CommandMessage& recvData)
 				return;
 			}
 
-			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT channel FROM hginfo WHERE nev = '%s'", res[2].c_str());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT channel FROM hginfo WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 			if(db)
 			{
 				string channel = db->Fetch()[0].GetString();
@@ -1643,7 +1643,7 @@ void CommandMgr::HandleHg(CommandMessage& recvData)
 				adat += "," + res[3];
 
 				reschannel.clear();
-				sVezerlo.GetSQLConn()->Query("UPDATE hginfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), res[2].c_str());
+				sVezerlo.GetSQLConn()->Query("UPDATE hginfo SET channel = '%s' WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(adat).c_str(), sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Channel sikeresen hozzáadva.");
 			}
 			else
@@ -1665,7 +1665,7 @@ void CommandMgr::HandleHg(CommandMessage& recvData)
 				return;
 			}
 
-			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT channel FROM hginfo WHERE nev = '%s'", res[2].c_str());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT channel FROM hginfo WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 			if(db)
 			{
 				string channel = db->Fetch()[0].GetString();
@@ -1690,7 +1690,7 @@ void CommandMgr::HandleHg(CommandMessage& recvData)
 				}
 
 				reschannel.clear();
-				sVezerlo.GetSQLConn()->Query("UPDATE hginfo SET channel = '%s' WHERE nev = '%s'", adat.c_str(), res[2].c_str());
+				sVezerlo.GetSQLConn()->Query("UPDATE hginfo SET channel = '%s' WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(adat).c_str(), sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Channel sikeresen törölve.");
 			}
 			else
@@ -1763,7 +1763,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 				alomany += " " + res[i];
 
 			transform(res[3].begin(), res[3].end(), res[3].begin(), ::tolower);
-			sVezerlo.GetSQLConn()->Query("INSERT INTO `kicklista`(nick, channel, oka) VALUES ('%s', '%s', '%s')", res[3].c_str(), recvData.GetChannel(), alomany.substr(1).c_str());
+			sVezerlo.GetSQLConn()->Query("INSERT INTO `kicklista`(nick, channel, oka) VALUES ('%s', '%s', '%s')", sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str(), recvData.GetChannel(), sVezerlo.GetSQLConn()->EscapeString(alomany.substr(1)).c_str());
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kick listához a név hozzáadva: %s", res[3].c_str());
 		}
 		else if(res[2] == delet)
@@ -1776,7 +1776,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 			}
 
 			transform(res[3].begin(), res[3].end(), res[3].begin(), ::tolower);
-			sVezerlo.GetSQLConn()->Query("DELETE FROM `kicklista` WHERE nick = '%s'", res[3].c_str());
+			sVezerlo.GetSQLConn()->Query("DELETE FROM `kicklista` WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str());
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kick listából a név eltávólitva: %s", res[3].c_str());
 		}
 		else if(res[2] == Help)
@@ -1844,7 +1844,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 					alomany += " " + res[i];
 
 				transform(res[4].begin(), res[4].end(), res[4].begin(), ::tolower);
-				sVezerlo.GetSQLConn()->Query("INSERT INTO `kicklista`(nick, channel, oka) VALUES ('%s', '%s', '%s')", res[4].c_str(), res[5].c_str(), alomany.substr(1).c_str());
+				sVezerlo.GetSQLConn()->Query("INSERT INTO `kicklista`(nick, channel, oka) VALUES ('%s', '%s', '%s')", sVezerlo.GetSQLConn()->EscapeString(res[4]).c_str(), sVezerlo.GetSQLConn()->EscapeString(res[5]).c_str(), sVezerlo.GetSQLConn()->EscapeString(alomany.substr(1)).c_str());
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kick listához a név hozzáadva: %s", res[4].c_str());
 			}
 			else if(res[3] == delet)
@@ -1857,7 +1857,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 				}
 
 				transform(res[4].begin(), res[4].end(), res[4].begin(), ::tolower);
-				sVezerlo.GetSQLConn()->Query("DELETE FROM `kicklista` WHERE nick = '%s'", res[4].c_str());
+				sVezerlo.GetSQLConn()->Query("DELETE FROM `kicklista` WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[4]).c_str());
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kick listából a név eltávólitva: %s", res[4].c_str());
 			}
 			else if(res[3] == INFO)
@@ -1907,7 +1907,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 			}
 
 			transform(res[3].begin(), res[3].end(), res[3].begin(), ::tolower);
-			sVezerlo.GetSQLConn()->Query("INSERT INTO `modelista`(nick, channel, rang) VALUES ('%s', '%s', '%s')", res[3].c_str(), recvData.GetChannel(), res[4].c_str());
+			sVezerlo.GetSQLConn()->Query("INSERT INTO `modelista`(nick, channel, rang) VALUES ('%s', '%s', '%s')", sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str(), recvData.GetChannel(), sVezerlo.GetSQLConn()->EscapeString(res[4]).c_str());
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Mode listához a név hozzáadva: %s", res[3].c_str());
 		}
 		else if(res[2] == delet)
@@ -1920,7 +1920,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 			}
 
 			transform(res[3].begin(), res[3].end(), res[3].begin(), ::tolower);
-			sVezerlo.GetSQLConn()->Query("DELETE FROM `modelista` WHERE nick = '%s'", res[3].c_str());
+			sVezerlo.GetSQLConn()->Query("DELETE FROM `modelista` WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str());
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Mode listából a név eltávólitva: %s", res[3].c_str());
 		}
 		else if(res[2] == Help)
@@ -1982,7 +1982,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 				}
 
 				transform(res[4].begin(), res[4].end(), res[4].begin(), ::tolower);
-				sVezerlo.GetSQLConn()->Query("INSERT INTO `modelista`(nick, channel, rang) VALUES ('%s', '%s', '%s')", res[4].c_str(), res[5].c_str(), res[6].c_str());
+				sVezerlo.GetSQLConn()->Query("INSERT INTO `modelista`(nick, channel, rang) VALUES ('%s', '%s', '%s')", sVezerlo.GetSQLConn()->EscapeString(res[4]).c_str(), sVezerlo.GetSQLConn()->EscapeString(res[5]).c_str(), sVezerlo.GetSQLConn()->EscapeString(res[6]).c_str());
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Mode listához a név hozzáadva: %s", res[4].c_str());
 			}
 			else if(res[3] == delet)
@@ -1995,7 +1995,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 				}
 
 				transform(res[4].begin(), res[4].end(), res[4].begin(), ::tolower);
-				sVezerlo.GetSQLConn()->Query("DELETE FROM `modelista` WHERE nick = '%s'", res[3].c_str());
+				sVezerlo.GetSQLConn()->Query("DELETE FROM `modelista` WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str());
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Mode listából a név eltávólitva: %s", res[4].c_str());
 			}
 			else if(res[3] == INFO)

@@ -2,3 +2,4 @@
 - &jegyzet-hez mesterkulcs létrehozása és bekérdezés rész hozzáirása.
 - Rss-ek átnézése mert valamitől eszik a memoriát!
 - Flood elleni védelem beépitése. Ha 10 másodperc alatt 10 sor üzenet érkezik kick.
+- Születés nap továbbfejlesztése az az ha a nick kihez tartozik a dátum azon a napon feljön jelez neki hogy születésnapja van. A jelzés útán figyelmen kivül haggya majd jővő évben jelez lekközelebb.

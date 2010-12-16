@@ -24,7 +24,7 @@
  * Aktuális verzió száma.
  */
 
-#define revision "4.0.4"
+#define revision "4.0.5"
 
 /*
  * Program fájlainak elnevezése. Ha cserélve van név egy helyen keljen csak cserélni.

@@ -107,7 +107,7 @@ void CommandMgr::HandleSzoba(CommandMessage& recvData)
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Funkció használata: %sszoba <ide jön a szoba>", sIRCSession.GetParancsElojel());
 	}
 	else
-		sVezerlo.GetSQLConn()->Query("UPDATE schumix SET irc_cim = '%s' WHERE entry = '1'", res[1].c_str());
+		sVezerlo.GetSQLConn()->Query("UPDATE schumix SET irc_cim = '%s' WHERE entry = '1'", sVezerlo.GetSQLConn()->EscapeString(res[1]).c_str());
 
 	res.clear();
 }

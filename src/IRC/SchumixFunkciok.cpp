@@ -188,7 +188,7 @@ void IRCSession::HLUzenet(IRCMessage& recvData)
 		for(int i = 1; i < resAdat; i++)
 		{
 			transform(res[i].begin(), res[i].end(), res[i].begin(), ::tolower);
-			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT info, alapot FROM hluzenet WHERE nick = '%s'", res[i].c_str());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT info, alapot FROM hluzenet WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[i]).c_str());
 			if(db)
 			{
 				string info = db->Fetch()[0].GetString();

@@ -356,7 +356,7 @@ void CommandMgr::HandleIrc(CommandMessage& recvData)
 	}
 	else
 	{
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT hasznalata FROM irc_parancsok WHERE parancs = '%s'", irc.c_str());
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT hasznalata FROM irc_parancsok WHERE parancs = '%s'", sVezerlo.GetSQLConn()->EscapeString(irc).c_str());
 		if(db)
 		{
 			string hasznalata = db->Fetch()[0].GetString();
@@ -457,7 +457,7 @@ void CommandMgr::HandleJegyzet(CommandMessage& recvData)
 			return;
 		}
 
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT jegyzet FROM jegyzetek WHERE kod = '%s'", res[2].c_str());
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT jegyzet FROM jegyzetek WHERE kod = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 		if(db)
 		{
 			string jegyzet = db->Fetch()[0].GetString();
@@ -473,7 +473,7 @@ void CommandMgr::HandleJegyzet(CommandMessage& recvData)
 			alomany += " " + res[i];
 
 		string kod = sIRCSession.RandomString(10, true, true, false);
-		sVezerlo.GetSQLConn()->Query("INSERT INTO `jegyzetek`(kod, nick, jegyzet) VALUES ('%s', '%s', '%s')", kod.c_str(), recvData.GetNick(), alomany.substr(1).c_str());
+		sVezerlo.GetSQLConn()->Query("INSERT INTO `jegyzetek`(kod, nick, jegyzet) VALUES ('%s', '%s', '%s')", kod.c_str(), recvData.GetNick(), sVezerlo.GetSQLConn()->EscapeString(alomany.substr(1)).c_str());
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetNick(), "Jegyzet kodja: %s", kod.c_str());
 	}
 

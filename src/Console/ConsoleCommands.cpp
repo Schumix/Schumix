@@ -163,7 +163,7 @@ bool Console::ConsoleCommands(char* adat)
 			{
 				string nev = res[3];
 				Log.Notice("Console", "%s: %skapcsolva", nev.c_str(), status.c_str());
-				sVezerlo.GetSQLConn()->Query("UPDATE schumix SET funkcio_status = '%s' WHERE funkcio_nev = '%s'", status.c_str(), nev.c_str());
+				sVezerlo.GetSQLConn()->Query("UPDATE schumix SET funkcio_status = '%s' WHERE funkcio_nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(status).c_str(), sVezerlo.GetSQLConn()->EscapeString(nev).c_str());
 			}
 		}
 
@@ -180,7 +180,7 @@ bool Console::ConsoleCommands(char* adat)
 			return false;
 		}
 
-		sVezerlo.GetSQLConn()->Query("UPDATE schumix SET irc_cim = '%s' WHERE entry = '1'", res[2].c_str());
+		sVezerlo.GetSQLConn()->Query("UPDATE schumix SET irc_cim = '%s' WHERE entry = '1'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 
 		res.clear();
 		return true;
@@ -240,7 +240,7 @@ bool Console::ConsoleCommands(char* adat)
 			int flag;
 			transform(res[3].begin(), res[3].end(), res[3].begin(), ::tolower);
 
-			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT flag FROM adminok WHERE nev = '%s'", res[3].c_str());
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT flag FROM adminok WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str());
 			if(db)
 				flag = cast_int(db->Fetch()[0].GetUInt8());
 			else
@@ -280,8 +280,8 @@ bool Console::ConsoleCommands(char* adat)
 			transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
 			string pass = sIRCSession.RandomString(10, true, true, false);
 
-			sVezerlo.GetSQLConn()->Query("INSERT INTO `adminok`(nev, jelszo) VALUES ('%s', '%s')", nev.c_str(), sVezerlo.Sha1(pass).c_str());
-			sVezerlo.GetSQLConn()->Query("INSERT INTO `hluzenet`(nick, alapot) VALUES ('%s', 'ki')", nev.c_str());
+			sVezerlo.GetSQLConn()->Query("INSERT INTO `adminok`(nev, jelszo) VALUES ('%s', '%s')", sVezerlo.GetSQLConn()->EscapeString(nev).c_str(), sVezerlo.Sha1(pass).c_str());
+			sVezerlo.GetSQLConn()->Query("INSERT INTO `hluzenet`(nick, alapot) VALUES ('%s', 'ki')", sVezerlo.GetSQLConn()->EscapeString(nev).c_str());
 
 			Log.Notice("Console", "Admin hozzaadva: %s", nev.c_str());
 			Log.Notice("Console", "Mostani jelszo: %s", pass.c_str());
@@ -297,8 +297,8 @@ bool Console::ConsoleCommands(char* adat)
 
 			string nev = res[3];
 			transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
-			sVezerlo.GetSQLConn()->Query("DELETE FROM `adminok` WHERE nev = '%s'", nev.c_str());
-			sVezerlo.GetSQLConn()->Query("DELETE FROM `hluzenet` WHERE nick = '%s'", nev.c_str());
+			sVezerlo.GetSQLConn()->Query("DELETE FROM `adminok` WHERE nev = '%s'", sVezerlo.GetSQLConn()->EscapeString(nev).c_str());
+			sVezerlo.GetSQLConn()->Query("DELETE FROM `hluzenet` WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(nev).c_str());
 			Log.Notice("Console", "Admin törölve: %s", nev.c_str());
 		}
 		else if(res[2] == "rang")
@@ -326,7 +326,7 @@ bool Console::ConsoleCommands(char* adat)
 
 			if(rang == Administrator || rang == Operator)
 			{
-				sVezerlo.GetSQLConn()->Query("UPDATE adminok SET flag = '%i' WHERE nev = '%s'", rang, nev.c_str());
+				sVezerlo.GetSQLConn()->Query("UPDATE adminok SET flag = '%i' WHERE nev = '%s'", rang, sVezerlo.GetSQLConn()->EscapeString(nev).c_str());
 				Log.Notice("Console", "Rang sikeresen modositva.");
 			}
 			else
