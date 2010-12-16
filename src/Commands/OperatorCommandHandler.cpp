@@ -629,6 +629,7 @@ void CommandMgr::HandleChannel(CommandMessage& recvData)
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Aktiv: %s", Aktivszobak.substr(2).c_str());
 			else
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Aktiv: Nincs adat.");
+
 			if(adatszoba1)
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Deaktiv: %s", DeAktivszobak.substr(2).c_str());
 			else
@@ -786,7 +787,6 @@ void CommandMgr::HandleKick(CommandMessage& recvData)
 	{
 		if(kick != Nick)
 			sIRCSession.WriteLine("KICK %s %s", recvData.GetChannel(), kick.c_str());
-
 	}
 	else if(szam >= 3)
 	{
@@ -833,7 +833,6 @@ void CommandMgr::HandleMode(CommandMessage& recvData)
 		nevek += " " + res[i];
 
 	sIRCSession.WriteLine("MODE %s %s %s", recvData.GetChannel(), rang.c_str(), nevek.substr(1).c_str());
-
 	res.clear();
 }
 
@@ -1417,7 +1416,6 @@ void CommandMgr::HandleGit(CommandMessage& recvData)
 				res.clear();
 				return;
 			}
-
 
 			if(res.size() < 5)
 

@@ -40,7 +40,13 @@ int main()
 #if PLATFORM == PLATFORM_WINDOWS
 	// WSA Setup
 	WSADATA info;
-	WSAStartup(MAKEWORD(2, 2), &info);
+	int error;
+
+	if((err = WSAStartup(MAKEWORD(2, 2), &info)) != 0)
+	{
+		Log.Error("WSA", "Hiba tortent a WSA inicializalasanal. Hibakod: %i", error);
+		return -1;
+	}
 #endif
 
 	Log.Notice("Config", "Config fajl betoltese...");
