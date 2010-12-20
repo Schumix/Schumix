@@ -252,6 +252,8 @@ void IRCSession::SvnSandshroud(int rev, string channel)
 			return;
 		}
 	}
+	else
+		curl_easy_cleanup(m_Curl);
 
 	// author
 	m_Curl = curl_easy_init();
@@ -281,6 +283,8 @@ void IRCSession::SvnSandshroud(int rev, string channel)
 			return;
 		}
 	}
+	else
+		curl_easy_cleanup(m_Curl);
 
 	if(commit == "" && author == "")
 		SendChatMessage(PRIVMSG, channel.c_str(), "Nincs ilyen rev.");

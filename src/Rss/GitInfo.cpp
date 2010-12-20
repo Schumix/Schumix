@@ -50,7 +50,7 @@ GitInfo::GitInfo(string host, string user, string password, string database)
 			Feltoltes(id);
 
 			m_running[id] = true;
-			MultiThread Mt(this, id);
+			GMultiThread Mt(id);
 			boost::thread t(Mt);
 			Threadszam++;
 		} while(adatbazis->NextRow());
@@ -112,7 +112,7 @@ void GitInfo::NewThread(uint32 id)
 	Feltoltes(id);
 
 	m_running[id] = true;
-	MultiThread Mt(this, id);
+	GMultiThread Mt(id);
 	boost::thread t(Mt);
 
 	Log.Success("GitInfo", "Thread indult: %s %s", nev[id].c_str(), tipus[id].c_str());
@@ -124,7 +124,7 @@ void GitInfo::StopThread(uint32 id)
 		return;
 
 	m_running[id] = false;
-	MultiThread Mt(this, id);
+	GMultiThread Mt(id);
 	boost::thread t(Mt);
 
 	Log.Success("GitInfo", "Thread leallt: %s %s", nev[id].c_str(), tipus[id].c_str());
@@ -158,7 +158,7 @@ void GitInfo::ReloadAllThread()
 			Feltoltes(id);
 
 			m_running[id] = true;
-			MultiThread Mt(this, id);
+			GMultiThread Mt(id);
 			boost::thread t(Mt);
 			Threadszam++;
 		} while(adatbazis1->NextRow());
@@ -179,7 +179,7 @@ void GitInfo::ReloadThread(uint32 id)
 	Feltoltes(id);
 
 	m_running[id] = true;
-	MultiThread Mt(this, id);
+	GMultiThread Mt(id);
 	boost::thread t(Mt);
 
 	Log.Success("GitInfo", "Thread ujraindult: %s %s", nev[id].c_str(), tipus[id].c_str());
@@ -291,6 +291,8 @@ string GitInfo::titleUrl(uint32 id)
 			return "nincs adat";
 		}
 	}
+	else
+		curl_easy_cleanup(m_Curl[id]);
 
 	return "nincs adat";
 }
@@ -344,6 +346,8 @@ string GitInfo::revUrl(uint32 id)
 			return "nincs adat";
 		}
 	}
+	else
+		curl_easy_cleanup(m_Curl[id]);
 
 	return "nincs adat";
 }
@@ -397,6 +401,8 @@ string GitInfo::authorUrl(uint32 id)
 			return "nincs adat";
 		}
 	}
+	else
+		curl_easy_cleanup(m_Curl[id]);
 
 	return "nincs adat";
 }

@@ -170,6 +170,8 @@ void CommandMgr::HandleKeres(CommandMessage& recvData)
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás találat");
 			}
 		}
+		else
+			curl_easy_cleanup(m_Curl);
 	}
 
 	res.clear();
@@ -243,6 +245,8 @@ void CommandMgr::HandleForditas(CommandMessage& recvData)
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás fordítás");
 			}
 		}
+		else
+			curl_easy_cleanup(m_Curl);
 	}
 
 	res.clear();

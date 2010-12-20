@@ -35,31 +35,14 @@ public:
 	void ReloadThread(uint32 id);
 	void Leallas();
 
+	void Thread(uint32 id);
 	bool Running(uint32 id) { return m_running[id]; }
 
 protected:
-	struct MultiThread
-	{
-		uint32 _id;
-		SvnInfo* _mgr;
-
-		MultiThread(SvnInfo* mgr, uint32 id)
-		{
-			_id = id;
-			_mgr = mgr;
-		}
-
-		void operator()()
-		{
-			_mgr->Thread(_id);
-		}
-	};
-
 	int getrfa(uint32 id, string title);
 	string titleUrl(uint32 id);
 	string authorUrl(uint32 id);
 
-	void Thread(uint32 id);
 	void Kiiras(uint32 id);
 	void Lekerdezes(uint32 id);
 	void Feltoltes(uint32 id);
@@ -89,5 +72,27 @@ private:
 };
 
 #define sSvnInfo SvnInfo::getSingleton()
+
+struct SMultiThread
+{
+	uint32 _id;
+
+	SMultiThread(uint32 id)
+	{
+		_id = id;
+	}
+
+	~SMultiThread()
+	{
+#ifdef _DEBUG_MOD
+		Log.Notice("SvnInfo", "MultiThread::~MultiThread()");
+#endif
+	}
+
+	void operator()()
+	{
+		sSvnInfo.Thread(_id);
+	}
+};
 
 #endif

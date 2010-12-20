@@ -35,31 +35,14 @@ public:
 	void ReloadThread(uint32 id);
 	void Leallas();
 
+	void Thread(uint32 id);
 	bool Running(uint32 id) { return m_running[id]; }
 
 protected:
-	struct MultiThread
-	{
-		uint32 _id;
-		GitInfo* _mgr;
-
-		MultiThread(GitInfo* mgr, uint32 id)
-		{
-			_id = id;
-			_mgr = mgr;
-		}
-
-		void operator()()
-		{
-			_mgr->Thread(_id);
-		}
-	};
-
 	string titleUrl(uint32 id);
 	string revUrl(uint32 id);
 	string authorUrl(uint32 id);
 
-	void Thread(uint32 id);
 	void Kiiras(uint32 id);
 	void Lekerdezes(uint32 id);
 	void Feltoltes(uint32 id);
@@ -91,5 +74,27 @@ private:
 };
 
 #define sGitInfo GitInfo::getSingleton()
+
+struct GMultiThread
+{
+	uint32 _id;
+
+	GMultiThread(uint32 id)
+	{
+		_id = id;
+	}
+
+	~GMultiThread()
+	{
+#ifdef _DEBUG_MOD
+		Log.Notice("GitInfo", "MultiThread::~MultiThread()");
+#endif
+	}
+
+	void operator()()
+	{
+		sGitInfo.Thread(_id);
+	}
+};
 
 #endif

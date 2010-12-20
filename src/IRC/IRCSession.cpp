@@ -49,6 +49,7 @@ IRCSession::IRCSession(string host, uint32 port)
 #else
 		mkdir(m_LogHelye.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 #endif
+	closedir(pDir);
 
 	m_ConnState = CONN_CONNECTED;
 	m_running = true;

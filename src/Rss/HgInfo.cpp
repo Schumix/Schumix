@@ -50,7 +50,7 @@ HgInfo::HgInfo(string host, string user, string password, string database)
 			Feltoltes(id);
 
 			m_running[id] = true;
-			MultiThread Mt(this, id);
+			HMultiThread Mt(id);
 			boost::thread t(Mt);
 			Threadszam++;
 		} while(adatbazis->NextRow());
@@ -119,7 +119,7 @@ void HgInfo::NewThread(uint32 id)
 	Feltoltes(id);
 
 	m_running[id] = true;
-	MultiThread Mt(this, id);
+	HMultiThread Mt(id);
 	boost::thread t(Mt);
 
 	Log.Success("HgInfo", "Thread indult: %s", nev[id].c_str());
@@ -131,7 +131,7 @@ void HgInfo::StopThread(uint32 id)
 		return;
 
 	m_running[id] = false;
-	MultiThread Mt(this, id);
+	HMultiThread Mt(id);
 	boost::thread t(Mt);
 
 	Log.Success("HgInfo", "Thread leallt: %s", nev[id].c_str());
@@ -165,7 +165,7 @@ void HgInfo::ReloadAllThread()
 			Feltoltes(id);
 
 			m_running[id] = true;
-			MultiThread Mt(this, id);
+			HMultiThread Mt(id);
 			boost::thread t(Mt);
 			Threadszam++;
 		} while(adatbazis1->NextRow());
@@ -186,7 +186,7 @@ void HgInfo::ReloadThread(uint32 id)
 	Feltoltes(id);
 
 	m_running[id] = true;
-	MultiThread Mt(this, id);
+	HMultiThread Mt(id);
 	boost::thread t(Mt);
 
 	Log.Success("HgInfo", "Thread ujraindult: %s", nev[id].c_str());
@@ -298,6 +298,8 @@ string HgInfo::titleUrl(uint32 id)
 			return "nincs adat";
 		}
 	}
+	else
+		curl_easy_cleanup(m_Curl[id]);
 
 	return "nincs adat";
 }
@@ -351,6 +353,8 @@ string HgInfo::revUrl(uint32 id)
 			return "nincs adat";
 		}
 	}
+	else
+		curl_easy_cleanup(m_Curl[id]);
 
 	return "nincs adat";
 }
@@ -404,6 +408,8 @@ string HgInfo::authorUrl(uint32 id)
 			return "nincs adat";
 		}
 	}
+	else
+		curl_easy_cleanup(m_Curl[id]);
 
 	return "nincs adat";
 }

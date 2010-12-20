@@ -50,7 +50,7 @@ SvnInfo::SvnInfo(string host, string user, string password, string database)
 			Feltoltes(id);
 
 			m_running[id] = true;
-			MultiThread Mt(this, id);
+			HMultiThread Mt(id);
 			boost::thread t(Mt);
 			Threadszam++;
 		} while(adatbazis->NextRow());
@@ -120,7 +120,7 @@ void SvnInfo::NewThread(uint32 id)
 	Feltoltes(id);
 
 	m_running[id] = true;
-	MultiThread Mt(this, id);
+	HMultiThread Mt(id);
 	boost::thread t(Mt);
 
 	Log.Success("SvnInfo", "Thread indult: %s", nev[id].c_str());
@@ -132,7 +132,7 @@ void SvnInfo::StopThread(uint32 id)
 		return;
 
 	m_running[id] = false;
-	MultiThread Mt(this, id);
+	HMultiThread Mt(id);
 	boost::thread t(Mt);
 
 	Log.Success("SvnInfo", "Thread leallt: %s", nev[id].c_str());
@@ -166,7 +166,7 @@ void SvnInfo::ReloadAllThread()
 			Feltoltes(id);
 
 			m_running[id] = true;
-			MultiThread Mt(this, id);
+			HMultiThread Mt(id);
 			boost::thread t(Mt);
 			Threadszam++;
 		} while(adatbazis1->NextRow());
@@ -187,7 +187,7 @@ void SvnInfo::ReloadThread(uint32 id)
 	Feltoltes(id);
 
 	m_running[id] = true;
-	MultiThread Mt(this, id);
+	HMultiThread Mt(id);
 	boost::thread t(Mt);
 
 	Log.Success("SvnInfo", "Thread ujraindult: %s", nev[id].c_str());
@@ -359,6 +359,8 @@ string SvnInfo::titleUrl(uint32 id)
 			return "nincs adat";
 		}
 	}
+	else
+		curl_easy_cleanup(m_Curl[id]);
 
 	return "nincs adat";
 }
@@ -412,6 +414,8 @@ string SvnInfo::authorUrl(uint32 id)
 			return "nincs adat";
 		}
 	}
+	else
+		curl_easy_cleanup(m_Curl[id]);
 
 	return "nincs adat";
 }

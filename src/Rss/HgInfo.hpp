@@ -35,31 +35,14 @@ public:
 	void ReloadThread(uint32 id);
 	void Leallas();
 
+	void Thread(uint32 id);
 	bool Running(uint32 id) { return m_running[id]; }
 
 protected:
-	struct MultiThread
-	{
-		uint32 _id;
-		HgInfo* _mgr;
-
-		MultiThread(HgInfo* mgr, uint32 id)
-		{
-			_id = id;
-			_mgr = mgr;
-		}
-
-		void operator()()
-		{
-			_mgr->Thread(_id);
-		}
-	};
-
 	string titleUrl(uint32 id);
 	string revUrl(uint32 id);
 	string authorUrl(uint32 id);
 
-	void Thread(uint32 id);
 	void Kiiras(uint32 id);
 	void Lekerdezes(uint32 id);
 	void Feltoltes(uint32 id);
@@ -90,5 +73,27 @@ private:
 };
 
 #define sHgInfo HgInfo::getSingleton()
+
+struct HMultiThread
+{
+	uint32 _id;
+
+	HMultiThread(uint32 id)
+	{
+		_id = id;
+	}
+
+	~HMultiThread()
+	{
+#ifdef _DEBUG_MOD
+		Log.Notice("HgInfo", "MultiThread::~MultiThread()");
+#endif
+	}
+
+	void operator()()
+	{
+		sHgInfo.Thread(_id);
+	}
+};
 
 #endif
