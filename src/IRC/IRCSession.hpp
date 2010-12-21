@@ -152,7 +152,7 @@ protected:
 	void Update();
 
 	void InitHandler();
-	void RegisterHandler(string code, IRCCallback method);
+	void RegisterHandle(string code, IRCCallback method);
 
 	/* Message Handlers
 	 * --------------------------------

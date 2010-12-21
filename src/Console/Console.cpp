@@ -25,7 +25,7 @@ Console::Console()
 {
 	m_running = true;
 	Thread t(&RunUpdateProc, this);
-	ConsoleLog = Config.MainConfig.GetBoolDefault("Log", "Irclog", false);;
+	ConsoleLog = Config.MainConfig.GetBoolDefault("Log", "Irclog", false);
 
 	Log.Notice("Console", "Console elindult.");
 	printf("\n");

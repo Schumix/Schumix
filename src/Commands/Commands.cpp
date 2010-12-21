@@ -90,4 +90,3 @@ bool Commands::Admin(string nick, string Vhost, AdminFlag Flag)
 
 	return false;
 }
-

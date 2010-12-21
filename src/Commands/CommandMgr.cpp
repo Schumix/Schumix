@@ -64,48 +64,48 @@ void CommandMgr::BejovoInfo(IRCMessage& recvData)
 
 void CommandMgr::InitHandler()
 {
-	RegisterHandler("xbot",        cast_default(CommandHandler, &CommandMgr::HandleXbot));
-	RegisterHandler("help",        cast_default(CommandHandler, &CommandMgr::HandleHelp));
-	RegisterHandler("szinek",      cast_default(CommandHandler, &CommandMgr::HandleSzinek));
-	RegisterHandler("info",        cast_default(CommandHandler, &CommandMgr::HandleInfo));
-	RegisterHandler("roll",        cast_default(CommandHandler, &CommandMgr::HandleRoll));
-	RegisterHandler("admin",       cast_default(CommandHandler, &CommandMgr::HandleAdmin));
-	RegisterHandler("hozzaferes",  cast_default(CommandHandler, &CommandMgr::HandleHozzaferes));
-	RegisterHandler("ujjelszo",    cast_default(CommandHandler, &CommandMgr::HandleUjjelszo));
-	RegisterHandler("datum",       cast_default(CommandHandler, &CommandMgr::HandleDatum));
-	RegisterHandler("ido",         cast_default(CommandHandler, &CommandMgr::HandleIdo));
-	RegisterHandler("funkcio",     cast_default(CommandHandler, &CommandMgr::HandleFunkciok));
-	RegisterHandler("keres",       cast_default(CommandHandler, &CommandMgr::HandleKeres));
-	RegisterHandler("fordit",      cast_default(CommandHandler, &CommandMgr::HandleForditas));
-	RegisterHandler("teszt",       cast_default(CommandHandler, &CommandMgr::HandleTeszt));
-	RegisterHandler("sha1",        cast_default(CommandHandler, &CommandMgr::HandleSha1));
-	RegisterHandler("md5",         cast_default(CommandHandler, &CommandMgr::HandleMd5));
-	RegisterHandler("channel",     cast_default(CommandHandler, &CommandMgr::HandleChannel));
-	RegisterHandler("sznap",       cast_default(CommandHandler, &CommandMgr::HandleSznap));
-	RegisterHandler("xrev",        cast_default(CommandHandler, &CommandMgr::HandleXrev));
-	RegisterHandler("szoba",       cast_default(CommandHandler, &CommandMgr::HandleSzoba));
-	RegisterHandler("irc",         cast_default(CommandHandler, &CommandMgr::HandleIrc));
-	RegisterHandler("szam",        cast_default(CommandHandler, &CommandMgr::HandleSzam));
-	RegisterHandler("nick",        cast_default(CommandHandler, &CommandMgr::HandleNick));
-	RegisterHandler("join",        cast_default(CommandHandler, &CommandMgr::HandleJoin));
-	RegisterHandler("left",        cast_default(CommandHandler, &CommandMgr::HandleLeft));
-	RegisterHandler("kick",        cast_default(CommandHandler, &CommandMgr::HandleKick));
-	RegisterHandler("mode",        cast_default(CommandHandler, &CommandMgr::HandleMode));
-	RegisterHandler("uzenet",      cast_default(CommandHandler, &CommandMgr::HandleUzenet));
-	RegisterHandler("hluzenet",    cast_default(CommandHandler, &CommandMgr::HandleHLFunkcio));
-	RegisterHandler("svn",         cast_default(CommandHandler, &CommandMgr::HandleSvn));
-	RegisterHandler("git",         cast_default(CommandHandler, &CommandMgr::HandleGit));
-	RegisterHandler("hg",          cast_default(CommandHandler, &CommandMgr::HandleHg));
-	RegisterHandler("jegyzet",     cast_default(CommandHandler, &CommandMgr::HandleJegyzet));
-	RegisterHandler("reload",      cast_default(CommandHandler, &CommandMgr::HandleReload));
-	RegisterHandler("whois",       cast_default(CommandHandler, &CommandMgr::HandleWhois));
-	RegisterHandler("autofunkcio", cast_default(CommandHandler, &CommandMgr::HandleAutoFunkcio));
-	RegisterHandler("kikapcs",     cast_default(CommandHandler, &CommandMgr::HandleKikapcsolas));
+	RegisterHandle("xbot",        cast_default(CommandHandler, &CommandMgr::HandleXbot));
+	RegisterHandle("help",        cast_default(CommandHandler, &CommandMgr::HandleHelp));
+	RegisterHandle("szinek",      cast_default(CommandHandler, &CommandMgr::HandleSzinek));
+	RegisterHandle("info",        cast_default(CommandHandler, &CommandMgr::HandleInfo));
+	RegisterHandle("roll",        cast_default(CommandHandler, &CommandMgr::HandleRoll));
+	RegisterHandle("admin",       cast_default(CommandHandler, &CommandMgr::HandleAdmin));
+	RegisterHandle("hozzaferes",  cast_default(CommandHandler, &CommandMgr::HandleHozzaferes));
+	RegisterHandle("ujjelszo",    cast_default(CommandHandler, &CommandMgr::HandleUjjelszo));
+	RegisterHandle("datum",       cast_default(CommandHandler, &CommandMgr::HandleDatum));
+	RegisterHandle("ido",         cast_default(CommandHandler, &CommandMgr::HandleIdo));
+	RegisterHandle("funkcio",     cast_default(CommandHandler, &CommandMgr::HandleFunkciok));
+	RegisterHandle("keres",       cast_default(CommandHandler, &CommandMgr::HandleKeres));
+	RegisterHandle("fordit",      cast_default(CommandHandler, &CommandMgr::HandleForditas));
+	RegisterHandle("teszt",       cast_default(CommandHandler, &CommandMgr::HandleTeszt));
+	RegisterHandle("sha1",        cast_default(CommandHandler, &CommandMgr::HandleSha1));
+	RegisterHandle("md5",         cast_default(CommandHandler, &CommandMgr::HandleMd5));
+	RegisterHandle("channel",     cast_default(CommandHandler, &CommandMgr::HandleChannel));
+	RegisterHandle("sznap",       cast_default(CommandHandler, &CommandMgr::HandleSznap));
+	RegisterHandle("xrev",        cast_default(CommandHandler, &CommandMgr::HandleXrev));
+	RegisterHandle("szoba",       cast_default(CommandHandler, &CommandMgr::HandleSzoba));
+	RegisterHandle("irc",         cast_default(CommandHandler, &CommandMgr::HandleIrc));
+	RegisterHandle("szam",        cast_default(CommandHandler, &CommandMgr::HandleSzam));
+	RegisterHandle("nick",        cast_default(CommandHandler, &CommandMgr::HandleNick));
+	RegisterHandle("join",        cast_default(CommandHandler, &CommandMgr::HandleJoin));
+	RegisterHandle("left",        cast_default(CommandHandler, &CommandMgr::HandleLeft));
+	RegisterHandle("kick",        cast_default(CommandHandler, &CommandMgr::HandleKick));
+	RegisterHandle("mode",        cast_default(CommandHandler, &CommandMgr::HandleMode));
+	RegisterHandle("uzenet",      cast_default(CommandHandler, &CommandMgr::HandleUzenet));
+	RegisterHandle("hluzenet",    cast_default(CommandHandler, &CommandMgr::HandleHLFunkcio));
+	RegisterHandle("svn",         cast_default(CommandHandler, &CommandMgr::HandleSvn));
+	RegisterHandle("git",         cast_default(CommandHandler, &CommandMgr::HandleGit));
+	RegisterHandle("hg",          cast_default(CommandHandler, &CommandMgr::HandleHg));
+	RegisterHandle("jegyzet",     cast_default(CommandHandler, &CommandMgr::HandleJegyzet));
+	RegisterHandle("reload",      cast_default(CommandHandler, &CommandMgr::HandleReload));
+	RegisterHandle("whois",       cast_default(CommandHandler, &CommandMgr::HandleWhois));
+	RegisterHandle("autofunkcio", cast_default(CommandHandler, &CommandMgr::HandleAutoFunkcio));
+	RegisterHandle("kikapcs",     cast_default(CommandHandler, &CommandMgr::HandleKikapcsolas));
 
 	Log.Notice("CommandMgr", "Osszes Command handler regisztralva.");
 }
 
-void CommandMgr::RegisterHandler(string code, CommandHandler method)
+void CommandMgr::RegisterHandle(string code, CommandHandler method)
 {
 	CommandHandlerMap.insert(make_pair(code, method));
 }
@@ -121,4 +121,3 @@ int CommandMgr::writer(char* data, size_t size, size_t nmemb, string *buffer)
 	}
 	return result;
 }
-
