@@ -52,7 +52,7 @@ public:
 
 protected:
 	void InitHandler();
-	void RegisterHandle(string code, CommandHandler method);
+	void RegisterHandler(string code, CommandHandler method);
 
 	void HandleXbot(CommandMessage& recvData);
 	void HandleHelp(CommandMessage& recvData);

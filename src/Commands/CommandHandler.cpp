@@ -25,7 +25,7 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ha a aparancs mögé irod a megadot paranc snevét vagy a nevet és egy alparancsát információt add a használatáról.");
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ha a aparancs mögé irod a megadott parancs nevét vagy a nevet és egy alparancsát információt add a használatáról.");
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Fő parancsom: %sxbot", sIRCSession.GetParancsElojel());
 		return;
 	}
@@ -104,7 +104,7 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 	else if(res[1] == "calc")
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Több funkciós számologép.");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %scalc <egyenlet>", sIRCSession.GetParancsElojel());
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %scalc <szám>", sIRCSession.GetParancsElojel());
 	}
 	else if(res[1] == "uzenet")
 	{

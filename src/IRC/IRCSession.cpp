@@ -114,30 +114,30 @@ IRCSession::~IRCSession()
 
 void IRCSession::InitHandler()
 {
-	RegisterHandle(RPL_SUCCESSFUL_AUTH,    cast_default(IRCCallback, &IRCSession::HandleSuccessfulAuth));
-	RegisterHandle(RPL_MOTDSTART,          cast_default(IRCCallback, &IRCSession::HandleMotdStart));
-	RegisterHandle(RPL_MOTD,               cast_default(IRCCallback, &IRCSession::HandleMotd));
-	RegisterHandle(RPL_ENDOFMOTD,          cast_default(IRCCallback, &IRCSession::HandleMotdStop));
-	RegisterHandle(RPL_NOTICE,             cast_default(IRCCallback, &IRCSession::HandleNotice));
-	RegisterHandle(RPL_PRIVMSG,            cast_default(IRCCallback, &IRCSession::HandlePrivmsg));
-	RegisterHandle(RPL_PING,               cast_default(IRCCallback, &IRCSession::HandlePing));
-	RegisterHandle(RPL_PONG,               cast_default(IRCCallback, &IRCSession::HandlePong));
-	RegisterHandle(RPL_NICK_ERROR,         cast_default(IRCCallback, &IRCSession::HandleNickError));
-	RegisterHandle(RPL_WHOIS,              cast_default(IRCCallback, &IRCSession::HandleWhois));
-	RegisterHandle(RPL_KICK,               cast_default(IRCCallback, &IRCSession::HandleKick));
-	RegisterHandle(RPL_MODE,               cast_default(IRCCallback, &IRCSession::HandleMode));
-	RegisterHandle(RPL_JOIN,               cast_default(IRCCallback, &IRCSession::HandleJoin));
-	RegisterHandle(RPL_LEFT,               cast_default(IRCCallback, &IRCSession::HandleLeft));
-	RegisterHandle(RPL_QUIT,               cast_default(IRCCallback, &IRCSession::HandleQuit));
-	RegisterHandle(RPL_404,                cast_default(IRCCallback, &IRCSession::HandleReJoin));
-	RegisterHandle(RPL_NICK,               cast_default(IRCCallback, &IRCSession::HandleNick));
-	RegisterHandle(RPL_NoChannel_jelszo,   cast_default(IRCCallback, &IRCSession::HandleNoChannelJelszo));
-	RegisterHandle(RPL_Channel_ban,        cast_default(IRCCallback, &IRCSession::HandleChannelBan));
+	RegisterHandler(RPL_SUCCESSFUL_AUTH,    cast_default(IRCCallback, &IRCSession::HandleSuccessfulAuth));
+	RegisterHandler(RPL_MOTDSTART,          cast_default(IRCCallback, &IRCSession::HandleMotdStart));
+	RegisterHandler(RPL_MOTD,               cast_default(IRCCallback, &IRCSession::HandleMotd));
+	RegisterHandler(RPL_ENDOFMOTD,          cast_default(IRCCallback, &IRCSession::HandleMotdStop));
+	RegisterHandler(RPL_NOTICE,             cast_default(IRCCallback, &IRCSession::HandleNotice));
+	RegisterHandler(RPL_PRIVMSG,            cast_default(IRCCallback, &IRCSession::HandlePrivmsg));
+	RegisterHandler(RPL_PING,               cast_default(IRCCallback, &IRCSession::HandlePing));
+	RegisterHandler(RPL_PONG,               cast_default(IRCCallback, &IRCSession::HandlePong));
+	RegisterHandler(RPL_NICK_ERROR,         cast_default(IRCCallback, &IRCSession::HandleNickError));
+	RegisterHandler(RPL_WHOIS,              cast_default(IRCCallback, &IRCSession::HandleWhois));
+	RegisterHandler(RPL_KICK,               cast_default(IRCCallback, &IRCSession::HandleKick));
+	RegisterHandler(RPL_MODE,               cast_default(IRCCallback, &IRCSession::HandleMode));
+	RegisterHandler(RPL_JOIN,               cast_default(IRCCallback, &IRCSession::HandleJoin));
+	RegisterHandler(RPL_LEFT,               cast_default(IRCCallback, &IRCSession::HandleLeft));
+	RegisterHandler(RPL_QUIT,               cast_default(IRCCallback, &IRCSession::HandleQuit));
+	RegisterHandler(RPL_404,                cast_default(IRCCallback, &IRCSession::HandleReJoin));
+	RegisterHandler(RPL_NICK,               cast_default(IRCCallback, &IRCSession::HandleNick));
+	RegisterHandler(RPL_NoChannel_jelszo,   cast_default(IRCCallback, &IRCSession::HandleNoChannelJelszo));
+	RegisterHandler(RPL_Channel_ban,        cast_default(IRCCallback, &IRCSession::HandleChannelBan));
 
 	Log.Notice("IRCSession", "Osszes IRC handler regisztralva.");
 }
 
-void IRCSession::RegisterHandle(string code, IRCCallback method)
+void IRCSession::RegisterHandler(string code, IRCCallback method)
 {
 	MessageHandlerMap.insert(make_pair(code, method));
 }
@@ -251,6 +251,7 @@ void IRCSession::ReConnect()
 					Log.Error("IRCSession", "Ujrakapcsolodas sikertelen ide: %s", m_Host.c_str());
 					SocketDisconnect();
 				}
+
 
 				else
 				{
