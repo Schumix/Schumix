@@ -251,6 +251,7 @@ void IRCSession::ReConnect()
 					Log.Error("IRCSession", "Ujrakapcsolodas sikertelen ide: %s", m_Host.c_str());
 					SocketDisconnect();
 				}
+
 				else
 				{
 					Log.Success("IRCSession", "Ujrakapcsolodva ide: %s", m_Host.c_str());
@@ -430,4 +431,10 @@ Thread_void IRCSession::RunUpdateProc(void* smg)
 {
 	cast_default(IRCSession*, smg)->ReConnect();
 	return NULL;
+}
+
+void IRCSession::CNick(IRCMessage& recvData)
+{
+	if(m_NickTarolo == recvData.Channel)
+		recvData.Channel = recvData.Nick;
 }

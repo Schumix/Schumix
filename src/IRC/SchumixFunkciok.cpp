@@ -21,7 +21,7 @@
 
 void IRCSession::Schumix(IRCMessage& recvData)
 {
-	if(FSelectChannel(PARANCSOK, recvData.Channel) != bekapcsol)
+	if(FSelectChannel(PARANCSOK, recvData.Channel) != bekapcsol && cast_int(recvData.Channel.find("#")) != string::npos)
 		return;
 
 	string _nick = m_NickName[0];
@@ -33,6 +33,8 @@ void IRCSession::Schumix(IRCMessage& recvData)
 		uint8 elsoszokoz = recvData.Args.find(' ');
 		if(elsoszokoz == string::npos)
 			elsoszokoz = recvData.Args.length();
+
+		CNick(recvData);
 
 		if(recvData.Args.length() <= elsoszokoz+1)
 		{

@@ -24,6 +24,8 @@ void CommandMgr::HandleAdmin(CommandMessage& recvData)
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
 		return;
 
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		if(sCommands.Admin(recvData.Nick, Operator))
@@ -34,7 +36,7 @@ void CommandMgr::HandleAdmin(CommandMessage& recvData)
 		else if(sCommands.Admin(recvData.Nick, Administrator))
 		{
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: %snick | %sjoin | %sleft | %skick | %smode", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: %sszinek | %sfunkcio | %skikapcs | %ssznap | %sszoba | %schannel | %shozzaferes | %sujjelszo | %ssvn | %sgit | %shg | %shluzenet | %sreload | %sautofunkcio", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: %sszinek | %sfunkcio | %skikapcs | %ssznap | %schannel | %shozzaferes | %sujjelszo | %ssvn | %sgit | %shg | %shluzenet | %sreload | %sautofunkcio", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
 		}
 
 		return;
@@ -269,6 +271,8 @@ void CommandMgr::HandleSzinek(CommandMessage& recvData)
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
 		return;
 
+	CNick(recvData);
+
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "1teszt1 2teszt2 3teszt3 4teszt4 5teszt5 6teszt6 7teszt7 8teszt8");
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "9teszt9 10teszt10 11teszt11 12teszt12 13teszt13 14teszt14 15teszt15");
 }
@@ -277,6 +281,8 @@ void CommandMgr::HandleFunkciok(CommandMessage& recvData)
 {
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
 		return;
+
+	CNick(recvData);
 
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
@@ -518,6 +524,8 @@ void CommandMgr::HandleChannel(CommandMessage& recvData)
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
 		return;
 
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
@@ -647,6 +655,8 @@ void CommandMgr::HandleSznap(CommandMessage& recvData)
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
 		return;
 
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
@@ -683,6 +693,8 @@ void CommandMgr::HandleNick(CommandMessage& recvData)
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
 		return;
 
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
@@ -716,6 +728,8 @@ void CommandMgr::HandleJoin(CommandMessage& recvData)
 		return;
 	}
 
+	CNick(recvData);
+
 	vector<string> res(1);
 	split(recvData.Args.substr(recvData.firstSpace+1), " ", res);
 
@@ -737,6 +751,8 @@ void CommandMgr::HandleLeft(CommandMessage& recvData)
 {
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
 		return;
+
+	CNick(recvData);
 
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
@@ -761,6 +777,8 @@ void CommandMgr::HandleKick(CommandMessage& recvData)
 {
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
 		return;
+
+	CNick(recvData);
 
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
@@ -808,6 +826,8 @@ void CommandMgr::HandleMode(CommandMessage& recvData)
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
 		return;
 
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
@@ -840,6 +860,8 @@ void CommandMgr::HandleHLFunkcio(CommandMessage& recvData)
 {
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
 		return;
+
+	CNick(recvData);
 
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
@@ -945,6 +967,8 @@ void CommandMgr::HandleSvn(CommandMessage& recvData)
 {
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
 		return;
+
+	CNick(recvData);
 
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
@@ -1186,6 +1210,8 @@ void CommandMgr::HandleGit(CommandMessage& recvData)
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
 		return;
 
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
@@ -1200,6 +1226,7 @@ void CommandMgr::HandleGit(CommandMessage& recvData)
 		res.clear();
 		return;
 	}
+
 
 	string info = res[1];
 
@@ -1466,6 +1493,8 @@ void CommandMgr::HandleHg(CommandMessage& recvData)
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
 		return;
 
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
@@ -1705,6 +1734,8 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 {
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
 		return;
+
+	CNick(recvData);
 
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{

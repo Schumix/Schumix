@@ -24,6 +24,8 @@ void CommandMgr::HandleTeszt(CommandMessage& recvData)
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Administrator))
 		return;
 
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
@@ -81,41 +83,12 @@ void CommandMgr::HandleTeszt(CommandMessage& recvData)
 	res.clear();
 }
 
-void CommandMgr::HandleSzoba(CommandMessage& recvData)
-{
-	if(!sCommands.Admin(recvData.Nick, recvData.Host, Administrator))
-		return;
-
-	if(recvData.Args.length() <= recvData.firstSpace+1)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
-		return;
-	}
-
-	vector<string> res(1);
-	split(recvData.Args.substr(recvData.firstSpace+1), " ", res);
-
-	if(res.size() < 2)
-	{
-		res.clear();
-		return;
-	}
-
-	if(res[1] == Help)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Segitség a konzol szoba váltásához!");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Funkció használata: %sszoba <ide jön a szoba>", sIRCSession.GetParancsElojel());
-	}
-	else
-		sVezerlo.GetSQLConn()->Query("UPDATE schumix SET irc_cim = '%s' WHERE entry = '1'", sVezerlo.GetSQLConn()->EscapeString(res[1]).c_str());
-
-	res.clear();
-}
-
 void CommandMgr::HandleReload(CommandMessage& recvData)
 {
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Administrator))
 		return;
+
+	CNick(recvData);
 
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
@@ -151,6 +124,8 @@ void CommandMgr::HandleKikapcsolas(CommandMessage& recvData)
 {
 	if(!sCommands.Admin(recvData.Nick, recvData.Host, Administrator))
 		return;
+
+	CNick(recvData);
 
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Viszlát :(");
 	sIRCSession.WriteLine("QUIT :%s leallitott parancsal.", recvData.GetNick());

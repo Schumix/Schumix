@@ -184,6 +184,7 @@ protected:
 	void Schumix(IRCMessage& recvData);
 	void HLUzenet(IRCMessage& recvData);
 	bool AutoKick(IRCMessage& recvData, string allapot);
+	void CNick(IRCMessage& recvData);
 
 	// Újra kapcsolodási szál
 	void ReConnect();

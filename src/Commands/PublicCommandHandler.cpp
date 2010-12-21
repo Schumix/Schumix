@@ -21,6 +21,8 @@
 
 void CommandMgr::HandleXbot(CommandMessage& recvData)
 {
+	CNick(recvData);
+
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Verzió: 10%s", revision);
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: %sinfo | %shelp | %sxrev | %sido | %sdatum | %sirc | %sroll | %sszam | %skeres | %sfordit | %ssha1 | %smd5 | %suzenet | %swhois | %sjegyzet", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Programmed by: 3Csaba");
@@ -28,17 +30,20 @@ void CommandMgr::HandleXbot(CommandMessage& recvData)
 
 void CommandMgr::HandleHelp(CommandMessage& recvData)
 {
+	CNick(recvData);
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ha egy parancs mögé irod a help-et segít a használatában!");
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Fõ parancsom: %sxbot", sIRCSession.GetParancsElojel());
 }
 
 void CommandMgr::HandleInfo(CommandMessage& recvData)
 {
+	CNick(recvData);
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Programozóm: Csaba, Twl és Scymex. Üzemeltetõ: %s.", sIRCSession.GetUzemelteto());
 }
 
 void CommandMgr::HandleRoll(CommandMessage& recvData)
 {
+	CNick(recvData);
 	uint32 adat = rand()%101;
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Százalékos aránya %u!", adat);
 }
@@ -62,6 +67,7 @@ static const char* Nevnap[12][31] = {
 
 void CommandMgr::HandleDatum(CommandMessage& recvData)
 {
+	CNick(recvData);
 	int honap = Honap();
 	int nap = Nap();
 
@@ -92,6 +98,7 @@ void CommandMgr::HandleDatum(CommandMessage& recvData)
 
 void CommandMgr::HandleIdo(CommandMessage& recvData)
 {
+	CNick(recvData);
 	int perc = Perc();
 
 	if(perc < 10)
@@ -102,6 +109,8 @@ void CommandMgr::HandleIdo(CommandMessage& recvData)
 
 void CommandMgr::HandleKeres(CommandMessage& recvData)
 {
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
@@ -179,6 +188,8 @@ void CommandMgr::HandleKeres(CommandMessage& recvData)
 
 void CommandMgr::HandleForditas(CommandMessage& recvData)
 {
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
@@ -254,6 +265,8 @@ void CommandMgr::HandleForditas(CommandMessage& recvData)
 
 void CommandMgr::HandleSha1(CommandMessage& recvData)
 {
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
@@ -265,6 +278,8 @@ void CommandMgr::HandleSha1(CommandMessage& recvData)
 
 void CommandMgr::HandleMd5(CommandMessage& recvData)
 {
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
@@ -293,6 +308,8 @@ void CommandMgr::HandleMd5(CommandMessage& recvData)
 
 void CommandMgr::HandleXrev(CommandMessage& recvData)
 {
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Emulátorok: sandshroud");
@@ -336,6 +353,8 @@ void CommandMgr::HandleXrev(CommandMessage& recvData)
 
 void CommandMgr::HandleIrc(CommandMessage& recvData)
 {
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
@@ -373,6 +392,8 @@ void CommandMgr::HandleIrc(CommandMessage& recvData)
 
 void CommandMgr::HandleSzam(CommandMessage& recvData)
 {
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
@@ -386,6 +407,8 @@ void CommandMgr::HandleSzam(CommandMessage& recvData)
 
 void CommandMgr::HandleUzenet(CommandMessage& recvData)
 {
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
@@ -423,11 +446,14 @@ void CommandMgr::HandleUzenet(CommandMessage& recvData)
 			sIRCSession.SendChatMessage(PRIVMSG, iras.c_str(), "%s", alomany.substr(1).c_str());
 	}
 
+
 	res.clear();
 }
 
 void CommandMgr::HandleJegyzet(CommandMessage& recvData)
 {
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
@@ -486,6 +512,8 @@ void CommandMgr::HandleJegyzet(CommandMessage& recvData)
 
 void CommandMgr::HandleWhois(CommandMessage& recvData)
 {
+	CNick(recvData);
+
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");

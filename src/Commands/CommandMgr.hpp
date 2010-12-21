@@ -73,7 +73,6 @@ protected:
 	void HandleChannel(CommandMessage& recvData);
 	void HandleSznap(CommandMessage& recvData);
 	void HandleXrev(CommandMessage& recvData);
-	void HandleSzoba(CommandMessage& recvData);
 	void HandleIrc(CommandMessage& recvData);
 	void HandleSzam(CommandMessage& recvData);
 	void HandleNick(CommandMessage& recvData);
@@ -91,6 +90,8 @@ protected:
 	void HandleWhois(CommandMessage& recvData);
 	void HandleAutoFunkcio(CommandMessage& recvData);
 	void HandleKikapcsolas(CommandMessage& recvData);
+
+	void CNick(CommandMessage& recvData);
 
 private:
 	// Url kezeles
