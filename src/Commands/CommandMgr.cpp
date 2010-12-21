@@ -84,22 +84,19 @@ void CommandMgr::InitHandler()
 
 	// Operátor parancsok
 	RegisterHandle("admin",       cast_default(CommandHandler, &CommandMgr::HandleAdmin));
-	RegisterHandle("szinek",      cast_default(CommandHandler, &CommandMgr::HandleSzinek));
-	RegisterHandle("hozzaferes",  cast_default(CommandHandler, &CommandMgr::HandleHozzaferes));
-	RegisterHandle("ujjelszo",    cast_default(CommandHandler, &CommandMgr::HandleUjjelszo));
-	RegisterHandle("funkcio",     cast_default(CommandHandler, &CommandMgr::HandleFunkciok));
 	RegisterHandle("channel",     cast_default(CommandHandler, &CommandMgr::HandleChannel));
+	RegisterHandle("funkcio",     cast_default(CommandHandler, &CommandMgr::HandleFunkciok));
+	RegisterHandle("autofunkcio", cast_default(CommandHandler, &CommandMgr::HandleAutoFunkcio));
+	RegisterHandle("szinek",      cast_default(CommandHandler, &CommandMgr::HandleSzinek));
 	RegisterHandle("sznap",       cast_default(CommandHandler, &CommandMgr::HandleSznap));
 	RegisterHandle("nick",        cast_default(CommandHandler, &CommandMgr::HandleNick));
 	RegisterHandle("join",        cast_default(CommandHandler, &CommandMgr::HandleJoin));
 	RegisterHandle("left",        cast_default(CommandHandler, &CommandMgr::HandleLeft));
 	RegisterHandle("kick",        cast_default(CommandHandler, &CommandMgr::HandleKick));
 	RegisterHandle("mode",        cast_default(CommandHandler, &CommandMgr::HandleMode));
-	RegisterHandle("hluzenet",    cast_default(CommandHandler, &CommandMgr::HandleHLFunkcio));
 	RegisterHandle("svn",         cast_default(CommandHandler, &CommandMgr::HandleSvn));
 	RegisterHandle("git",         cast_default(CommandHandler, &CommandMgr::HandleGit));
 	RegisterHandle("hg",          cast_default(CommandHandler, &CommandMgr::HandleHg));
-	RegisterHandle("autofunkcio", cast_default(CommandHandler, &CommandMgr::HandleAutoFunkcio));
 
 	// Adminisztrátor parancsok
 	RegisterHandle("teszt",       cast_default(CommandHandler, &CommandMgr::HandleTeszt));

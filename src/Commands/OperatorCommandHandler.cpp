@@ -21,22 +21,25 @@
 
 void CommandMgr::HandleAdmin(CommandMessage& recvData)
 {
-	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
+	if(!sCommands.Admin(recvData.Nick))
 		return;
 
 	CNick(recvData);
 
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
+		if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
+			return;
+
 		if(sCommands.Admin(recvData.Nick, Operator))
 		{
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: %snick | %sjoin | %sleft | %skick | %smode", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: %sszinek | %sfunkcio | %ssznap | %schannel | %shozzaferes | %sujjelszo | %ssvn | %sgit | %shg | %shluzenet | %sautofunkcio", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: %schannel | %sfunkcio | %sautofunkcio | %ssznap | %sszinek | %ssvn | %sgit | %shg", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
 		}
 		else if(sCommands.Admin(recvData.Nick, Administrator))
 		{
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: %snick | %sjoin | %sleft | %skick | %smode", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: %sszinek | %sfunkcio | %skikapcs | %ssznap | %schannel | %shozzaferes | %sujjelszo | %ssvn | %sgit | %shg | %shluzenet | %sreload | %sautofunkcio", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: %schannel | %sfunkcio | %sautofunkcio | %ssznap | %sszinek | %ssvn | %sgit | %shg | %sreload | %skikapcs", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
 		}
 
 		return;
@@ -53,6 +56,67 @@ void CommandMgr::HandleAdmin(CommandMessage& recvData)
 
 	string iras = res[1];
 
+	if(iras == "hozzaferes")
+	{
+		if(res.size() < 3)
+		{
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs jelszó megadva!");
+			res.clear();
+			return;
+		}
+
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT jelszo FROM adminok WHERE nev = '%s'", recvData.GetNick());
+		if(db)
+		{
+			string JelszoSql = db->Fetch()[0].GetString();
+
+			if(JelszoSql == sVezerlo.Sha1(res[2]))
+			{
+				sVezerlo.GetSQLConn()->Query("UPDATE adminok SET vhost = '%s' WHERE nev = '%s'", recvData.GetHost(), recvData.GetNick());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hozzáférés engedélyezve");
+			}
+			else
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hozzáférés megtagadva");
+		}
+	}
+	else if(iras == "ujjelszo")
+	{
+		if(res.size() < 3)
+		{
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs a régi jelszó megadva!");
+			res.clear();
+			return;
+		}
+
+		if(res.size() < 4)
+		{
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs az újjelszó megadva!");
+			res.clear();
+			return;
+		}
+
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT nev, jelszo FROM adminok WHERE nev = '%s'", recvData.GetNick());
+		if(db)
+		{
+			string JelszoSql = db->Fetch()[0].GetString();
+			string ujjelszo = res[3];
+
+			if(JelszoSql == sVezerlo.Sha1(res[2]))
+			{
+				sVezerlo.GetSQLConn()->Query("UPDATE adminok SET jelszo = '%s' WHERE nev = '%s'", sVezerlo.Sha1(ujjelszo).c_str(), recvData.GetNick());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Jelszó sikeresen meg lett változtatva erre: %s", ujjelszo.c_str());
+			}
+			else
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "A mostani jelszó nem egyezik, modósitás megtagadva");
+		}
+	}
+
+	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
+	{
+		res.clear();
+		return;
+	}
+
 	if(iras == Help)
 	{
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
@@ -61,6 +125,8 @@ void CommandMgr::HandleAdmin(CommandMessage& recvData)
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Eltávolítás: %sadmin del <admin neve>", sIRCSession.GetParancsElojel());
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rang: %sadmin rang <admin neve> <új rang pl operator: 0, administrator: 1>", sIRCSession.GetParancsElojel());
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Info: %sadmin info", sIRCSession.GetParancsElojel());
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hozzáférés: %sadmin hozzaferes <jelszó>", sIRCSession.GetParancsElojel());
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új jelszó: %sadmin ujjelszo <régi jelszó> <új jelszó>", sIRCSession.GetParancsElojel());
 	}
 	else if(iras == INFO)
 	{
@@ -115,8 +181,8 @@ void CommandMgr::HandleAdmin(CommandMessage& recvData)
 
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Admin hozzáadva: %s", nev.c_str());
 		sIRCSession.SendChatMessage(PRIVMSG, nev.c_str(), "Mostantól Schumix adminja vagy. A te mostani jelszavad: %s", pass.c_str());
-		sIRCSession.SendChatMessage(PRIVMSG, nev.c_str(), "Ha megszeretnéd változtatni használd az %sujjelszo parancsot. Használata: %sujjelszo <régi> <új>", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, nev.c_str(), "Admin nick élesítése: %shozzaferes <jelszó>", sIRCSession.GetParancsElojel());
+		sIRCSession.SendChatMessage(PRIVMSG, nev.c_str(), "Ha megszeretnéd változtatni használd az ujjelszo parancsot. Használata: %sadmin ujjelszo <régi> <új>", sIRCSession.GetParancsElojel());
+		sIRCSession.SendChatMessage(PRIVMSG, nev.c_str(), "Admin nick élesítése: %sadmin hozzaferes <jelszó>", sIRCSession.GetParancsElojel());
 	}
 	else if(iras == delet)
 	{
@@ -184,83 +250,6 @@ void CommandMgr::HandleAdmin(CommandMessage& recvData)
 		}
 		else
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás rang!");
-	}
-
-	res.clear();
-}
-
-void CommandMgr::HandleHozzaferes(CommandMessage& recvData)
-{
-	if(!sCommands.Admin(recvData.Nick))
-		return;
-
-	if(recvData.Args.length() <= recvData.firstSpace+1)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetNick(), "Nincs paraméter!");
-		return;
-	}
-
-	vector<string> res(1);
-	split(recvData.Args.substr(recvData.firstSpace+1), " ", res);
-
-	if(res.size() < 2)
-	{
-		res.clear();
-		return;
-
-	}
-
-	QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT jelszo FROM adminok WHERE nev = '%s'", recvData.GetNick());
-	if(db)
-	{
-		string JelszoSql = db->Fetch()[0].GetString();
-
-		if(JelszoSql == sVezerlo.Sha1(res[1]))
-		{
-			sVezerlo.GetSQLConn()->Query("UPDATE adminok SET vhost = '%s' WHERE nev = '%s'", recvData.GetHost(), recvData.GetNick());
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetNick(), "Hozzáférés engedélyezve");
-		}
-		else
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetNick(), "Hozzáférés megtagadva");
-	}
-
-	res.clear();
-}
-
-void CommandMgr::HandleUjjelszo(CommandMessage& recvData)
-{
-	if(!sCommands.Admin(recvData.Nick))
-		return;
-
-	if(recvData.Args.length() <= recvData.firstSpace+1)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetNick(), "Nincs paraméter!");
-		return;
-	}
-
-	vector<string> res(1);
-	split(recvData.Args.substr(recvData.firstSpace+1), " ", res);
-
-	if(res.size() < 3)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs az újjelszó megadva!");
-		res.clear();
-		return;
-	}
-
-	QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT nev, jelszo FROM adminok WHERE nev = '%s'", recvData.GetNick());
-	if(db)
-	{
-		string JelszoSql = db->Fetch()[0].GetString();
-		string ujjelszo = res[2];
-
-		if(JelszoSql == sVezerlo.Sha1(res[1]))
-		{
-			sVezerlo.GetSQLConn()->Query("UPDATE adminok SET jelszo = '%s' WHERE nev = '%s'", sVezerlo.Sha1(ujjelszo).c_str(), recvData.GetNick());
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetNick(), "Jelszó sikeresen meg lett változtatva erre: %s", ujjelszo.c_str());
-		}
-		else
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetNick(), "A mostani jelszó nem egyezik, modósitás megtagadva");
 	}
 
 	res.clear();
@@ -854,113 +843,6 @@ void CommandMgr::HandleMode(CommandMessage& recvData)
 
 	sIRCSession.WriteLine("MODE %s %s %s", recvData.GetChannel(), rang.c_str(), nevek.substr(1).c_str());
 	res.clear();
-}
-
-void CommandMgr::HandleHLFunkcio(CommandMessage& recvData)
-{
-	if(!sCommands.Admin(recvData.Nick, recvData.Host, Operator))
-		return;
-
-	CNick(recvData);
-
-	if(recvData.Args.length() <= recvData.firstSpace+1)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
-		return;
-	}
-
-	vector<string> res(1);
-	split(recvData.Args.substr(recvData.firstSpace+1), " ", res);
-
-	if(res.size() < 2)
-	{
-		res.clear();
-		return;
-	}
-
-	if(res[1] == Help)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nick lista frissitése: %shluzenet update", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hl üzenet hozzáadása: %shluzenet <üzenet>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hl üzenet küldés állitása: %shluzenet funkcio <állapot>", sIRCSession.GetParancsElojel());
-	}
-	if(res[1] == INFO)
-	{
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT nick, alapot FROM hluzenet");
-		if(db)
-		{
-			string Nevek;
-
-			do
-			{
-				string nev = db->Fetch()[0].GetString();
-				string alapot = db->Fetch()[1].GetString();
-				Nevek += ", " + nev + ":" + alapot;
-			} while(db->NextRow());
-
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Létezõ nickek: %s", Nevek.substr(2).c_str());
-		}
-		else
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás lekérdezés!");
-	}
-	if(res[1] == update)
-	{
-	// Hibás a kod egyenlõre nem lehet használni
-	/*
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT MAX(id) FROM hluzenet");
-		if(db)
-		{
-			uint32 id = db->Fetch()[0].GetUInt32();
-			sVezerlo.GetSQLConn()->kiiras = false;
-
-			for(int x = 0; x < id; x++)
-				sVezerlo.GetSQLConn()->Query("DELETE FROM `hluzenet` WHERE id = '%u'", id);
-
-			sVezerlo.GetSQLConn()->kiiras = true;
-		}
-
-		QueryResultPointer db1 = sVezerlo.GetSQLConn()->Query("SELECT nev FROM adminok");
-		if(db1)
-		{
-			do
-			{
-				string nev = db1->Fetch()[0].GetString();
-				transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
-				sVezerlo.GetSQLConn()->Query("INSERT INTO `hluzenet`(nick, alapot) VALUES ('%s', 'ki')", nev.c_str());
-			} while(db1->NextRow());
-		}
-	*/
-	}
-	if(res[1] == "funkcio")
-	{
-		if(res.size() < 3)
-		{
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs a funkció név megadva!");
-			res.clear();
-			return;
-		}
-
-		string nev = recvData.Nick;
-		transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
-		sVezerlo.GetSQLConn()->Query("UPDATE `hluzenet` SET `alapot` = '%s' WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str(), nev.c_str());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s: %skapcsolva", nev.c_str(), res[2].c_str());
-	}
-	else
-	{
-		string alomany;
-		int resAdat = res.size();
-
-		for(int i = 1; i < resAdat; i++)
-			alomany += " " + res[i];
-
-		string nev = recvData.Nick;
-		transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
-		sVezerlo.GetSQLConn()->Query("UPDATE `hluzenet` SET `info` = '%s', `alapot` = 'be' WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(alomany.substr(1)).c_str(), nev.c_str());
-		sVezerlo.GetSQLConn()->Query("UPDATE `schumix` SET `funkcio_status` = 'be' WHERE funkcio_nev = '%s'", HL);
-
-		res.clear();
-	}
 }
 
 void CommandMgr::HandleSvn(CommandMessage& recvData)
@@ -1739,7 +1621,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: kick | mode");
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: kick | mode | hluzenet");
 		return;
 	}
 
@@ -1757,6 +1639,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Auto kick help: %sautofunkcio kick help", sIRCSession.GetParancsElojel());
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Auto mode help: %sautofunkcio mode help", sIRCSession.GetParancsElojel());
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hl üzenet help: %sautofunkcio hluzenet help", sIRCSession.GetParancsElojel());
 	}
 	/*if(res[1] == INFO)
 	{
@@ -1912,7 +1795,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 			}
 		}
 	}
-	if(res[1] == "mode")
+	else if(res[1] == "mode")
 	{
 		if(res.size() < 3)
 		{
@@ -2050,4 +1933,101 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 			}
 		}
 	}
+	else if(res[1] == "hluzenet")
+	{
+		if(res.size() < 3)
+		{
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs megadva az 1. paraméter!");
+			res.clear();
+			return;
+		}
+
+		if(res[2] == Help)
+		{
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nick lista frissitése: %shluzenet update", sIRCSession.GetParancsElojel());
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hl üzenet hozzáadása: %shluzenet <üzenet>", sIRCSession.GetParancsElojel());
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hl üzenet küldés állitása: %shluzenet funkcio <állapot>", sIRCSession.GetParancsElojel());
+		}
+		if(res[2] == INFO)
+		{
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT nick, alapot FROM hluzenet");
+			if(db)
+			{
+				string Nevek;
+
+				do
+				{
+					string nev = db->Fetch()[0].GetString();
+					string alapot = db->Fetch()[1].GetString();
+					Nevek += ", " + nev + ":" + alapot;
+				} while(db->NextRow());
+
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Létezõ nickek: %s", Nevek.substr(2).c_str());
+			}
+			else
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás lekérdezés!");
+		}
+		if(res[2] == update)
+		{
+		// Hibás a kod egyenlõre nem lehet használni
+		/*
+			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT MAX(id) FROM hluzenet");
+			if(db)
+			{
+
+				uint32 id = db->Fetch()[0].GetUInt32();
+				sVezerlo.GetSQLConn()->kiiras = false;
+
+				for(int x = 0; x < id; x++)
+					sVezerlo.GetSQLConn()->Query("DELETE FROM `hluzenet` WHERE id = '%u'", id);
+
+
+				sVezerlo.GetSQLConn()->kiiras = true;
+			}
+
+			QueryResultPointer db1 = sVezerlo.GetSQLConn()->Query("SELECT nev FROM adminok");
+			if(db1)
+			{
+
+				do
+				{
+					string nev = db1->Fetch()[0].GetString();
+					transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
+					sVezerlo.GetSQLConn()->Query("INSERT INTO `hluzenet`(nick, alapot) VALUES ('%s', 'ki')", nev.c_str());
+				} while(db1->NextRow());
+			}
+
+		*/
+		}
+		if(res[2] == "funkcio")
+		{
+			if(res.size() < 4)
+			{
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs a funkció név megadva!");
+				res.clear();
+				return;
+			}
+
+			string nev = recvData.Nick;
+			transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
+			sVezerlo.GetSQLConn()->Query("UPDATE `hluzenet` SET `alapot` = '%s' WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str(), nev.c_str());
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s: %skapcsolva", nev.c_str(), res[3].c_str());
+		}
+		else
+		{
+			string alomany;
+			int resAdat = res.size();
+
+			for(int i = 2; i < resAdat; i++)
+				alomany += " " + res[i];
+
+			string nev = recvData.Nick;
+			transform(nev.begin(), nev.end(), nev.begin(), ::tolower);
+			sVezerlo.GetSQLConn()->Query("UPDATE `hluzenet` SET `info` = '%s', `alapot` = 'be' WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(alomany.substr(1)).c_str(), nev.c_str());
+			sVezerlo.GetSQLConn()->Query("UPDATE `schumix` SET `funkcio_status` = 'be' WHERE funkcio_nev = '%s'", HL);
+		}
+	}
+
+	res.clear();
 }

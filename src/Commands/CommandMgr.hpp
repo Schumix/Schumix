@@ -60,8 +60,6 @@ protected:
 	void HandleInfo(CommandMessage& recvData);
 	void HandleRoll(CommandMessage& recvData);
 	void HandleAdmin(CommandMessage& recvData);
-	void HandleHozzaferes(CommandMessage& recvData);
-	void HandleUjjelszo(CommandMessage& recvData);
 	void HandleDatum(CommandMessage& recvData);
 	void HandleIdo(CommandMessage& recvData);
 	void HandleFunkciok(CommandMessage& recvData);
@@ -81,7 +79,6 @@ protected:
 	void HandleKick(CommandMessage& recvData);
 	void HandleMode(CommandMessage& recvData);
 	void HandleUzenet(CommandMessage& recvData);
-	void HandleHLFunkcio(CommandMessage& recvData);
 	void HandleSvn(CommandMessage& recvData);
 	void HandleGit(CommandMessage& recvData);
 	void HandleHg(CommandMessage& recvData);
