@@ -117,18 +117,7 @@ void CommandMgr::HandleAdmin(CommandMessage& recvData)
 		return;
 	}
 
-	if(iras == Help)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Admin lista: %sadmin lista", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hozzáadás: %sadmin add <admin neve>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Eltávolítás: %sadmin del <admin neve>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rang: %sadmin rang <admin neve> <új rang pl operator: 0, administrator: 1>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Info: %sadmin info", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hozzáférés: %sadmin hozzaferes <jelszó>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új jelszó: %sadmin ujjelszo <régi jelszó> <új jelszó>", sIRCSession.GetParancsElojel());
-	}
-	else if(iras == INFO)
+	if(iras == INFO)
 	{
 		int flag;
 		string nev = recvData.Nick;
@@ -290,20 +279,7 @@ void CommandMgr::HandleFunkciok(CommandMessage& recvData)
 
 	string info = res[1];
 
-	if(info == Help)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Channel kezelés: %sfunkcio <be vagy ki> <funkcio név>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Channel-en több funkció kezelése: %sfunkcio <be vagy ki> <funkcio név1> <funkcio név2> ... stb", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Channel kezelés máshonnét: %sfunkcio channel <channel név> <be vagy ki> <funkcio név>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Channel-en több funkció kezelés máshonnét: %sfunkcio channel <channel név> <be vagy ki> <funkcio név1> <funkcio név2> ... stb", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Együtes kezelés: %sfunkcio all <be vagy ki> <funkcio név>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Együtesen több funkció kezelése: %sfunkcio all <be vagy ki> <funkcio név1> <funkcio név2> ... stb", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "All update kezelése: %sfunkcio update all", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Más channel update kezelése: %sfunkcio update <channel neve>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ahol tartozkodsz channel update kezelése: %sfunkcio update", sIRCSession.GetParancsElojel());
-	}
-	else if(info == INFO)
+	if(info == INFO)
 	{
 		string ChannelInfo = sIRCSession.ChannelFunkciokInfo(recvData.Channel);
 		int szokoz = ChannelInfo.find("|");
@@ -517,7 +493,44 @@ void CommandMgr::HandleChannel(CommandMessage& recvData)
 
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT szoba, aktivitas, error FROM channel");
+		if(db)
+		{
+			string Aktivszobak, DeAktivszobak;
+			bool adatszoba = false;
+			bool adatszoba1 = false;
+
+			do 
+			{
+				string szoba = db->Fetch()[0].GetString();
+				string aktivitas = db->Fetch()[1].GetString();
+				string error = db->Fetch()[2].GetString();
+
+				if(aktivitas == "aktiv")
+				{
+					Aktivszobak += ", " + szoba;
+					adatszoba = true;
+				}
+				else if(aktivitas == "nem aktiv")
+				{
+					DeAktivszobak += ", " + szoba + ":" + error;
+					adatszoba1 = true;
+				}
+			} while(db->NextRow());
+
+			if(adatszoba)
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Aktiv: %s", Aktivszobak.substr(2).c_str());
+			else
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Aktiv: Nincs adat.");
+
+			if(adatszoba1)
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Deaktiv: %s", DeAktivszobak.substr(2).c_str());
+			else
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Deaktiv: Nincs adat.");
+		}
+		else
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás lekérdezés!");
+
 		return;
 	}
 
@@ -532,14 +545,7 @@ void CommandMgr::HandleChannel(CommandMessage& recvData)
 
 	string iras = res[1];
 
-	if(iras == Help)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hozzáadás: %schannel add <channel> <ha van pass akkor az>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Eltávolítás: %schannel del <channel>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Frissítés: %schannel update", sIRCSession.GetParancsElojel());
-	}
-	else if(iras == added)
+	if(iras == added)
 	{
 		if(res.size() < 3)
 		{
@@ -594,46 +600,6 @@ void CommandMgr::HandleChannel(CommandMessage& recvData)
 	{
 		sIRCSession.ChannelListaReload();
 		sIRCSession.ChannelFunkcioReload();
-	}
-	else if(iras == INFO)
-	{
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT szoba, aktivitas, error FROM channel");
-		if(db)
-		{
-			string Aktivszobak, DeAktivszobak;
-			bool adatszoba = false;
-			bool adatszoba1 = false;
-
-			do 
-			{
-				string szoba = db->Fetch()[0].GetString();
-				string aktivitas = db->Fetch()[1].GetString();
-				string error = db->Fetch()[2].GetString();
-
-				if(aktivitas == "aktiv")
-				{
-					Aktivszobak += ", " + szoba;
-					adatszoba = true;
-				}
-				else if(aktivitas == "nem aktiv")
-				{
-					DeAktivszobak += ", " + szoba + ":" + error;
-					adatszoba1 = true;
-				}
-			} while(db->NextRow());
-
-			if(adatszoba)
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Aktiv: %s", Aktivszobak.substr(2).c_str());
-			else
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Aktiv: Nincs adat.");
-
-			if(adatszoba1)
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Deaktiv: %s", DeAktivszobak.substr(2).c_str());
-			else
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Deaktiv: Nincs adat.");
-		}
-		else
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás lekérdezés!");
 	}
 
 	res.clear();
@@ -869,18 +835,7 @@ void CommandMgr::HandleSvn(CommandMessage& recvData)
 
 	string info = res[1];
 
-	if(info == Help)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Választható emuk: %ssvn lista", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hozzáadás: %ssvn add <emu> <channel>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Eltávolítás: %ssvn del <emu> <channel>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "New thread: %ssvn new <emu>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Stop thread: %ssvn stop <emu>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Reload all thread: %ssvn reload all", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Reload thread: %ssvn reload <emu>", sIRCSession.GetParancsElojel());
-	}
-	else if(info == INFO)
+	if(info == INFO)
 	{
 		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT nev, channel FROM svninfo");
 		if(db)
@@ -908,6 +863,8 @@ void CommandMgr::HandleSvn(CommandMessage& recvData)
 				reschannel.clear();
 			} while(db->NextRow());
 		}
+		else
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás lekérdezés!");
 	}
 	else if(info == "lista")
 	{
@@ -1112,18 +1069,7 @@ void CommandMgr::HandleGit(CommandMessage& recvData)
 
 	string info = res[1];
 
-	if(info == Help)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Választható emuk: %sgit lista", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hozzáadás: %sgit add <nev> <tipus> <channel>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Eltávolítás: %sgit del <nev> <tipus> <channel>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "New thread: %sgit new <nev> <tipus>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Stop thread: %sgit stop <nev> <tipus>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Reload all thread: %sgit reload all", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Reload thread: %sgit reload <nev> <tipus>", sIRCSession.GetParancsElojel());
-	}
-	else if(info == INFO)
+	if(info == INFO)
 	{
 		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT nev, tipus, channel FROM gitinfo");
 		if(db)
@@ -1153,6 +1099,8 @@ void CommandMgr::HandleGit(CommandMessage& recvData)
 				reschannel.clear();
 			} while(db->NextRow());
 		}
+		else
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás lekérdezés!");
 	}
 	else if(info == "lista")
 	{
@@ -1394,18 +1342,7 @@ void CommandMgr::HandleHg(CommandMessage& recvData)
 
 	string info = res[1];
 
-	if(info == Help)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Választható emuk: %shg lista", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hozzáadás: %shg add <emu> <channel>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Eltávolítás: %shg del <emu> <channel>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "New thread: %shg new <emu>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Stop thread: %shg stop <emu>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Reload all thread: %shg reload all", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Reload thread: %shg reload <emu>", sIRCSession.GetParancsElojel());
-	}
-	else if(info == INFO)
+	if(info == INFO)
 	{
 		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT nev, channel FROM hginfo");
 		if(db)
@@ -1433,6 +1370,8 @@ void CommandMgr::HandleHg(CommandMessage& recvData)
 				reschannel.clear();
 			} while(db->NextRow());
 		}
+		else
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás lekérdezés!");
 	}
 	else if(info == "lista")
 	{
@@ -1634,17 +1573,6 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 		return;
 	}
 
-	if(res[1] == Help)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Auto kick help: %sautofunkcio kick help", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Auto mode help: %sautofunkcio mode help", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hl üzenet help: %sautofunkcio hluzenet help", sIRCSession.GetParancsElojel());
-	}
-	/*if(res[1] == INFO)
-	{
-
-	}*/
 	if(res[1] == "kick")
 	{
 		if(res.size() < 3)
@@ -1692,14 +1620,6 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 			transform(res[3].begin(), res[3].end(), res[3].begin(), ::tolower);
 			sVezerlo.GetSQLConn()->Query("DELETE FROM `kicklista` WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str());
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kick listából a név eltávólitva: %s", res[3].c_str());
-		}
-		else if(res[2] == Help)
-		{
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ahol vagy channel kick-elt hozzáadása: %sautofunkcio kick add <nev> <oka>", sIRCSession.GetParancsElojel());
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ahol vagy channel kick-elt eltávólítása: %sautofunkcio kick del <nev>", sIRCSession.GetParancsElojel());
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Másik channel channel kick-elt hozzáadása: %sautofunkcio kick channel add <nev> <channel> <oka>", sIRCSession.GetParancsElojel());
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Másik channel channel kick-elt eltávólítása: %sautofunkcio kick channel del <nev>", sIRCSession.GetParancsElojel());
 		}
 		else if(res[2] == INFO)
 		{
@@ -1837,14 +1757,6 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 			sVezerlo.GetSQLConn()->Query("DELETE FROM `modelista` WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str());
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Mode listából a név eltávólitva: %s", res[3].c_str());
 		}
-		else if(res[2] == Help)
-		{
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ahol vagy channel rang hozzáadása: %sautofunkcio mode add <nev> <rang>", sIRCSession.GetParancsElojel());
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ahol vagy channel rang eltávólítása: %sautofunkcio mode del <nev>", sIRCSession.GetParancsElojel());
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Másik channel rang hozzáadása: %sautofunkcio mode channel add <nev> <channel> <rang>", sIRCSession.GetParancsElojel());
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Másik channel rang eltávólítása: %sautofunkcio mode channel del <nev>", sIRCSession.GetParancsElojel());
-		}
 		else if(res[2] == INFO)
 		{
 			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT nick FROM modelista WHERE channel = '%s'", recvData.GetChannel());
@@ -1942,13 +1854,6 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 			return;
 		}
 
-		if(res[2] == Help)
-		{
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nick lista frissitése: %shluzenet update", sIRCSession.GetParancsElojel());
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hl üzenet hozzáadása: %shluzenet <üzenet>", sIRCSession.GetParancsElojel());
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hl üzenet küldés állitása: %shluzenet funkcio <állapot>", sIRCSession.GetParancsElojel());
-		}
 		if(res[2] == INFO)
 		{
 			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT nick, alapot FROM hluzenet");
@@ -1968,7 +1873,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 			else
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás lekérdezés!");
 		}
-		if(res[2] == update)
+		else if(res[2] == update)
 		{
 		// Hibás a kod egyenlõre nem lehet használni
 		/*
@@ -2000,7 +1905,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 
 		*/
 		}
-		if(res[2] == "funkcio")
+		else if(res[2] == "funkcio")
 		{
 			if(res.size() < 4)
 			{

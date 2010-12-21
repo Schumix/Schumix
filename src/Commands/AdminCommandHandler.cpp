@@ -107,12 +107,7 @@ void CommandMgr::HandleReload(CommandMessage& recvData)
 
 	string info = res[1];
 
-	if(info == Help)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Reload: %sreload <nev>", sIRCSession.GetParancsElojel());
-	}
-	else if(info == INFO)
+	if(info == INFO)
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Most újraindithatóak: IRCSession, SvnInfo, GitInfo, HgInfo, Console");
 	else
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s", sVezerlo.Reload(info).c_str());

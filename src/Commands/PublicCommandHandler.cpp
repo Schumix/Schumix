@@ -24,15 +24,8 @@ void CommandMgr::HandleXbot(CommandMessage& recvData)
 	CNick(recvData);
 
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Verzió: 10%s", revision);
-	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: %sinfo | %shelp | %sxrev | %sido | %sdatum | %sirc | %sroll | %sszam | %skeres | %sfordit | %ssha1 | %smd5 | %suzenet | %swhois | %sjegyzet", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
+	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: %sinfo | %shelp | %sxrev | %sido | %sdatum | %sirc | %sroll | %scalc | %skeres | %sfordit | %ssha1 | %smd5 | %suzenet | %swhois | %sjegyzet", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Programmed by: 3Csaba");
-}
-
-void CommandMgr::HandleHelp(CommandMessage& recvData)
-{
-	CNick(recvData);
-	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ha egy parancs mögé irod a help-et segít a használatában!");
-	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Fõ parancsom: %sxbot", sIRCSession.GetParancsElojel());
 }
 
 void CommandMgr::HandleInfo(CommandMessage& recvData)
@@ -117,73 +110,46 @@ void CommandMgr::HandleKeres(CommandMessage& recvData)
 		return;
 	}
 
-	vector<string> res(1);
-	split(recvData.Args.substr(recvData.firstSpace+1), " ", res);
+	string kiiras = sVezerlo.urlencode(recvData.Args.substr(recvData.firstSpace+1));
 
-	if(res.size() < 2)
+	m_Curl = curl_easy_init();
+	if(m_Curl)
 	{
-		res.clear();
-		return;
-	}
+		string bufferdata;
 
-	string iras = res[1];
+		curl_easy_setopt(m_Curl, CURLOPT_URL, format("http://ajax.googleapis.com/ajax/services/search/web?v=1.0&start=0&rsz=small&q=%s", kiiras.c_str()).c_str());
+		curl_easy_setopt(m_Curl, CURLOPT_WRITEFUNCTION, CommandMgr::writer);
+		curl_easy_setopt(m_Curl, CURLOPT_WRITEDATA, &bufferdata);
+		CURLcode result = curl_easy_perform(m_Curl);
 
-	if(iras == Help)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Segítség a kereséshez!");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Funkció használata: %skeres <ide jön a kereset szöveg>", sIRCSession.GetParancsElojel());
-	}
-	else
-	{
-		string alomany;
-		int resAdat = res.size();
+		curl_easy_cleanup(m_Curl);
 
-		for(int i = 1; i < resAdat; i++)
-			alomany += " " + res[i];
-
-		string kiiras = sVezerlo.urlencode(alomany.substr(1));
-
-		m_Curl = curl_easy_init();
-		if(m_Curl)
+		if(result == CURLE_OK)
 		{
-			string bufferdata;
+			boost::regex re("(\\\"unescapedUrl\\\"):\\\"(?<url>\\S+)\\\",\\\"url\\\"");
+			boost::cmatch matches;
 
-			curl_easy_setopt(m_Curl, CURLOPT_URL, format("http://ajax.googleapis.com/ajax/services/search/web?v=1.0&start=0&rsz=small&q=%s", kiiras.c_str()).c_str());
-			curl_easy_setopt(m_Curl, CURLOPT_WRITEFUNCTION, CommandMgr::writer);
-			curl_easy_setopt(m_Curl, CURLOPT_WRITEDATA, &bufferdata);
-			CURLcode result = curl_easy_perform(m_Curl);
+			boost::regex_search(bufferdata.c_str(), matches, re);
+			string matched(matches[2].first, matches[2].second);
 
-			curl_easy_cleanup(m_Curl);
+			boost::regex re1(".titleNoFormatting.:.(.*).,.content.:.");
+			boost::cmatch matches1;
 
-			if(result == CURLE_OK)
-			{
-				boost::regex re("(\\\"unescapedUrl\\\"):\\\"(?<url>\\S+)\\\",\\\"url\\\"");
-				boost::cmatch matches;
+			boost::regex_search(bufferdata.c_str(), matches1, re1);
+			string matched1(matches1[1].first, matches1[1].second);
 
-				boost::regex_search(bufferdata.c_str(), matches, re);
-				string matched(matches[2].first, matches[2].second);
-
-				boost::regex re1(".titleNoFormatting.:.(.*).,.content.:.");
-				boost::cmatch matches1;
-
-				boost::regex_search(bufferdata.c_str(), matches1, re1);
-				string matched1(matches1[1].first, matches1[1].second);
-
-				int szokoz = matched1.find("\",\"");
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "2Title: %s", matched1.substr(0, szokoz).c_str());
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "2Link: 9%s", matched.c_str());
-			}
-			else
-			{
-				Log.Notice("IRCSession", "Keres: Hiba a Http lekerdezesben.");
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás találat");
-			}
+			int szokoz = matched1.find("\",\"");
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "2Title: %s", matched1.substr(0, szokoz).c_str());
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "2Link: 9%s", matched.c_str());
 		}
 		else
-			curl_easy_cleanup(m_Curl);
+		{
+			Log.Notice("IRCSession", "Keres: Hiba a Http lekerdezesben.");
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás találat");
+		}
 	}
-
-	res.clear();
+	else
+		curl_easy_cleanup(m_Curl);
 }
 
 void CommandMgr::HandleForditas(CommandMessage& recvData)
@@ -205,60 +171,53 @@ void CommandMgr::HandleForditas(CommandMessage& recvData)
 		return;
 	}
 
-	if(res[1] == Help)
+	if(res.size() < 3)
 	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Segítség a fordításhoz!");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Funkció használata: %sfordit <mirõl|mire> <szöveg>", sIRCSession.GetParancsElojel());
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs egy szó se megadva amit lekéne fordítani!");
+		res.clear();
+		return;
 	}
-	else
+
+	string nyelv = res[1];
+	string alomany;
+	int resAdat = res.size();
+
+	for(int i = 2; i < resAdat; i++)
+		alomany += " " + res[i];
+
+	string iras = sVezerlo.urlencode(alomany.substr(1));
+
+	m_Curl = curl_easy_init();
+	if(m_Curl)
 	{
-		if(res.size() < 3)
+		string bufferdata;
+
+		curl_easy_setopt(m_Curl, CURLOPT_URL, format("http://ajax.googleapis.com/ajax/services/language/translate?v=1.0&q=%s&langpair=%s", iras.c_str(), nyelv.c_str()).c_str());
+		curl_easy_setopt(m_Curl, CURLOPT_WRITEFUNCTION, CommandMgr::writer);
+		curl_easy_setopt(m_Curl, CURLOPT_WRITEDATA, &bufferdata);
+
+		CURLcode result = curl_easy_perform(m_Curl);
+
+		curl_easy_cleanup(m_Curl);
+
+		if(result == CURLE_OK)
 		{
-			res.clear();
-			return;
-		}
+			boost::regex re("\\{.translatedText.\\:.(.+).\\},");
+			boost::cmatch matches;
 
-		string nyelv = res[1];
-		string alomany;
-		int resAdat = res.size();
+			boost::regex_search(bufferdata.c_str(), matches, re);
+			string matched(matches[1].first, matches[1].second);
 
-		for(int i = 2; i < resAdat; i++)
-			alomany += " " + res[i];
-
-		string iras = sVezerlo.urlencode(alomany.substr(1));
-
-		m_Curl = curl_easy_init();
-		if(m_Curl)
-		{
-			string bufferdata;
-
-			curl_easy_setopt(m_Curl, CURLOPT_URL, format("http://ajax.googleapis.com/ajax/services/language/translate?v=1.0&q=%s&langpair=%s", iras.c_str(), nyelv.c_str()).c_str());
-			curl_easy_setopt(m_Curl, CURLOPT_WRITEFUNCTION, CommandMgr::writer);
-			curl_easy_setopt(m_Curl, CURLOPT_WRITEDATA, &bufferdata);
-
-			CURLcode result = curl_easy_perform(m_Curl);
-
-			curl_easy_cleanup(m_Curl);
-
-			if(result == CURLE_OK)
-			{
-				boost::regex re("\\{.translatedText.\\:.(.+).\\},");
-				boost::cmatch matches;
-
-				boost::regex_search(bufferdata.c_str(), matches, re);
-				string matched(matches[1].first, matches[1].second);
-
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s", matched.c_str());
-			}
-			else
-			{
-				Log.Notice("IRCSession", "Fordit: Hiba a Http lekerdezesben.");
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás fordítás");
-			}
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s", matched.c_str());
 		}
 		else
-			curl_easy_cleanup(m_Curl);
+		{
+			Log.Notice("IRCSession", "Fordit: Hiba a Http lekerdezesben.");
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hibás fordítás");
+		}
 	}
+	else
+		curl_easy_cleanup(m_Curl);
 
 	res.clear();
 }
@@ -327,9 +286,7 @@ void CommandMgr::HandleXrev(CommandMessage& recvData)
 
 	string iras = res[1];
 
-	if(iras == Help)
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Parancs használata: %sxrev <emulátor neve> <rev>", sIRCSession.GetParancsElojel());
-	else if(iras == "sandshroud")
+	if(iras == "sandshroud")
 	{
 		if(res.size() < 3)
 		{
@@ -357,7 +314,7 @@ void CommandMgr::HandleIrc(CommandMessage& recvData)
 
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Parancsok: %sirc rang | %sirc rang1 | %sirc nick | %sirc kick | %sirc owner", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
 		return;
 	}
 
@@ -370,21 +327,11 @@ void CommandMgr::HandleIrc(CommandMessage& recvData)
 		return;
 	}
 
-	string irc = res[1];
-
-	if(irc == Help)
+	QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT hasznalata FROM irc_parancsok WHERE parancs = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[1]).c_str());
+	if(db)
 	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Segítség az irc-hez!");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Parancsok: %sirc rang | %sirc rang1 | %sirc nick | %sirc kick | %sirc owner", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
-	}
-	else
-	{
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT hasznalata FROM irc_parancsok WHERE parancs = '%s'", sVezerlo.GetSQLConn()->EscapeString(irc).c_str());
-		if(db)
-		{
-			string hasznalata = db->Fetch()[0].GetString();
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s", hasznalata.c_str());
-		}
+		string hasznalata = db->Fetch()[0].GetString();
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "%s", hasznalata.c_str());
 	}
 
 	res.clear();
@@ -426,26 +373,16 @@ void CommandMgr::HandleUzenet(CommandMessage& recvData)
 
 	string iras = res[1];
 
-	if(iras == Help)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Segitség az üzenethez!");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Funkció használata: %süzenet <ide jön a személy> <ha nem felhivás küldenél hanem saját üzenetet>", sIRCSession.GetParancsElojel());
-	}
-	else
-	{
-		string alomany;
-		int resAdat = res.size();
+	string alomany;
+	int resAdat = res.size();
 
-		for(int i = 2; i < resAdat; i++)
+	for(int i = 2; i < resAdat; i++)
+		alomany += " " + res[i];
 
-			alomany += " " + res[i];
-
-		if(resAdat == 2)
-			sIRCSession.SendChatMessage(PRIVMSG, iras.c_str(), "Keresnek téged itt: %s", recvData.GetChannel());
-		else if(resAdat >= 3)
-			sIRCSession.SendChatMessage(PRIVMSG, iras.c_str(), "%s", alomany.substr(1).c_str());
-	}
-
+	if(resAdat == 2)
+		sIRCSession.SendChatMessage(PRIVMSG, iras.c_str(), "Keresnek téged itt: %s", recvData.GetChannel());
+	else if(resAdat >= 3)
+		sIRCSession.SendChatMessage(PRIVMSG, iras.c_str(), "%s", alomany.substr(1).c_str());
 
 	res.clear();
 }
@@ -471,13 +408,7 @@ void CommandMgr::HandleJegyzet(CommandMessage& recvData)
 
 	string info = res[1];
 
-	if(info == Help)
-	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Alparancsok használata:");
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Jegyzet beküldése: %sjegyzet <amit feljegyeznél>", sIRCSession.GetParancsElojel());
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Jegyzet kiolvasása: %sjegyzet kod <kod amit kaptál>", sIRCSession.GetParancsElojel());
-	}
-	else if(info == "kod")
+	if(info == "kod")
 	{
 		if(res.size() < 3)
 		{

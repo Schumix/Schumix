@@ -77,7 +77,7 @@ void CommandMgr::InitHandler()
 	RegisterHandle("fordit",      cast_default(CommandHandler, &CommandMgr::HandleForditas));
 	RegisterHandle("xrev",        cast_default(CommandHandler, &CommandMgr::HandleXrev));
 	RegisterHandle("irc",         cast_default(CommandHandler, &CommandMgr::HandleIrc));
-	RegisterHandle("szam",        cast_default(CommandHandler, &CommandMgr::HandleSzam));
+	RegisterHandle("calc",        cast_default(CommandHandler, &CommandMgr::HandleSzam));
 	RegisterHandle("uzenet",      cast_default(CommandHandler, &CommandMgr::HandleUzenet));
 	RegisterHandle("sha1",        cast_default(CommandHandler, &CommandMgr::HandleSha1));
 	RegisterHandle("md5",         cast_default(CommandHandler, &CommandMgr::HandleMd5));
