@@ -97,6 +97,11 @@ void IRCSession::HandleSuccessfulAuth(IRCMessage& recvData)
 			Log.Success("IRCSession", "Sikeresen kapcsolodva szobakhoz.");
 		else
 			Log.Warning("IRCSession", "Nehany kapcsolodas sikertelen!");
+
+		if(sVezerlo.m_Indulas)
+			sVezerlo.IndulasiIdo();
+
+		sVezerlo.m_Indulas = false;
 	}
 }
 
@@ -136,7 +141,7 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 		printf("%s%s", recvData.GetArgs(), NEWLINE);
 	}
 
-	if(AutoMode)
+	if(recvData.Nick == "NickServ" && AutoMode)
 	{
 		vector<string> res(1);
 		split(recvData.Args, " ", res);
@@ -163,7 +168,7 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 		res.clear();
 	}
 
-	if(m_UseHostServ)
+	if(recvData.Nick == "HostServ" && m_UseHostServ)
 	{
 		if(cast_int(recvData.Args.find("Your vhost of")) != string::npos && h_Aktivitas)
 		{
@@ -220,16 +225,23 @@ void IRCSession::HandleNotice(IRCMessage& recvData)
 			else
 				Log.Warning("IRCSession", "Nehany kapcsolodas sikertelen!");
 
+			if(sVezerlo.m_Indulas)
+				sVezerlo.IndulasiIdo();
+
 			h_Aktivitas = false;
+			sVezerlo.m_Indulas = false;
 		}
 	}
 
-	if(cast_int(recvData.Args.find("Password incorrect.")) != string::npos)
-		Log.Error("NickServ", "NickServ azonosito jelszo hibas!");
-	else if(cast_int(recvData.Args.find("You are already identified.")) != string::npos)
-		Log.Warning("NickServ", "NickServ azonosito mar aktivalva van!");
-	else if(cast_int(recvData.Args.find("Password accepted - you are now recognized.")) != string::npos)
-		Log.Success("NickServ", "NickServ azonosito jelszo elfogadva.");
+	if(recvData.Nick == "NickServ")
+	{
+		if(cast_int(recvData.Args.find("Password incorrect.")) != string::npos)
+			Log.Error("NickServ", "NickServ azonosito jelszo hibas!");
+		else if(cast_int(recvData.Args.find("You are already identified.")) != string::npos)
+			Log.Warning("NickServ", "NickServ azonosito mar aktivalva van!");
+		else if(cast_int(recvData.Args.find("Password accepted - you are now recognized.")) != string::npos)
+			Log.Success("NickServ", "NickServ azonosito jelszo elfogadva.");
+	}
 }
 
 void IRCSession::HandlePing(IRCMessage& recvData)
@@ -285,6 +297,7 @@ void IRCSession::HandleKick(IRCMessage& recvData)
 
 			string oka;
 			int resAdat = res.size();
+
 
 			for(int i = 5; i < resAdat; i++)
 				oka += " " + res[i];
@@ -563,6 +576,12 @@ void IRCSession::HandleNickError(IRCMessage& recvData)
 		return;
 	}
 	else if(m_NickTarolo == "__Schumix__")
+	{
+		m_NickTarolo = m_NickName[0];
+		m_ConnState = CONN_CONNECTED;
+		return;
+	}
+	else
 	{
 		m_NickTarolo = m_NickName[0];
 		m_ConnState = CONN_CONNECTED;

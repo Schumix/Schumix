@@ -27,11 +27,13 @@ public:
 	~Vezerlo();
 
 	volatile bool m_crash;
+	bool m_Indulas;
 
 	void Leallas();
 	void Uptime();
 	string Reload(string nev);
 	string GetUptimeString();
+	void IndulasiIdo();
 
 #if PLATFORM == PLATFORM_WINDOWS
 	float MemoryInfo(DWORD processID);

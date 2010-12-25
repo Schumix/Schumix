@@ -151,7 +151,7 @@ void IRCSession::BejovoInfo(string SInfo)
 	char* channel = new char[256];
 	char* args = new char[4096];
 
-	// Kizárja a null adatatot
+	// Kizárja a null adatot
 	memset(hostmask, '\0', 255);
 	memset(opcode, '\0', 255);
 	memset(channel, '\0', 255);

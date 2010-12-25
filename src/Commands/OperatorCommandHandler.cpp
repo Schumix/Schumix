@@ -95,7 +95,7 @@ void CommandMgr::HandleAdmin(CommandMessage& recvData)
 			return;
 		}
 
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT nev, jelszo FROM adminok WHERE nev = '%s'", recvData.GetNick());
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT jelszo FROM adminok WHERE nev = '%s'", recvData.GetNick());
 		if(db)
 		{
 			string JelszoSql = db->Fetch()[0].GetString();
@@ -1620,6 +1620,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 			transform(res[3].begin(), res[3].end(), res[3].begin(), ::tolower);
 			sVezerlo.GetSQLConn()->Query("DELETE FROM `kicklista` WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str());
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kick listából a név eltávólitva: %s", res[3].c_str());
+
 		}
 		else if(res[2] == INFO)
 		{

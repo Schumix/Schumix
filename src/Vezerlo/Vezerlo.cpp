@@ -24,6 +24,11 @@ initialiseSingleton(Vezerlo);
 Vezerlo::Vezerlo()
 {
 	m_crash = true;
+	m_Indulas = true;
+
+	// uptime
+	UNIXTIME = time(NULL);
+	m_StartTime = cast_uint32(UNIXTIME);
 
 	// Irc szerver conf
 	m_server = Config.MainConfig.GetStringDefault("IRC", "Server", "");
@@ -46,10 +51,6 @@ Vezerlo::Vezerlo()
 		Sleep(5000);
 		return;
 	}
-
-	// uptime
-	UNIXTIME = time(NULL);
-	m_StartTime = cast_uint32(UNIXTIME);
 
 	string pidfajl = string(Elnevezes) + ".pid";
 
@@ -246,6 +247,15 @@ void Vezerlo::Uptime()
 #else
 	m_SQLConn->Query("INSERT INTO `uptime`(datum, uptime, memory) VALUES ('%s', '%s', '%f MB')", datum.c_str(), GetUptimeString().c_str(), MemoryInfo()/1000*0.3762);
 #endif
+}
+
+void Vezerlo::IndulasiIdo()
+{
+	UNIXTIME = time(NULL);
+	time_t pTime = cast_default(time_t, UNIXTIME) - m_StartTime;
+	tm* tmv = gmtime(&pTime);
+
+	Log.Debug("Vezerlo", "A program %ums alatt indult el.", (tmv->tm_sec*1000));
 }
 
 #if PLATFORM == PLATFORM_WINDOWS

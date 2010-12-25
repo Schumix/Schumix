@@ -206,17 +206,18 @@ double CalcLexer::roman_to_f(string s)
 	return d;
 }
 
-Token::Token(string tt, double d, string s)
-{
-	tkntype = tt;
-	number = d; 
-	str = s;
-}
 Token::Token()
 {
 	tkntype = TKN_UNKNOWN;
 	number = 0;
 	str = "";              
+}
+
+Token::Token(string tt, double d, string s)
+{
+	tkntype = tt;
+	number = d; 
+	str = s;
 }
 
 CalcLexer::CalcLexer(string mystr)
