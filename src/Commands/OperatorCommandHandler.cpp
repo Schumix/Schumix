@@ -1620,7 +1620,6 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 			transform(res[3].begin(), res[3].end(), res[3].begin(), ::tolower);
 			sVezerlo.GetSQLConn()->Query("DELETE FROM `kicklista` WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str());
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kick listából a név eltávólitva: %s", res[3].c_str());
-
 		}
 		else if(res[2] == INFO)
 		{
@@ -1876,7 +1875,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 		}
 		else if(res[2] == update)
 		{
-		// Hibás a kod egyenlõre nem lehet használni
+		// Hibás a kód egyenlõre nem lehet használni!
 		/*
 			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT MAX(id) FROM hluzenet");
 			if(db)

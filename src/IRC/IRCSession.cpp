@@ -436,6 +436,6 @@ Thread_void IRCSession::RunUpdateProc(void* smg)
 
 void IRCSession::CNick(IRCMessage& recvData)
 {
-	if(m_NickTarolo == recvData.Channel)
+	if(cast_int(recvData.Channel.find("#")) == string::npos)
 		recvData.Channel = recvData.Nick;
 }

@@ -125,6 +125,6 @@ int CommandMgr::writer(char* data, size_t size, size_t nmemb, string *buffer)
 
 void CommandMgr::CNick(CommandMessage& recvData)
 {
-	if(sIRCSession.m_NickTarolo == recvData.Channel)
+	if(cast_int(recvData.Channel.find("#")) == string::npos)
 		recvData.Channel = recvData.Nick;
 }
