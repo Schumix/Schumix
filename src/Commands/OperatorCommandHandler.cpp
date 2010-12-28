@@ -1,7 +1,7 @@
 /*
  * This file is part of Schumix.
  * 
- * Copyright (C) 2010 Megax <http://www.megaxx.info/>
+ * Copyright (C) 2010-2011 Megax <http://www.megaxx.info/>
  * 
  * Schumix is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1621,6 +1621,8 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 			sVezerlo.GetSQLConn()->Query("DELETE FROM `kicklista` WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str());
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kick listából a név eltávólitva: %s", res[3].c_str());
 		}
+
+
 		else if(res[2] == INFO)
 		{
 			QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT nick, channel FROM kicklista WHERE channel = '%s'", recvData.GetChannel());

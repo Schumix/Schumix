@@ -2,7 +2,7 @@
  * This file is part of Schumix.
  * 
  * Copyright (C) 2008 Valroft <http://www.aspiredev.org/>
- * Copyright (C) 2010 Megax <http://www.megaxx.info/>
+ * Copyright (C) 2010-2011 Megax <http://www.megaxx.info/>
  * 
  * Schumix is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -287,7 +287,7 @@ void IRCSession::ReConnect()
 	ThreadExit(0);
 }
 
-void IRCSession::SendChatMessage(MessageType type, const char * target, const char * format, ...)
+void IRCSession::SendChatMessage(MessageType type, const char* target, const char* format, ...)
 {
 	m_mutex.Acquire();
 	char* obuf = new char[65536];
@@ -316,7 +316,7 @@ void IRCSession::SendChatMessage(MessageType type, const char * target, const ch
 	WriteLine(oss.c_str());
 }
 
-void IRCSession::WriteLine(const char * format, ...)
+void IRCSession::WriteLine(const char* format, ...)
 {
 	m_mutex.Acquire();
 	char* obuf = new char[65536];
@@ -339,7 +339,7 @@ void IRCSession::WriteLine(const char * format, ...)
 	m_mutex.Release();
 }
 
-void IRCSession::WriteLineForce(const char * format, ...)
+void IRCSession::WriteLineForce(const char* format, ...)
 {
 	m_mutex.Acquire();
 	char* obuf = new char[65536];

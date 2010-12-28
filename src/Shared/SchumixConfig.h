@@ -1,7 +1,7 @@
 /*
  * This file is part of Schumix.
  * 
- * Copyright (C) 2010 Megax <http://www.megaxx.info/>
+ * Copyright (C) 2010-2011 Megax <http://www.megaxx.info/>
  * 
  * Schumix is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
  * Aktuális verzió száma.
  */
 
-#define revision "4.1.4"
+#define revision "4.1.5 |2010|"
 
 /*
  * Program fájlainak elnevezése. Ha cserélve van név egy helyen keljen csak cserélni.

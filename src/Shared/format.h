@@ -1,11 +1,11 @@
 /*
  * This file is part of Schumix.
  * 
- * Copyright (C) 2004 - 2005 Antrix Team
- * Copyright (C) 2005 - 2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008 - 2009 AspireDev <http://www.aspiredev.org/>
- * Copyright (C) 2009 - 2010 Sandshroud <http://www.sandshroud.org/>
- * Copyright (C) 2010 Megax <http://www.megaxx.info/>
+ * Copyright (C) 2004-2005 Antrix Team
+ * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
+ * Copyright (C) 2008-2009 AspireDev <http://www.aspiredev.org/>
+ * Copyright (C) 2009-2010 Sandshroud <http://www.sandshroud.org/>
+ * Copyright (C) 2010-2011 Megax <http://www.megaxx.info/>
  * 
  * Schumix is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

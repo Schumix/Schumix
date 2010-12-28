@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2010 Megax <http://www.megaxx.info/>
+# Copyright (C) 2010-2011 Megax <http://www.megaxx.info/>
 # Auto Builder.
 
 echo "\nSchumix Auto Builder by Megax.";

@@ -2,7 +2,7 @@
  * This file is part of Schumix.
  * 
  * Copyright (C) 2008 Valroft <http://www.aspiredev.org/>
- * Copyright (C) 2010 Megax <http://www.megaxx.info/>
+ * Copyright (C) 2010-2011 Megax <http://www.megaxx.info/>
  * 
  * Schumix is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,8 +79,8 @@ public:
 	/*
 	 * Kifelé induló fv-k melyek a szerver felé küldik az adatott. Bele van épitve a "\n".
 	 */
-	void WriteLine(const char * format, ...);
-	void WriteLineForce(const char * format, ...);
+	void WriteLine(const char* format, ...);
+	void WriteLineForce(const char* format, ...);
 
 	/*
 	 * Send a simple chat message. 
@@ -88,7 +88,7 @@ public:
 	 * @param target The target of the message. Can be a channel or a user.
 	 * @param format The message to send. May include formatters such as %s, %u, etc.
 	 */
-	void SendChatMessage(MessageType type, const char * target, const char * format, ...);
+	void SendChatMessage(MessageType type, const char* target, const char* format, ...);
 
 	inline string GetHost() { return m_Host; }
 	inline uint32 GetPort() { return m_Port; }

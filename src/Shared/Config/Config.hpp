@@ -2,7 +2,7 @@
  * This file is part of Schumix.
  * 
  * Copyright (C) 2008 Valroft <http://www.aspiredev.org/>
- * Copyright (C) 2010 Megax <http://www.megaxx.info/>
+ * Copyright (C) 2010-2011 Megax <http://www.megaxx.info/>
  * 
  * Schumix is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ public:
 	bool SetSource(const char* file, bool ignorecase = true);
 	ConfigSetting* GetSetting(const char* Block, const char* Setting);
 
-	bool GetString(const char* block, const char* name, std::string* value);
+	bool GetString(const char* block, const char* name, string* value);
 	string GetStringDefault(const char* block, const char* name, const char* def);
 	string GetStringVA(const char* block, const char* def, const char* name, ...);
 	bool GetString(const char* block, char* buffer, const char* name, const char* def, uint32 len);
