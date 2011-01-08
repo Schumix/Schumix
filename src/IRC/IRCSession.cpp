@@ -28,15 +28,6 @@ IRCSession::IRCSession(string host, uint32 port)
 	m_Port = port;
 	m_Socket = SocketPointer(new Socket());
 
-	if(!m_Socket->Connect(host, port))
-	{
-		Log.Error("IRCSession", "Kapcsolodas ide: %s sikertelen.", host.c_str());
-		Sleep(5000);
-		return;
-	}
-	else
-		Log.Success("IRCSession", "Kapcsolodas ide: %s sikeres.", host.c_str());
-
 	RehashConfig();
 	printf("\n");
 
@@ -65,10 +56,9 @@ IRCSession::IRCSession(string host, uint32 port)
 	m_Commands = CommandsPointer(new Commands());
 
 	Log.Debug("IRCSession", "Reconnect Thread indul...");
-	Thread t(&RunUpdateProc, this);
+	THread t(&RunUpdateProc, this);
 
 	printf("\n");
-	Update();
 }
 
 void IRCSession::RehashConfig()
@@ -197,8 +187,17 @@ void IRCSession::BejovoInfo(string SInfo)
 	(this->*cb)(mess);
 }
 
-void IRCSession::Update()
+bool IRCSession::Run()
 {
+	if(!m_Socket->Connect(m_Host, m_Port))
+	{
+		Log.Error("IRCSession", "Kapcsolodas ide: %s sikertelen.", m_Host.c_str());
+		Sleep(5000);
+		return false;
+	}
+	else
+		Log.Success("IRCSession", "Kapcsolodas ide: %s sikeres.", m_Host.c_str());
+
 	Log.Notice("IRCSession", "Komunikacio az irc szerverrel megindult.");
 
 	while(Running())
@@ -230,6 +229,8 @@ void IRCSession::Update()
 
 		Sleep(100);
 	}
+
+	return true;
 }
 
 void IRCSession::ReConnect()

@@ -70,7 +70,7 @@ enum MessageType
 
 typedef void(IRCSession::*IRCCallback)(IRCMessage& recvData);
 
-class IRCSession : public Singleton<IRCSession>
+class IRCSession : public Singleton<IRCSession>, public ThreadContext
 {
 public:
 	IRCSession(string host, uint32 port);
@@ -89,6 +89,12 @@ public:
 	 * @param format The message to send. May include formatters such as %s, %u, etc.
 	 */
 	void SendChatMessage(MessageType type, const char* target, const char* format, ...);
+
+	/*
+	 * Updates the IRC Session. Do not invoke directly.
+	 */
+
+	bool Run();
 
 	inline string GetHost() { return m_Host; }
 	inline uint32 GetPort() { return m_Port; }
@@ -144,12 +150,6 @@ protected:
 	 * Bejövö információ az irc szerver felõl. Szétosztja az opcodes-nek az adatokat stb.
 	 */
 	void BejovoInfo(string SInfo);
-
-	/*
-	 * Updates the IRC Session. Do not invoke directly.
-	 */
-
-	void Update();
 
 	void InitHandler();
 	void RegisterHandler(string code, IRCCallback method);

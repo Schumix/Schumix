@@ -39,13 +39,13 @@ inline void ThreadExit(void** t_state) { pthread_exit(t_state); }
 #endif
 
 /// Cross-platform thread class
-class Thread
+class THread
 {
 public:
 #if PLATFORM == PLATFORM_WINDOWS
-	Thread(LPTHREAD_START_ROUTINE lpStartRoutine, LPVOID lpParam)
+	THread(LPTHREAD_START_ROUTINE lpStartRoutine, LPVOID lpParam)
 #else
-	Thread(void *start_routine(void*), void* threadParam)
+	THread(void *start_routine(void*), void* threadParam)
 #endif
 	{
 #if PLATFORM == PLATFORM_WINDOWS

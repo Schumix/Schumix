@@ -22,7 +22,7 @@
 SocketMgr::SocketMgr()
 {
 	Log.Debug("SocketMgr", "SocketMgr indul...");
-	Thread t(&RunUpdateProc, this);
+	THread t(&RunUpdateProc, this);
 }
 
 SocketMgr::~SocketMgr()

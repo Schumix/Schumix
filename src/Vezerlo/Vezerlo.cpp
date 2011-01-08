@@ -25,6 +25,7 @@ Vezerlo::Vezerlo()
 {
 	m_crash = true;
 	m_Indulas = true;
+	m_running = true;
 
 	// uptime
 	UNIXTIME = time(NULL);
@@ -80,11 +81,24 @@ Vezerlo::Vezerlo()
 
 	Log.Debug("Vezerlo", "Console indul...");
 	m_Console = new Console();
+	ThreadPool.ExecuteTask(m_Console);
 
 	Log.Debug("Vezerlo", "IRCSession indul...");
 	m_IRCSession = new IRCSession(m_server, m_port);
+	ThreadPool.ExecuteTask(m_IRCSession);
+
+	while(Running())
+	{
+		if(!Running())
+			break;
+
+		Sleep(1000);
+	}
 
 	_UnhookSignals();
+
+	Log.Notice("ThreadPool", "Ending %u active threads...", ThreadPool.GetActiveThreadCount());
+	ThreadPool.Shutdown();
 
 	// delete pid fájl
 	remove(pidfajl.c_str());
@@ -255,6 +269,8 @@ void Vezerlo::IndulasiIdo()
 	time_t pTime = cast_default(time_t, UNIXTIME) - m_StartTime;
 	tm* tmv = gmtime(&pTime);
 
+	printf("\n");
+	ThreadPool.ShowStats();
 	Log.Debug("Vezerlo", "A program %ums alatt indult el.", (tmv->tm_sec*1000));
 }
 
@@ -272,7 +288,6 @@ float Vezerlo::MemoryInfo(DWORD processID)
 		szam = cast_float(pmc.WorkingSetSize);
 
 	CloseHandle(hProcess);
-
 	return szam;
 }
 
@@ -736,4 +751,5 @@ void Vezerlo::Leallas()
 	sIRCSession.Leallas();
 
 	Log.Success("Vezerlo", "Leallas befejezodot.");
+	m_running = false;
 }

@@ -23,22 +23,21 @@
 class MySQLConnection;
 class IRCSession;
 
-class Console : public Singleton<Console>
+class Console : public Singleton<Console> , public ThreadContext
 {
 public:
 	Console();
 	~Console();
 
 	inline bool GetConsoleLog() { return ConsoleLog; }
+	// Konzol irás
+	bool Run();
 	// Class leállása
 	void Leallas();
 
 protected:
-	// Konzol irás
-	void ReadConsoleRoutine();
 	//Konzol parancsok
 	bool ConsoleCommands(char* adat);
-	static Thread_void RunUpdateProc(void* smg);
 
 	bool Running() { return m_running; }
 	volatile bool m_running;
