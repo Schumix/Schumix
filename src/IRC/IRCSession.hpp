@@ -112,7 +112,7 @@ public:
 	// Lehetséges kapcsolat fajták: CONN_CONNECTED, CONN_REGISTERING vagy CONN_REGISTERED
 	uint8 m_ConnState;
 	// Class leállása
-	void Leallas();
+	void OnShutdown();
 
 	// Számologép
 	void setConsts();
@@ -188,9 +188,6 @@ protected:
 
 	// Újra kapcsolodási szál
 	void ReConnect();
-
-	bool Running() { return m_running; }
-	volatile bool m_running;
 
 	// Szerver pingelési ideje
 	uint32 m_LastPing;

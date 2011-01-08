@@ -145,7 +145,7 @@ bool Socket::Connect(string host, uint32 port)
 
 	pSocketMgr = new SocketMgr();
 	pSocketMgr->AddSocket(cast_default(SocketPointer, shared_from_this()));
-	m_running = true;
+	ThreadPool.ExecuteTask(pSocketMgr);
 
 	return true;
 }
@@ -156,6 +156,11 @@ void Socket::Disconnect()
 	m_fd = NULL;
 
 	pSocketMgr->RemoveSocket(cast_default(SocketPointer, shared_from_this()));
-	m_running = false;
 	Sleep(1500);
+}
+
+void Socket::Leallas()
+{
+	pSocketMgr->OnShutdown();
+	Log.Notice("Socket", "Socket leallt.");
 }

@@ -23,7 +23,7 @@
 class MySQLConnection;
 class IRCSession;
 
-class Console : public Singleton<Console> , public ThreadContext
+class Console : public Singleton<Console>, public ThreadContext
 {
 public:
 	Console();
@@ -33,14 +33,11 @@ public:
 	// Konzol irás
 	bool Run();
 	// Class leállása
-	void Leallas();
+	void OnShutdown();
 
 protected:
 	//Konzol parancsok
 	bool ConsoleCommands(char* adat);
-
-	bool Running() { return m_running; }
-	volatile bool m_running;
 
 	// Konzol irás állapota
 	bool ConsoleLog;

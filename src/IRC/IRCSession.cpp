@@ -43,7 +43,6 @@ IRCSession::IRCSession(string host, uint32 port)
 	closedir(pDir);
 
 	m_ConnState = CONN_CONNECTED;
-	m_running = true;
 	AutoMode = false;
 
 	//mHasFullMotd = false;
@@ -189,6 +188,8 @@ void IRCSession::BejovoInfo(string SInfo)
 
 bool IRCSession::Run()
 {
+	SetThreadName("IRCSession Thread");
+
 	if(!m_Socket->Connect(m_Host, m_Port))
 	{
 		Log.Error("IRCSession", "Kapcsolodas ide: %s sikertelen.", m_Host.c_str());
@@ -200,9 +201,9 @@ bool IRCSession::Run()
 
 	Log.Notice("IRCSession", "Komunikacio az irc szerverrel megindult.");
 
-	while(Running())
+	for(;;)
 	{
-		if(!Running())
+		if(!m_threadRunning)
 			break;
 
 		if(m_ConnState == CONN_CONNECTED)
@@ -226,7 +227,6 @@ bool IRCSession::Run()
 		}
 
 		m_Socket->UpdateQueue();
-
 		Sleep(100);
 	}
 
@@ -237,9 +237,9 @@ void IRCSession::ReConnect()
 {
 	Log.Success("IRCSession", "Reconnect Thread elindult.");
 
-	while(Running())
+	for(;;)
 	{
-		if(!Running())
+		if(!m_threadRunning)
 			break;
 
 
@@ -252,8 +252,6 @@ void IRCSession::ReConnect()
 					Log.Error("IRCSession", "Ujrakapcsolodas sikertelen ide: %s", m_Host.c_str());
 					SocketDisconnect();
 				}
-
-
 				else
 				{
 					Log.Success("IRCSession", "Ujrakapcsolodva ide: %s", m_Host.c_str());
@@ -421,11 +419,10 @@ void IRCSession::SocketDisconnect()
 	m_Socket->Disconnect();
 }
 
-void IRCSession::Leallas()
+void IRCSession::OnShutdown()
 {
-	m_running = false;
 	SocketDisconnect();
-
+	m_Socket->Leallas();
 	Log.Notice("IRCSession", "IRCSession leallt.");
 }
 

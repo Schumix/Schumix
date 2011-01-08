@@ -23,9 +23,7 @@ initialiseSingleton(Console);
 
 Console::Console()
 {
-	m_running = true;
 	ConsoleLog = Config.MainConfig.GetBoolDefault("Log", "Irclog", false);
-
 	Log.Notice("Console", "Console elindult.");
 	printf("\n");
 }
@@ -42,9 +40,9 @@ bool Console::Run()
 	Sleep(1000);
 	SetThreadName("Console Interpreter");
 
-	while(Running())
+	for(;;)
 	{
-		if(!Running())
+		if(!m_threadRunning)
 			break;
 
 		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT irc_cim FROM schumix WHERE entry = '1'");
@@ -74,8 +72,7 @@ bool Console::Run()
 	return true;
 }
 
-void Console::Leallas()
+void Console::OnShutdown()
 {
-	m_running = false;
 	Log.Notice("Console", "Console leallt.");
 }

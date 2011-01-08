@@ -22,7 +22,6 @@
 SocketMgr::SocketMgr()
 {
 	Log.Debug("SocketMgr", "SocketMgr indul...");
-	THread t(&RunUpdateProc, this);
 }
 
 SocketMgr::~SocketMgr()
@@ -30,12 +29,6 @@ SocketMgr::~SocketMgr()
 #ifdef _DEBUG_MOD
 	Log.Notice("SocketMgr", "~SocketMgr()");
 #endif
-}
-
-Thread_void SocketMgr::RunUpdateProc(void* smg)
-{
-	cast_default(SocketMgr*, smg)->Update();
-	return NULL;
 }
 
 void SocketMgr::AddSocket(SocketPointer pSocket)
@@ -52,8 +45,10 @@ void SocketMgr::RemoveSocket(SocketPointer pSocket)
 	m_mutex.Release();
 }
 
-void SocketMgr::Update()
+bool SocketMgr::Run()
 {
+	SetThreadName("SocketMgr Thread");
+
 	fd_set read_set;
 	fd_set write_set;
 	fd_set exception_set;
@@ -69,9 +64,9 @@ void SocketMgr::Update()
 	
 	Log.Notice("SocketMgr", "SocketMgr elindult.");
 
-	while(sSocket.Running())
+	for(;;)
 	{
-		if(!sSocket.Running())
+		if(!m_threadRunning)
 			break;
 
 		FD_ZERO(&read_set);
@@ -139,6 +134,12 @@ void SocketMgr::Update()
 		Sleep(100);
 	}
 
-	Log.Warning("SocketMgr", "SocketMgr leallt.");
-	ThreadExit(0);
+	//Log.Warning("SocketMgr", "SocketMgr thread leallt.");
+	//ThreadExit(0);
+	return true;
+}
+
+void SocketMgr::OnShutdown()
+{
+	Log.Notice("SocketMgr", "SocketMgr leallt.");
 }

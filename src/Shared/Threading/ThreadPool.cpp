@@ -110,9 +110,8 @@ bool CThreadPool::ThreadExit(Thread * t)
 	std::set<Thread*>::iterator itr = m_freeThreads.find(t);
 
 	if(itr != m_freeThreads.end())
-	{
 		printf("Thread %u duplicated with thread %u\n", (*itr)->ControlInterface.GetId(), t->ControlInterface.GetId());
-	}
+
 	m_freeThreads.insert(t);
 
 	Log.Debug("ThreadPool", "Thread %u entered the free pool.", t->ControlInterface.GetId());
@@ -171,7 +170,7 @@ void CThreadPool::ShowStats()
 	Log.Debug("ThreadPool", "============ ThreadPool Status =============");
 	Log.Debug("ThreadPool", "Active Threads: %u", m_activeThreads.size());
 	Log.Debug("ThreadPool", "Suspended Threads: %u", m_freeThreads.size());
-	Log.Debug("ThreadPool", "Requested-To-Freed Ratio: %.3f%% (%u/%u)", float(float(_threadsRequestedSinceLastCheck+1) / float(_threadsExitedSinceLastCheck+1) * 100.0f), _threadsRequestedSinceLastCheck, _threadsExitedSinceLastCheck);
+	Log.Debug("ThreadPool", "Requested-To-Freed Ratio: %.3f%% (%u/%u)", cast_float(cast_float(_threadsRequestedSinceLastCheck+1) / cast_float(_threadsExitedSinceLastCheck+1) * 100.0f), _threadsRequestedSinceLastCheck, _threadsExitedSinceLastCheck);
 	Log.Debug("ThreadPool", "Eaten Count: %d (negative is bad!)", _threadsEaten);
 	Log.Debug("ThreadPool", "============================================");
 	_mutex.Release();
@@ -246,8 +245,8 @@ void CThreadPool::KillFreeThreads(uint32 count)
 
 void CThreadPool::Shutdown()
 {
-	_mutex.Acquire();
-	size_t tcount = m_activeThreads.size() + m_freeThreads.size();		// exit all
+	//_mutex.Acquire();
+	size_t tcount = m_activeThreads.size() + m_freeThreads.size();	// exit all
 	Log.Debug("ThreadPool", "Shutting down %u threads.", tcount);
 	KillFreeThreads((uint32)m_freeThreads.size());
 	_threadsToExit += (uint32)m_activeThreads.size();
@@ -257,23 +256,23 @@ void CThreadPool::Shutdown()
 		if((*itr)->ExecutionTarget)
 			(*itr)->ExecutionTarget->OnShutdown();
 	}
-	_mutex.Release();
+	//_mutex.Release();
 
 #if PLATFORM == PLATFORM_WINDOWS
 	uint32 listcount = 0;
 	for(;;)
 	{
-		_mutex.Acquire();
+		//_mutex.Acquire();
 		if(listcount > 24)
 		{
 			listcount = 0;
-			Log.Debug("ThreadPool", "Listing threads" );
+			Log.Debug("ThreadPool", "Listing threads");
 			if(m_activeThreads.size())
 			{
 				for(ThreadSet::iterator itr = m_activeThreads.begin(); itr != m_activeThreads.end(); ++itr)
 				{
 					if((*itr)->ExecutionTarget)
-						Log.Debug("ActiveThreadPool", "%u(%s) thread...", (*itr)->ControlInterface.GetId(), (*itr)->threadinfo.szName );
+						Log.Debug("ActiveThreadPool", "%u(%s) thread...", (*itr)->ControlInterface.GetId(), (*itr)->threadinfo.szName);
 				}
 			}
 
@@ -282,31 +281,31 @@ void CThreadPool::Shutdown()
 				for(ThreadSet::iterator itr = m_freeThreads.begin(); itr != m_freeThreads.end(); ++itr)
 				{
 					if((*itr)->ExecutionTarget)
-						Log.Debug("FreeThreadPool", "%u(%s) thread...", (*itr)->ControlInterface.GetId(), (*itr)->threadinfo.szName );
+						Log.Debug("FreeThreadPool", "%u(%s) thread...", (*itr)->ControlInterface.GetId(), (*itr)->threadinfo.szName);
 				}
 			}
 		}
 #else
 	for(;;)
 	{
-		_mutex.Acquire();
+		//_mutex.Acquire();
 #endif
 		if(m_activeThreads.size() || m_freeThreads.size())
 		{
-			Log.Debug("ThreadPool", "%u active threads, %u free threads remaining...", m_activeThreads.size(), m_freeThreads.size() );
-			_mutex.Release();
+			Log.Debug("ThreadPool", "%u active threads, %u free threads remaining...", m_activeThreads.size(), m_freeThreads.size());
+			//_mutex.Release();
 
 #if PLATFORM == PLATFORM_WINDOWS
 			listcount++;
 #endif
 
 			Sleep(1000);
-			continue;
+			//continue; leállást gátolja egyenlőre még nem tudom a hiba okát
 		}
 
 		m_activeThreads.clear();
 		m_freeThreads.clear();
-		_mutex.Release();
+		//_mutex.Release();
 
 		break;
 	}

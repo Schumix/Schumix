@@ -26,7 +26,7 @@
 #include "Threading/Mutex.hpp"
 #include "Threading/Guard.hpp"
 #include "Threading/Lock.hpp"
-#include "Threading/ThreadStarter.h"
-#include "Threading/ThreadPool.h"
+#include "Threading/ThreadStarter.hpp"
+#include "Threading/ThreadPool.hpp"
 
 #endif
