@@ -54,8 +54,8 @@ protected:
 	time_t UNIXTIME;
 	uint32 m_StartTime;
 
-	string m_server;
-	uint32 m_port;
+	string m_server[2];
+	uint32 m_port[2];
 
 	string char2hex(char dec);
 
@@ -74,6 +74,8 @@ private:
 
 	// IRCSession
 	IRCSession* m_IRCSession;
+
+	RemoteAccess* m_RemoteAccess;
 
 	// Mysql kapcsolat.
 	MySQLConnectionPointer m_SQLConn;

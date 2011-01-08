@@ -63,10 +63,12 @@ using std::string;
 #include "Shared/dirent.h"
 #else
 #include <sys/stat.h>
+#include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/resource.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <netdb.h> 
 #include <unistd.h>
 #include <dirent.h>
@@ -102,6 +104,7 @@ extern CLog Log;
 #include "IRC/IRCSession.hpp"
 #include "Commands/Commands.hpp"
 #include "Commands/CommandMgr.hpp"
+#include "RemoteAccess/RemoteAccess.hpp"
 #include "Shared/Network/SocketMgr.hpp"
 #include "Shared/Network/Socket.hpp"
 #include "Shared/Network/SocketOps.hpp"

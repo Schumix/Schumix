@@ -22,8 +22,6 @@
 #define _SCHUMIX_SOCKET_HPP
 
 #if PLATFORM == PLATFORM_LINUX
-#include <sys/ioctl.h>
-#include <sys/socket.h>
 #define SOCKET int
 #define SD_BOTH SHUT_RDWR
 #endif
@@ -31,7 +29,7 @@
 class IRCSession;
 class SocketMgr;
 
-class Socket : public boost::enable_shared_from_this<Socket>, public Singleton<Socket>
+class Socket : public boost::enable_shared_from_this<Socket>//, public Singleton<Socket>
 {
 	friend class SocketMgr;
 public:
@@ -39,6 +37,7 @@ public:
 	~Socket();
 
 	bool Connect(string host, uint32 port);
+	bool SocketServer(uint32 port, int connections);
 	void Disconnect();
 	bool IsConnected() { return m_fd != -1; }
 
@@ -49,6 +48,8 @@ public:
 	string GetLine();
 	void UpdateQueue();
 	bool Running() { return m_running; }
+
+	string GetRemoteIP();
 
 protected:
 	bool m_full;

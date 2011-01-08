@@ -20,7 +20,7 @@
 
 #include "../../StdAfx.h"
 
-initialiseSingleton(Socket);
+//initialiseSingleton(Socket);
 
 Socket::Socket()
 {
@@ -109,7 +109,7 @@ string Socket::GetLine()
 
 		if(c == '\n')
 			break;
-		
+
 		ret.append(&c, 1);
 	}
 
@@ -143,11 +143,52 @@ bool Socket::Connect(string host, uint32 port)
 
 	SocketOps::Blocking(m_fd);
 
-	pSocketMgr = new SocketMgr();
+	pSocketMgr = new SocketMgr(cast_default(SocketPointer, shared_from_this()));
 	pSocketMgr->AddSocket(cast_default(SocketPointer, shared_from_this()));
 	m_running = true;
 
 	return true;
+}
+
+bool Socket::SocketServer(uint32 port, int connections)
+{
+	m_fd = SocketOps::CreateTCPFileDescriptor();
+	SocketOps::Nonblocking(m_fd);
+
+	m_client.sin_family = AF_INET;
+	m_client.sin_port = ntohs((u_short)port);
+	m_client.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	int ret = ::bind(m_fd, (const sockaddr*)&m_client, sizeof(m_client));
+	if(ret != 0)
+	{
+		Log.Error("Socket", "Bind unsuccessful on port %u.", port);
+		return false;
+	}
+
+	ret = listen(m_fd, connections);
+	if(ret != 0) 
+	{
+		Log.Error("Socket", "Unable to listen on port %u.", port);
+		return false;
+	}
+
+	pSocketMgr = new SocketMgr(cast_default(SocketPointer, shared_from_this()));
+	pSocketMgr->AddSocket(cast_default(SocketPointer, shared_from_this()));
+	m_running = true;
+
+	return true;
+}
+
+string Socket::GetRemoteIP()
+{
+	char* ip = cast_default(char*, inet_ntoa(m_client.sin_addr));
+	if(ip != NULL)
+		return string(ip);
+	else
+		return string("noip");
+
+	return string("");
 }
 
 void Socket::Disconnect()

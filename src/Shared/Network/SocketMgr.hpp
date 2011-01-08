@@ -25,7 +25,7 @@ class Socket;
 class SocketMgr
 {
 public:
-	SocketMgr();
+	SocketMgr(SocketPointer session);
 	~SocketMgr();
 
 	void AddSocket(SocketPointer pSocket);
@@ -38,6 +38,9 @@ protected:
 	typedef set<SocketPointer> SocketSet;
 	Mutex m_mutex;
 	SocketSet m_sockets;
+
+private:
+        SocketPointer m_session;
 };
 
 #endif

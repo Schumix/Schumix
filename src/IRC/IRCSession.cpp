@@ -251,8 +251,6 @@ void IRCSession::ReConnect()
 					Log.Error("IRCSession", "Ujrakapcsolodas sikertelen ide: %s", m_Host.c_str());
 					SocketDisconnect();
 				}
-
-
 				else
 				{
 					Log.Success("IRCSession", "Ujrakapcsolodva ide: %s", m_Host.c_str());

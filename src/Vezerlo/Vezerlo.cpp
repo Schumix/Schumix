@@ -31,8 +31,8 @@ Vezerlo::Vezerlo()
 	m_StartTime = cast_uint32(UNIXTIME);
 
 	// Irc szerver conf
-	m_server = Config.MainConfig.GetStringDefault("IRC", "Server", "");
-	m_port = Config.MainConfig.GetIntDefault("IRC", "Port", 6667);
+	m_server[0] = Config.MainConfig.GetStringDefault("IRC", "Server", "");
+	m_port[0] = Config.MainConfig.GetIntDefault("IRC", "Port", 6667);
 
 	// Mysql Config
 	_mysql[0] = Config.MainConfig.GetStringDefault("MySQL", "Host", "");
@@ -81,8 +81,11 @@ Vezerlo::Vezerlo()
 	Log.Debug("Vezerlo", "Console indul...");
 	m_Console = new Console();
 
+	Log.Debug("Vezerlo", "RemoteAccess indul...");
+	m_RemoteAccess = new RemoteAccess(6000, 1);
+
 	Log.Debug("Vezerlo", "IRCSession indul...");
-	m_IRCSession = new IRCSession(m_server, m_port);
+	m_IRCSession = new IRCSession(m_server[0], m_port[0]);
 
 	_UnhookSignals();
 
@@ -682,7 +685,7 @@ string Vezerlo::Reload(string nev)
 			delete IRCSession::getSingletonPtr();
 
 		Log.Debug("Vezerlo", "IRCSession reload...");
-		m_IRCSession = new IRCSession(m_server, m_port);
+		m_IRCSession = new IRCSession(m_server[0], m_port[0]);
 		return "IRCSession ujraindult.";*/
 		return "javitas alatt";
 	}
@@ -714,7 +717,7 @@ string Vezerlo::Reload(string nev)
 		m_Console = new Console();
 
 		/*Log.Debug("Vezerlo", "IRCSession reload...");
-		m_IRCSession = new IRCSession(m_server, m_port);*/
+		m_IRCSession = new IRCSession(m_server[0], m_port[0]);*/
 		return "Minden ujraindult.";
 	}
 

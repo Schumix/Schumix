@@ -19,9 +19,18 @@
 
 #include "../../StdAfx.h"
 
-SocketMgr::SocketMgr()
+SocketMgr::SocketMgr(SocketPointer session)
 {
 	Log.Debug("SocketMgr", "SocketMgr indul...");
+
+        // m_session
+        this->m_session = session;
+#if PLATFORM == PLATFORM_WINDOWS
+        Log.Debug("SocketMgr", format("Socket session is at: 0x%p", cast_default(SocketPointer, session)).c_str());
+#else
+        //Log.Debug("SocketMgr", format("Socket session is at: %p", cast_default(SocketPointer, session)).c_str());
+#endif
+
 	Thread t(&RunUpdateProc, this);
 }
 
@@ -69,9 +78,9 @@ void SocketMgr::Update()
 	
 	Log.Notice("SocketMgr", "SocketMgr elindult.");
 
-	while(sSocket.Running())
+	while(m_session->Running())
 	{
-		if(!sSocket.Running())
+		if(!m_session->Running())
 			break;
 
 		FD_ZERO(&read_set);
