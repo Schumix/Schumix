@@ -35,7 +35,7 @@ struct RAMessage
 class RemoteAccess;
 typedef void(RemoteAccess::*RACallback)(RAMessage& recvData);
 
-class RemoteAccess : public Singleton<RemoteAccess>
+class RemoteAccess : public Singleton<RemoteAccess>, public ThreadContext
 {
 public:
 	RemoteAccess(uint32 port, int connections);
@@ -47,21 +47,18 @@ public:
 	void WriteLine(const char* format, ...);
 	void WriteLineForce(const char* format, ...);
 
+	bool Run();
 	// Class leállása
-	void Leallas();
+	void OnShutdown();
 
 protected:
 	static Thread_void RunUpdateProc(void* smg);
 	void BejovoInfo(string SInfo);
-	void Update();
 
 	void InitHandler();
 	void RegisterHandler(string code, RACallback method);
 
 	void HandleTeszt(RAMessage& recvData);
-
-	bool Running() { return m_running; }
-	volatile bool m_running;
 
 	uint32 m_Port;
 	int m_Connections;

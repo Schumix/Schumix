@@ -27,13 +27,9 @@ RemoteAccess::RemoteAccess(uint32 port, int connections)
 
 	m_Port = port;
 	m_Connections = connections;
-	m_running = true;
 
 	//m_LastPing = getMSTime();
 	InitHandler();
-
-	Log.Debug("RemoteAccess", "Update Thread indul...");
-	Thread t(&RunUpdateProc, this);
 }
 
 RemoteAccess::~RemoteAccess()
@@ -76,8 +72,9 @@ void RemoteAccess::BejovoInfo(string SInfo)
 	(this->*cb)(ra);
 }
 
-void RemoteAccess::Update()
+bool RemoteAccess::Run()
 {
+	SetThreadName("RemoteAccess Thread");
 	Log.Success("RemoteAccess", "Update Thread elindult.");
 	m_Socket = SocketPointer(new Socket());
 
@@ -85,14 +82,14 @@ void RemoteAccess::Update()
 	{
 		Log.Error("RemoteAccess", "Sikertelen a Socket Szerver inditasa.");
 		Sleep(5000);
-		return;
+		return false;
 	}
 	else
 		Log.Success("RemoteAccess", "Sikeres a Socket Szerver inditasa.");
 
-	while(Running())
+	for(;;)
 	{
-		if(!Running())
+		if(!m_threadRunning)
 			break;
 
 		if(m_Socket->HasLine())
@@ -113,12 +110,8 @@ void RemoteAccess::Update()
 
 		Sleep(100);
 	}
-}
 
-Thread_void RemoteAccess::RunUpdateProc(void* smg)
-{
-	cast_default(RemoteAccess*, smg)->Update();
-	return NULL;
+	return true;
 }
 
 void RemoteAccess::WriteLine(const char* format, ...)
@@ -167,8 +160,7 @@ void RemoteAccess::WriteLineForce(const char* format, ...)
 	m_mutex.Release();
 }
 
-void RemoteAccess::Leallas()
+void RemoteAccess::OnShutdown()
 {
-	m_running = false;
 	Log.Notice("RemoteAccess", "RemoteAccess leallt.");
 }

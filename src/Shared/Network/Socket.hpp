@@ -47,7 +47,8 @@ public:
 	bool HasLine();
 	string GetLine();
 	void UpdateQueue();
-	bool Running() { return m_running; }
+
+	void Leallas();
 
 	string GetRemoteIP();
 
@@ -65,8 +66,6 @@ protected:
 	uint32 m_sendPerPeriod;
 	uint32 m_sendCount;
 	time_t m_lastSendTime;
-
-	volatile bool m_running;
 
 private:
 	SocketMgr* pSocketMgr;

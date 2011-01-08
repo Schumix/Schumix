@@ -1,6 +1,11 @@
 /*
  * This file is part of Schumix.
  * 
+ * Copyright (C) 2004-2005 Antrix Team
+ * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
+ * Copyright (C) 2008-2009 AspireDev <http://www.aspiredev.org/>
+ * Copyright (C) 2009-2010 Sandshroud <http://www.sandshroud.org/>
+ * Copyright (C) 2010-2011 Sandshroud <http://www.sandshroud.org/>
  * Copyright (C) 2010-2011 Megax <http://www.megaxx.info/>
  * 
  * Schumix is free software: you can redistribute it and/or modify
@@ -17,32 +22,28 @@
  * along with Schumix.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SCHUMIX_CONSOL_HPP
-#define _SCHUMIX_CONSOL_HPP
+#ifndef _THREADING_STARTER_HPP
+#define _THREADING_STARTER_HPP
 
-class MySQLConnection;
-class IRCSession;
-
-class Console : public Singleton<Console>, public ThreadContext
+class ThreadContext
 {
 public:
-	Console();
-	~Console();
+	ThreadContext() { m_threadRunning = true; }
+	virtual ~ThreadContext() {}
+	virtual bool Run() = 0;
 
-	inline bool GetConsoleLog() { return ConsoleLog; }
-	// Konzol irás
-	bool Run();
-	// Class leállása
-	void OnShutdown();
+#ifdef WIN32
+	HANDLE THREAD_HANDLE;
+#else
+	pthread_t THREAD_HANDLE;
+#endif
+
+	inline void Terminate() { m_threadRunning = false; }
+	virtual void OnShutdown() { Terminate(); }
 
 protected:
-	//Konzol parancsok
-	bool ConsoleCommands(char* adat);
-
-	// Konzol irás állapota
-	bool ConsoleLog;
+	bool m_threadRunning;
 };
 
-#define sConsole Console::getSingleton()
-
 #endif
+

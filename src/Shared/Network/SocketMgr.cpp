@@ -22,16 +22,6 @@
 SocketMgr::SocketMgr(SocketPointer session)
 {
 	Log.Debug("SocketMgr", "SocketMgr indul...");
-
-        // m_session
-        this->m_session = session;
-#if PLATFORM == PLATFORM_WINDOWS
-        Log.Debug("SocketMgr", format("Socket session is at: 0x%p", cast_default(SocketPointer, session)).c_str());
-#else
-        //Log.Debug("SocketMgr", format("Socket session is at: %p", cast_default(SocketPointer, session)).c_str());
-#endif
-
-	Thread t(&RunUpdateProc, this);
 }
 
 SocketMgr::~SocketMgr()
@@ -39,12 +29,6 @@ SocketMgr::~SocketMgr()
 #ifdef _DEBUG_MOD
 	Log.Notice("SocketMgr", "~SocketMgr()");
 #endif
-}
-
-Thread_void SocketMgr::RunUpdateProc(void* smg)
-{
-	cast_default(SocketMgr*, smg)->Update();
-	return NULL;
 }
 
 void SocketMgr::AddSocket(SocketPointer pSocket)
@@ -61,8 +45,10 @@ void SocketMgr::RemoveSocket(SocketPointer pSocket)
 	m_mutex.Release();
 }
 
-void SocketMgr::Update()
+bool SocketMgr::Run()
 {
+	SetThreadName("SocketMgr Thread");
+
 	fd_set read_set;
 	fd_set write_set;
 	fd_set exception_set;
@@ -78,9 +64,9 @@ void SocketMgr::Update()
 	
 	Log.Notice("SocketMgr", "SocketMgr elindult.");
 
-	while(m_session->Running())
+	for(;;)
 	{
-		if(!m_session->Running())
+		if(!m_threadRunning)
 			break;
 
 		FD_ZERO(&read_set);
@@ -148,6 +134,12 @@ void SocketMgr::Update()
 		Sleep(100);
 	}
 
-	Log.Warning("SocketMgr", "SocketMgr leallt.");
-	ThreadExit(0);
+	//Log.Warning("SocketMgr", "SocketMgr thread leallt.");
+	//ThreadExit(0);
+	return true;
+}
+
+void SocketMgr::OnShutdown()
+{
+	Log.Notice("SocketMgr", "SocketMgr leallt.");
 }

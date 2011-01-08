@@ -22,19 +22,19 @@
 
 class Socket;
 
-class SocketMgr
+class SocketMgr: public ThreadContext
 {
 public:
 	SocketMgr(SocketPointer session);
 	~SocketMgr();
 
+	bool Run();
+	void OnShutdown();
+
 	void AddSocket(SocketPointer pSocket);
 	void RemoveSocket(SocketPointer pSocket);
 
 protected:
-	void Update();
-	static Thread_void RunUpdateProc(void* smg);
-
 	typedef set<SocketPointer> SocketSet;
 	Mutex m_mutex;
 	SocketSet m_sockets;

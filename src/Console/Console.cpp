@@ -23,10 +23,7 @@ initialiseSingleton(Console);
 
 Console::Console()
 {
-	m_running = true;
-	Thread t(&RunUpdateProc, this);
 	ConsoleLog = Config.MainConfig.GetBoolDefault("Log", "Irclog", false);
-
 	Log.Notice("Console", "Console elindult.");
 	printf("\n");
 }
@@ -38,13 +35,14 @@ Console::~Console()
 #endif
 }
 
-void Console::ReadConsoleRoutine()
+bool Console::Run()
 {
 	Sleep(1000);
+	SetThreadName("Console Interpreter");
 
-	while(Running())
+	for(;;)
 	{
-		if(!Running())
+		if(!m_threadRunning)
 			break;
 
 		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT irc_cim FROM schumix WHERE entry = '1'");
@@ -70,17 +68,11 @@ void Console::ReadConsoleRoutine()
 #ifdef _DEBUG_MOD
 	Log.Error("Console", "Console thread leallt.");
 #endif
-	ThreadExit(0);
+	//ThreadExit(0);
+	return true;
 }
 
-void Console::Leallas()
+void Console::OnShutdown()
 {
-	m_running = false;
 	Log.Notice("Console", "Console leallt.");
-}
-
-Thread_void Console::RunUpdateProc(void* smg)
-{
-	cast_default(Console*, smg)->ReadConsoleRoutine();
-	return NULL;
 }

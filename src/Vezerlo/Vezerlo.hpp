@@ -59,6 +59,9 @@ protected:
 
 	string char2hex(char dec);
 
+	bool Running() { return m_running; }
+	volatile bool m_running;
+
 private:
 	// SvnInfo
 	SvnInfo* m_SvnInfo;

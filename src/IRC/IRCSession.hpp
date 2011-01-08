@@ -70,7 +70,7 @@ enum MessageType
 
 typedef void(IRCSession::*IRCCallback)(IRCMessage& recvData);
 
-class IRCSession : public Singleton<IRCSession>
+class IRCSession : public Singleton<IRCSession>, public ThreadContext
 {
 public:
 	IRCSession(string host, uint32 port);
@@ -90,6 +90,12 @@ public:
 	 */
 	void SendChatMessage(MessageType type, const char* target, const char* format, ...);
 
+	/*
+	 * Updates the IRC Session. Do not invoke directly.
+	 */
+
+	bool Run();
+
 	inline string GetHost() { return m_Host; }
 	inline uint32 GetPort() { return m_Port; }
 	inline SocketPointer GetSocket() { return m_Socket; }
@@ -106,7 +112,7 @@ public:
 	// Lehetséges kapcsolat fajták: CONN_CONNECTED, CONN_REGISTERING vagy CONN_REGISTERED
 	uint8 m_ConnState;
 	// Class leállása
-	void Leallas();
+	void OnShutdown();
 
 	// Számologép
 	void setConsts();
@@ -145,12 +151,6 @@ protected:
 	 */
 	void BejovoInfo(string SInfo);
 
-	/*
-	 * Updates the IRC Session. Do not invoke directly.
-	 */
-
-	void Update();
-
 	void InitHandler();
 	void RegisterHandler(string code, IRCCallback method);
 
@@ -188,9 +188,6 @@ protected:
 
 	// Újra kapcsolodási szál
 	void ReConnect();
-
-	bool Running() { return m_running; }
-	volatile bool m_running;
 
 	// Szerver pingelési ideje
 	uint32 m_LastPing;

@@ -25,10 +25,12 @@ Vezerlo::Vezerlo()
 {
 	m_crash = true;
 	m_Indulas = true;
+	m_running = true;
 
 	// uptime
 	UNIXTIME = time(NULL);
 	m_StartTime = cast_uint32(UNIXTIME);
+	//ThreadPool.Startup();
 
 	// Irc szerver conf
 	m_server[0] = Config.MainConfig.GetStringDefault("IRC", "Server", "");
@@ -80,12 +82,23 @@ Vezerlo::Vezerlo()
 
 	Log.Debug("Vezerlo", "Console indul...");
 	m_Console = new Console();
+	ThreadPool.ExecuteTask(m_Console);
 
 	Log.Debug("Vezerlo", "RemoteAccess indul...");
 	m_RemoteAccess = new RemoteAccess(6000, 1);
+	ThreadPool.ExecuteTask(m_RemoteAccess);
 
 	Log.Debug("Vezerlo", "IRCSession indul...");
 	m_IRCSession = new IRCSession(m_server[0], m_port[0]);
+	ThreadPool.ExecuteTask(m_IRCSession);
+
+	while(Running())
+	{
+		if(!Running())
+			break;
+
+		Sleep(1000);
+	}
 
 	_UnhookSignals();
 
@@ -99,21 +112,11 @@ Vezerlo::~Vezerlo()
 #ifdef _DEBUG_MOD
 	Log.Notice("Vezerlo", "~Vezerlo()");
 #endif
-
-	if(m_SvnInfo)
-		delete m_SvnInfo;
-
-	if(m_GitInfo)
-		delete m_GitInfo;
-
-	if(m_HgInfo)
-		delete m_HgInfo;
-
-	if(m_Console)
-		delete m_Console;
-
-	if(m_IRCSession)
-		delete m_IRCSession;
+	delete m_SvnInfo;
+	delete m_GitInfo;
+	delete m_HgInfo;
+	delete m_Console;
+	delete m_IRCSession;
 }
 
 void _OnSignal(int s)
@@ -254,11 +257,13 @@ void Vezerlo::Uptime()
 
 void Vezerlo::IndulasiIdo()
 {
+	printf("\n");
+	ThreadPool.ShowStats();
 	UNIXTIME = time(NULL);
 	time_t pTime = cast_default(time_t, UNIXTIME) - m_StartTime;
 	tm* tmv = gmtime(&pTime);
 
-	Log.Debug("Vezerlo", "A program %ums alatt indult el.", (tmv->tm_sec*1000));
+	Log.Debug("Vezerlo", "A program %ums alatt indult el.", cast_uint32(tmv->tm_sec*1000));
 }
 
 #if PLATFORM == PLATFORM_WINDOWS
@@ -275,7 +280,6 @@ float Vezerlo::MemoryInfo(DWORD processID)
 		szam = cast_float(pmc.WorkingSetSize);
 
 	CloseHandle(hProcess);
-
 	return szam;
 }
 
@@ -672,7 +676,7 @@ string Vezerlo::Reload(string nev)
 	}
 	else if(nev == "console")
 	{
-		m_Console->Leallas();
+		m_Console->OnShutdown();
 		delete m_Console;
 		Log.Debug("Vezerlo", "Console reload...");
 		m_Console = new Console();
@@ -680,7 +684,7 @@ string Vezerlo::Reload(string nev)
 	}
 	else if(nev == "ircsession")
 	{
-		/*sIRCSession.Leallas();
+		/*sIRCSession.OnShutdown();
 		if(IRCSession::getSingletonPtr() != 0)
 			delete IRCSession::getSingletonPtr();
 
@@ -697,9 +701,9 @@ string Vezerlo::Reload(string nev)
 		delete m_GitInfo;
 		m_HgInfo->Leallas();
 		delete m_HgInfo;
-		m_Console->Leallas();
+		m_Console->OnShutdown();
 		delete m_Console;
-		sIRCSession.Leallas();
+		m_IRCSession->OnShutdown();
 
 		//if(IRCSession::getSingletonPtr() != 0)
 			//delete IRCSession::getSingletonPtr(); javítás alatt
@@ -735,8 +739,13 @@ void Vezerlo::Leallas()
 	m_SvnInfo->Leallas();
 	m_GitInfo->Leallas();
 	m_HgInfo->Leallas();
-	m_Console->Leallas();
-	sIRCSession.Leallas();
+	m_Console->OnShutdown();
+	m_RemoteAccess->OnShutdown();
+	m_IRCSession->OnShutdown();
+
+	Log.Notice("ThreadPool", "Ending %u active threads...", ThreadPool.GetActiveThreadCount());
+	ThreadPool.Shutdown();
 
 	Log.Success("Vezerlo", "Leallas befejezodot.");
+	m_running = false;
 }
