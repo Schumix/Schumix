@@ -699,7 +699,7 @@ string Vezerlo::Reload(string nev)
 		delete m_HgInfo;
 		m_Console->OnShutdown();
 		delete m_Console;
-		sIRCSession.OnShutdown();
+		m_IRCSession->OnShutdown();
 
 		//if(IRCSession::getSingletonPtr() != 0)
 			//delete IRCSession::getSingletonPtr(); javítás alatt
