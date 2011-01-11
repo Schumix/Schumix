@@ -26,6 +26,7 @@ Vezerlo::Vezerlo()
 	m_crash = true;
 	m_Indulas = true;
 	m_running = true;
+	m_IRC = false;
 
 	// uptime
 	UNIXTIME = time(NULL);
@@ -84,13 +85,21 @@ Vezerlo::Vezerlo()
 	m_Console = new Console();
 	ThreadPool.ExecuteTask(m_Console);
 
-	Log.Debug("Vezerlo", "RemoteAccess indul...");
-	m_RemoteAccess = new RemoteAccess(6000, 1);
-	ThreadPool.ExecuteTask(m_RemoteAccess);
-
 	Log.Debug("Vezerlo", "IRCSession indul...");
 	m_IRCSession = new IRCSession(m_server[0], m_port[0]);
 	ThreadPool.ExecuteTask(m_IRCSession);
+
+	while(true)
+	{
+		if(m_IRC)
+			break;
+
+		Sleep(100);
+	}
+
+	Log.Debug("Vezerlo", "RemoteAccess indul...");
+	m_RemoteAccess = new RemoteAccess(6000, 1);
+	ThreadPool.ExecuteTask(m_RemoteAccess);
 
 	while(Running())
 	{

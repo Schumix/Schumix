@@ -45,14 +45,14 @@ public:
 	void Suspend()
 	{
 		// We can't be suspended by someone else. That is a big-no-no and will lead to crashes.
-		ASSERT(GetCurrentThreadId() == thread_id);
+		assert(GetCurrentThreadId() == thread_id);
 		SuspendThread(hThread);
 	}
 
 	void Resume()
 	{
 		// This SHOULD be called by someone else.
-		ASSERT(GetCurrentThreadId() != thread_id);
+		assert(GetCurrentThreadId() != thread_id);
 		if(!ResumeThread(hThread))
 		{
 			DWORD le = GetLastError();
@@ -92,13 +92,13 @@ public:
 
 	void Suspend()
 	{
-		ASSERT(pthread_equal(pthread_self(), handle));
+		assert(pthread_equal(pthread_self(), handle));
 		sem_wait(&sem);
 	}
 
 	void Resume()
 	{
-		ASSERT(!pthread_equal(pthread_self(), handle));
+		assert(!pthread_equal(pthread_self(), handle));
 		sem_post(&sem);
 	}
 

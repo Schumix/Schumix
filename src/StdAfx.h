@@ -62,6 +62,7 @@ using std::string;
 #include "Shared/WinAPIExtensions.h"
 #include "Shared/dirent.h"
 #else
+#include <sys/wait.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
@@ -105,8 +106,8 @@ extern CLog Log;
 #include "Commands/Commands.hpp"
 #include "Commands/CommandMgr.hpp"
 #include "RemoteAccess/RemoteAccess.hpp"
-#include "Shared/Network/SocketMgr.hpp"
 #include "Shared/Network/Socket.hpp"
+#include "Shared/Network/SocketMgr.hpp"
 #include "Shared/Network/SocketOps.hpp"
 #include "Vezerlo/Vezerlo.hpp"
 

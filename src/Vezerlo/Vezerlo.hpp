@@ -46,6 +46,7 @@ public:
 	string Sha1(string Sha1);
 
 	inline MySQLConnectionPointer GetSQLConn() { return m_SQLConn; }
+	bool m_IRC;
 
 protected:
 	// Mysql hozzáférés

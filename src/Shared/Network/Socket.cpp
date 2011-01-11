@@ -141,16 +141,16 @@ bool Socket::Connect(string host, uint32 port)
 		return false;
 	}
 
-	SocketOps::Blocking(m_fd);
+	SocketOps::Nonblocking(m_fd);
 
-	pSocketMgr = new SocketMgr(cast_default(SocketPointer, shared_from_this()));
+	pSocketMgr = new SocketMgr(false);
 	pSocketMgr->AddSocket(cast_default(SocketPointer, shared_from_this()));
 	ThreadPool.ExecuteTask(pSocketMgr);
 
 	return true;
 }
 
-bool Socket::SocketServer(uint32 port, int connections)
+bool Socket::SocketServer(string host, uint32 port, int connections)
 {
 	m_fd = SocketOps::CreateTCPFileDescriptor();
 	SocketOps::Nonblocking(m_fd);
@@ -158,6 +158,13 @@ bool Socket::SocketServer(uint32 port, int connections)
 	m_client.sin_family = AF_INET;
 	m_client.sin_port = ntohs((u_short)port);
 	m_client.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	if(host != "0.0.0.0")
+	{
+		struct hostent * hostname = gethostbyname(host.c_str());
+		if(hostname != 0)
+			memcpy(&m_client.sin_addr.s_addr, hostname->h_addr_list[0], hostname->h_length);
+	}
 
 	int ret = ::bind(m_fd, (const sockaddr*)&m_client, sizeof(m_client));
 	if(ret != 0)
@@ -173,7 +180,7 @@ bool Socket::SocketServer(uint32 port, int connections)
 		return false;
 	}
 
-	pSocketMgr = new SocketMgr(cast_default(SocketPointer, shared_from_this()));
+	pSocketMgr = new SocketMgr(true);
 	pSocketMgr->AddSocket(cast_default(SocketPointer, shared_from_this()));
 	ThreadPool.ExecuteTask(pSocketMgr);
 

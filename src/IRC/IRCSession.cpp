@@ -177,6 +177,7 @@ void IRCSession::BejovoInfo(string SInfo)
 		{
 			// Információ melyik opcode fut le ha nincs pl használva.
 			Log.Notice("IRCSession", "Received unhandled opcode: %s", mess.GetOpcode());
+			printf("%s\n", mess.Minden.c_str());
 		}
 		return;
 	}
@@ -198,6 +199,8 @@ bool IRCSession::Run()
 	}
 	else
 		Log.Success("IRCSession", "Kapcsolodas ide: %s sikeres.", m_Host.c_str());
+
+	sVezerlo.m_IRC = true;
 
 	Log.Notice("IRCSession", "Komunikacio az irc szerverrel megindult.");
 
@@ -241,7 +244,6 @@ void IRCSession::ReConnect()
 	{
 		if(!m_threadRunning)
 			break;
-
 
 		if(FSelect(RECONNECT) == bekapcsol)
 		{

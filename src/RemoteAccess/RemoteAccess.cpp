@@ -42,7 +42,6 @@ RemoteAccess::~RemoteAccess()
 void RemoteAccess::InitHandler()
 {
 	RegisterHandler("teszt",    cast_default(RACallback, &RemoteAccess::HandleTeszt));
-
 	Log.Notice("RemoteAccess", "Osszes RemoteAccess handler regisztralva.");
 }
 
@@ -78,7 +77,7 @@ bool RemoteAccess::Run()
 	Log.Success("RemoteAccess", "Update Thread elindult.");
 	m_Socket = SocketPointer(new Socket());
 
-	if(!m_Socket->SocketServer(m_Port, m_Connections))
+	if(!m_Socket->SocketServer("127.0.0.1", m_Port, m_Connections))
 	{
 		Log.Error("RemoteAccess", "Sikertelen a Socket Szerver inditasa.");
 		Sleep(5000);
@@ -92,6 +91,7 @@ bool RemoteAccess::Run()
 		if(!m_threadRunning)
 			break;
 
+		WriteLine("megy :D");
 		if(m_Socket->HasLine())
 		{
 			printf("0\n");

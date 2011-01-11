@@ -65,6 +65,12 @@
     <Filter Include="Commands">
       <UniqueIdentifier>{24fe8ed4-bfda-4e6b-8987-3177e1dd20e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RemoteAccess">
+      <UniqueIdentifier>{b0bf64ab-059c-474a-98cb-f5297520e6b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Threading\ThreadPool">
+      <UniqueIdentifier>{7a88af8b-ccd2-4abb-9c47-9f48be074c5d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\StdAfx.h">
@@ -198,6 +204,15 @@
     <ClInclude Include="..\..\src\shared\Log.hpp">
       <Filter>Logging</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\RemoteAccess\RemoteAccess.hpp">
+      <Filter>RemoteAccess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\Threading\ThreadPool.hpp">
+      <Filter>Threading\ThreadPool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\Threading\ThreadStarter.hpp">
+      <Filter>Threading\ThreadPool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\StdAfx.cpp">
@@ -293,6 +308,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Commands\PublicCommandHandler.cpp">
       <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RemoteAccess\RemoteAccess.cpp">
+      <Filter>RemoteAccess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RemoteAccess\RemoteAccessHandler.cpp">
+      <Filter>RemoteAccess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\Threading\ThreadPool.cpp">
+      <Filter>Threading\ThreadPool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

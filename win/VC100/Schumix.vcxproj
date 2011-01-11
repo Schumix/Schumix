@@ -185,6 +185,7 @@
     <ClInclude Include="..\..\src\DefaultConfig\DefaultConfig.hpp" />
     <ClInclude Include="..\..\src\IRC\IRCSession.hpp" />
     <ClInclude Include="..\..\src\IRC\Replies.hpp" />
+    <ClInclude Include="..\..\src\RemoteAccess\RemoteAccess.hpp" />
     <ClInclude Include="..\..\src\Rss\GitInfo.hpp" />
     <ClInclude Include="..\..\src\Rss\HgInfo.hpp" />
     <ClInclude Include="..\..\src\Rss\SvnInfo.hpp" />
@@ -212,6 +213,8 @@
     <ClInclude Include="..\..\src\shared\Threading\Lock.hpp" />
     <ClInclude Include="..\..\src\shared\Threading\Mutex.hpp" />
     <ClInclude Include="..\..\src\shared\Threading\Thread.hpp" />
+    <ClInclude Include="..\..\src\Shared\Threading\ThreadPool.hpp" />
+    <ClInclude Include="..\..\src\Shared\Threading\ThreadStarter.hpp" />
     <ClInclude Include="..\..\src\shared\utf8.h" />
     <ClInclude Include="..\..\src\shared\utf8\checked.h" />
     <ClInclude Include="..\..\src\shared\utf8\core.h" />
@@ -239,6 +242,8 @@
     <ClCompile Include="..\..\src\IRC\MessageHandler.cpp" />
     <ClCompile Include="..\..\src\IRC\PublicMessageHandler.cpp" />
     <ClCompile Include="..\..\src\IRC\SchumixFunkciok.cpp" />
+    <ClCompile Include="..\..\src\RemoteAccess\RemoteAccess.cpp" />
+    <ClCompile Include="..\..\src\RemoteAccess\RemoteAccessHandler.cpp" />
     <ClCompile Include="..\..\src\Rss\GitInfo.cpp" />
     <ClCompile Include="..\..\src\Rss\HgInfo.cpp" />
     <ClCompile Include="..\..\src\Rss\SvnInfo.cpp" />
@@ -252,6 +257,7 @@
     <ClCompile Include="..\..\src\shared\Network\SocketMgr.cpp" />
     <ClCompile Include="..\..\src\shared\Network\SocketOpsLinux.cpp" />
     <ClCompile Include="..\..\src\shared\Network\SocketOpsWin32.cpp" />
+    <ClCompile Include="..\..\src\Shared\Threading\ThreadPool.cpp" />
     <ClCompile Include="..\..\src\StdAfx.cpp" />
     <ClCompile Include="..\..\src\Vezerlo\Vezerlo.cpp" />
   </ItemGroup>

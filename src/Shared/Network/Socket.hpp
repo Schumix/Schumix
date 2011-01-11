@@ -37,9 +37,9 @@ public:
 	~Socket();
 
 	bool Connect(string host, uint32 port);
-	bool SocketServer(uint32 port, int connections);
+	bool SocketServer(string host, uint32 port, int connections);
 	void Disconnect();
-	bool IsConnected() { return m_fd != -1; }
+	bool IsConnected() { return m_fd != 0; }
 
 	void SendLine(string line);
 	void SendForcedLine(string line);

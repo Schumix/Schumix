@@ -25,7 +25,7 @@ class Socket;
 class SocketMgr: public ThreadContext
 {
 public:
-	SocketMgr(SocketPointer session);
+	SocketMgr(bool SAllapot);
 	~SocketMgr();
 
 	bool Run();
@@ -33,11 +33,15 @@ public:
 
 	void AddSocket(SocketPointer pSocket);
 	void RemoveSocket(SocketPointer pSocket);
+	int Accept(int sockfd, sockaddr* addr, socklen_t* addrlen);
 
 protected:
 	typedef set<SocketPointer> SocketSet;
 	Mutex m_mutex;
 	SocketSet m_sockets;
+
+	bool m_Allapot;
+	sockaddr_in m_tempAddress;
 
 private:
         SocketPointer m_session;
