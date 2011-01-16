@@ -122,6 +122,11 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Md5 kódolássá átalakitó parancs.");
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %smd5 <átalakitandó szöveg>", sIRCSession.GetParancsElojel());
 	}
+	else if(res[1] == "prime")
+	{
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Megálapítja hogy a szám primszám-e. Csak egész számmal tud számolni!");
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sprime <szám>", sIRCSession.GetParancsElojel());
+	}
 
 	// Operátor parancsok segítségei
 	if(sCommands.Admin(recvData.Nick, recvData.Host, Operator))

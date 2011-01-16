@@ -159,6 +159,31 @@ inline uint32 getMSTime()
 
 		return iperc;
 	}
+
+	inline bool isPrime(uint32 x)
+	{
+		if(x == 1 || x == 0)
+			return false;
+
+		if(x == 2)
+			return true;
+
+		if(x % 2 == 0)
+			return false;
+            
+		bool p = true;
+
+		for(uint32 i = 3; i <= sqrt(x); i += 2)
+		{
+			if (x % i == 0)
+			{
+				p = false;
+				break;
+			}
+		}
+
+		return p;
+	}
 }
 
 #endif

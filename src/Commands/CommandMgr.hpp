@@ -58,6 +58,7 @@ protected:
 	void HandleHelp(CommandMessage& recvData);
 	void HandleSzinek(CommandMessage& recvData);
 	void HandleInfo(CommandMessage& recvData);
+	void HandlePrime(CommandMessage& recvData);
 	void HandleRoll(CommandMessage& recvData);
 	void HandleAdmin(CommandMessage& recvData);
 	void HandleDatum(CommandMessage& recvData);

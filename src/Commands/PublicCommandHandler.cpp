@@ -24,7 +24,7 @@ void CommandMgr::HandleXbot(CommandMessage& recvData)
 	CNick(recvData);
 
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Verzió: 10%s", revision);
-	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: %sinfo | %shelp | %sxrev | %sido | %sdatum | %sirc | %sroll | %scalc | %skeres | %sfordit | %ssha1 | %smd5 | %suzenet | %swhois | %sjegyzet", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
+	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: %sinfo | %shelp | %sxrev | %sido | %sdatum | %sirc | %sroll | %scalc | %skeres | %sfordit | %ssha1 | %smd5 | %suzenet | %swhois | %sjegyzet | %sprime", sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel(), sIRCSession.GetParancsElojel());
 	sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Programmed by: 3Csaba");
 }
 
@@ -461,4 +461,25 @@ void CommandMgr::HandleWhois(CommandMessage& recvData)
 
 	sIRCSession.m_WhoisPrivmsg = recvData.Channel;
 	sIRCSession.WriteLine("WHOIS %s", recvData.Args.substr(recvData.firstSpace+1).c_str());
+}
+
+void CommandMgr::HandlePrime(CommandMessage& recvData)
+{
+	CNick(recvData);
+
+	if(recvData.Args.length() <= recvData.firstSpace+1)
+	{
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paraméter!");
+		return;
+	}
+
+	uint32 prim;
+	stringstream ss;
+	ss << recvData.Args.substr(recvData.firstSpace+1);
+	ss >> prim;
+
+	if(!isPrime(prim))
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "%u nem primszám.", prim);
+	else
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "%u primszám.", prim);
 }

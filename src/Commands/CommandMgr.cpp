@@ -81,6 +81,7 @@ void CommandMgr::InitHandler()
 	RegisterHandler("uzenet",      cast_default(CommandHandler, &CommandMgr::HandleUzenet));
 	RegisterHandler("sha1",        cast_default(CommandHandler, &CommandMgr::HandleSha1));
 	RegisterHandler("md5",         cast_default(CommandHandler, &CommandMgr::HandleMd5));
+	RegisterHandler("prime",       cast_default(CommandHandler, &CommandMgr::HandlePrime));
 
 	// Operátor parancsok
 	RegisterHandler("admin",       cast_default(CommandHandler, &CommandMgr::HandleAdmin));

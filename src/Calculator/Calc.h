@@ -26,14 +26,14 @@
 
 #define MAXTOKENS 1000
 
-#define TKN_UNKNOWN string("TKN_UNKNOWN")
-#define TKN_NUMBER string("TKN_NUMBER")
-#define TKN_OPERATOR string("TKN_OPERATOR")
-#define TKN_NAME string("TKN_NAME")
-#define TKN_OPEN_PAR string("TKN_OPEN_PAR")
-#define TKN_CLOSE_PAR string("TKN_CLOSE_PAR")
-#define TKN_TERMINATION string("TKN_TERMINATION")
-#define TKN_NEXT_LINE string("TKN_NEXT_LINE")
+static string TKN_UNKNOWN     = "TKN_UNKNOWN";
+static string TKN_NUMBER      = "TKN_NUMBER";
+static string TKN_OPERATOR    = "TKN_OPERATOR";
+static string TKN_NAME        = "TKN_NAME";
+static string TKN_OPEN_PAR    = "TKN_OPEN_PAR";
+static string TKN_CLOSE_PAR   = "TKN_CLOSE_PAR";
+static string TKN_TERMINATION = "TKN_TERMINATION";
+static string TKN_NEXT_LINE   = "TKN_NEXT_LINE";
 
 #include "../StdAfx.h"
 #include "VarVector.hpp"
