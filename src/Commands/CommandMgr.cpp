@@ -127,4 +127,4 @@ void CommandMgr::CNick(CommandMessage& recvData)
 {
 	if(cast_int(recvData.Channel.find("#")) == string::npos)
 		recvData.Channel = recvData.Nick;
-}
+}z

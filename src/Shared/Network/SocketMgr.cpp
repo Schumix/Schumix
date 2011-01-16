@@ -93,12 +93,15 @@ bool SocketMgr::Run()
 		FD_ZERO(&write_set);
 		FD_ZERO(&exception_set);
 
-		sa.sa_handler = sigchld_handler; // levág minden halott folyamatot
-		sigemptyset(&sa.sa_mask);
-		sa.sa_flags = SA_RESTART;
-		if(sigaction(SIGCHLD, &sa, NULL) == -1)
+		if(m_Allapot)
 		{
-			printf("teszt\n");
+			sa.sa_handler = sigchld_handler; // levág minden halott folyamatot
+			sigemptyset(&sa.sa_mask);
+			sa.sa_flags = SA_RESTART;
+			if(sigaction(SIGCHLD, &sa, NULL) == -1)
+			{
+				printf("teszt\n");
+			}
 		}
 
 		m_mutex.Acquire();
