@@ -65,14 +65,17 @@ void CommandMgr::HandleAdmin(CommandMessage& recvData)
 			return;
 		}
 
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT jelszo FROM adminok WHERE nev = '%s'", recvData.GetNick());
+		string nick = recvData.Nick;
+		transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
+
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT jelszo FROM adminok WHERE nev = '%s'", nick.c_str());
 		if(db)
 		{
 			string JelszoSql = db->Fetch()[0].GetString();
 
 			if(JelszoSql == sVezerlo.Sha1(res[2]))
 			{
-				sVezerlo.GetSQLConn()->Query("UPDATE adminok SET vhost = '%s' WHERE nev = '%s'", recvData.GetHost(), recvData.GetNick());
+				sVezerlo.GetSQLConn()->Query("UPDATE adminok SET vhost = '%s' WHERE nev = '%s'", recvData.GetHost(), nick.c_str());
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Hozzáférés engedélyezve");
 			}
 			else
@@ -95,7 +98,10 @@ void CommandMgr::HandleAdmin(CommandMessage& recvData)
 			return;
 		}
 
-		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT jelszo FROM adminok WHERE nev = '%s'", recvData.GetNick());
+		string nick = recvData.Nick;
+		transform(nick.begin(), nick.end(), nick.begin(), ::tolower);
+
+		QueryResultPointer db = sVezerlo.GetSQLConn()->Query("SELECT jelszo FROM adminok WHERE nev = '%s'", nick.c_str());
 		if(db)
 		{
 			string JelszoSql = db->Fetch()[0].GetString();
@@ -103,7 +109,7 @@ void CommandMgr::HandleAdmin(CommandMessage& recvData)
 
 			if(JelszoSql == sVezerlo.Sha1(res[2]))
 			{
-				sVezerlo.GetSQLConn()->Query("UPDATE adminok SET jelszo = '%s' WHERE nev = '%s'", sVezerlo.Sha1(ujjelszo).c_str(), recvData.GetNick());
+				sVezerlo.GetSQLConn()->Query("UPDATE adminok SET jelszo = '%s' WHERE nev = '%s'", sVezerlo.Sha1(ujjelszo).c_str(), nick.c_str());
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Jelszó sikeresen meg lett változtatva erre: %s", ujjelszo.c_str());
 			}
 			else
@@ -1620,6 +1626,7 @@ void CommandMgr::HandleAutoFunkcio(CommandMessage& recvData)
 			transform(res[3].begin(), res[3].end(), res[3].begin(), ::tolower);
 			sVezerlo.GetSQLConn()->Query("DELETE FROM `kicklista` WHERE nick = '%s'", sVezerlo.GetSQLConn()->EscapeString(res[3]).c_str());
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kick listából a név eltávólitva: %s", res[3].c_str());
+
 		}
 
 
