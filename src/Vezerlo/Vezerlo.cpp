@@ -84,10 +84,6 @@ Vezerlo::Vezerlo()
 	m_Console = new Console();
 	ThreadPool.ExecuteTask(m_Console);
 
-	Log.Debug("Vezerlo", "RemoteAccess indul...");
-	m_RemoteAccess = new RemoteAccess(6000, 1);
-	ThreadPool.ExecuteTask(m_RemoteAccess);
-
 	Log.Debug("Vezerlo", "IRCSession indul...");
 	m_IRCSession = new IRCSession(m_server[0], m_port[0]);
 	ThreadPool.ExecuteTask(m_IRCSession);
@@ -740,7 +736,6 @@ void Vezerlo::Leallas()
 	m_GitInfo->Leallas();
 	m_HgInfo->Leallas();
 	m_Console->OnShutdown();
-	m_RemoteAccess->OnShutdown();
 	m_IRCSession->OnShutdown();
 
 	Log.Notice("ThreadPool", "Ending %u active threads...", ThreadPool.GetActiveThreadCount());

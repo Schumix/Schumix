@@ -78,8 +78,6 @@ private:
 	// IRCSession
 	IRCSession* m_IRCSession;
 
-	RemoteAccess* m_RemoteAccess;
-
 	// Mysql kapcsolat.
 	MySQLConnectionPointer m_SQLConn;
 

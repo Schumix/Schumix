@@ -66,7 +66,7 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 		if(res[2] == "kod")
 		{
-			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Jegyzet kiolvasásához szükséges kód.", sIRCSession.GetParancsElojel());
+			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Jegyzet kiolvasásához szükséges kód.");
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sjegyzet kod <kod amit kaptál>", sIRCSession.GetParancsElojel());
 		}
 	}
@@ -143,22 +143,22 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 			if(res[2] == "add")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új admin hozzáadása.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új admin hozzáadása.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sadmin add <admin neve>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "del")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Admin eltávolítása.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Admin eltávolítása.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sadmin del <admin neve>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "rang")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Admin rangjának megváltoztatása.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Admin rangjának megváltoztatása.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sadmin rang <admin neve> <új rang pl operator: 0, administrator: 1>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "info")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja az összes admin nevét aki az adatbázisban szerepel.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja az összes admin nevét aki az adatbázisban szerepel.");
 			}
 			else if(res[2] == "hozzaferes")
 			{
@@ -167,7 +167,7 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 			}
 			else if(res[2] == "ujjelszo")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Az admin jelszavának cseréje ha új kéne a régi helyet.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Az admin jelszavának cseréje ha új kéne a régi helyet.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sadmin ujjelszo <régi jelszó> <új jelszó>", sIRCSession.GetParancsElojel());
 			}
 		}
@@ -183,12 +183,12 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 			if(res[2] == "add")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új channel hozzáadása.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új channel hozzáadása.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %schannel add <channel> <ha van pass akkor az>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "del")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nem használatos channel eltávolítása.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nem használatos channel eltávolítása.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %schannel del <channel>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "update")
@@ -213,7 +213,7 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 			{
 				if(res.size() < 4)
 				{
-					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Megadot channelen állithatók ezzel a parancsal a funkciók.", sIRCSession.GetParancsElojel());
+					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Megadot channelen állithatók ezzel a parancsal a funkciók.");
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Funkcio channel parancsai: info");
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata:");
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Channel funkció kezelése: %sfunkcio <be vagy ki> <funkcio név>", sIRCSession.GetParancsElojel());
@@ -224,14 +224,14 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 				if(res[3] == "info")
 				{
-					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a funkciók állapotát.", sIRCSession.GetParancsElojel());
+					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a funkciók állapotát.");
 				}
 			}
 			else if(res[2] == "all")
 			{
 				if(res.size() < 4)
 				{
-					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Globális funkciók kezelése.", sIRCSession.GetParancsElojel());
+					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Globális funkciók kezelése.");
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Funkcio all parancsai: info");
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Együtes kezelés: %sfunkcio all <be vagy ki> <funkcio név>", sIRCSession.GetParancsElojel());
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Együtes funkciók kezelése: %sfunkcio all <be vagy ki> <funkcio név1> <funkcio név2> ... stb", sIRCSession.GetParancsElojel());
@@ -241,14 +241,14 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 				if(res[3] == "info")
 				{
-					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a funkciók állapotát.", sIRCSession.GetParancsElojel());
+					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a funkciók állapotát.");
 				}
 			}
 			else if(res[2] == "update")
 			{
 				if(res.size() < 4)
 				{
-					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Frissiti a funkciókat vagy alapértelmezésre állitja.", sIRCSession.GetParancsElojel());
+					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Frissiti a funkciókat vagy alapértelmezésre állitja.");
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Funkcio update parancsai: all");
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata:");
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Más channel: %sfunkcio update <channel neve>", sIRCSession.GetParancsElojel());
@@ -259,13 +259,13 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 				if(res[3] == "all")
 				{
-					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Frissiti az összes funkciót vagy alapértelmezésre állitja.", sIRCSession.GetParancsElojel());
+					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Frissiti az összes funkciót vagy alapértelmezésre állitja.");
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sfunkcio update all", sIRCSession.GetParancsElojel());
 				}
 			}
 			else if(res[2] == "info")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a funkciók állapotát.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a funkciók állapotát.");
 			}
 		}
 		else if(res[1] == "autofunkcio")
@@ -290,17 +290,17 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 				if(res[3] == "add")
 				{
-					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kirúgandó nevének hozzáadása ahol tartozkodsz.", sIRCSession.GetParancsElojel());
+					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kirúgandó nevének hozzáadása ahol tartozkodsz.");
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sautofunkcio kick add <nev> <oka>", sIRCSession.GetParancsElojel());
 				}
 				else if(res[3] == "del")
 				{
-					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kirúgandó nevének eltávolítása ahol tartozkodsz.", sIRCSession.GetParancsElojel());
+					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kirúgandó nevének eltávolítása ahol tartozkodsz.");
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sautofunkcio kick del <nev>", sIRCSession.GetParancsElojel());
 				}
 				else if(res[3] == "info")
 				{
-					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a kirúgandok állapotát.", sIRCSession.GetParancsElojel());
+					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a kirúgandok állapotát.");
 				}
 				else if(res[3] == "channel")
 				{
@@ -314,17 +314,17 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 					if(res[4] == "add")
 					{
-						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kirúgandó nevének hozzáadása megadott channelen.", sIRCSession.GetParancsElojel());
+						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kirúgandó nevének hozzáadása megadott channelen.");
 						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sautofunkcio kick channel add <nev> <channel> <oka>", sIRCSession.GetParancsElojel());
 					}
 					else if(res[4] == "del")
 					{
-						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kirúgandó nevének eltávolítása megadott channelen.", sIRCSession.GetParancsElojel());
+						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kirúgandó nevének eltávolítása megadott channelen.");
 						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sautofunkcio kick channel del <nev>", sIRCSession.GetParancsElojel());
 					}
 					else if(res[4] == "info")
 					{
-						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a kirúgandok állapotát.", sIRCSession.GetParancsElojel());
+						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a kirúgandok állapotát.");
 					}
 				}
 			}
@@ -340,17 +340,17 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 				if(res[3] == "add")
 				{
-					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rangot kapó nevének hozzáadása ahol tartozkodsz.", sIRCSession.GetParancsElojel());
+					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rangot kapó nevének hozzáadása ahol tartozkodsz.");
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sautofunkcio mode add <nev> <rang>", sIRCSession.GetParancsElojel());
 				}
 				else if(res[3] == "del")
 				{
-					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rangot kapó nevének eltávolítása ahol tartozkodsz.", sIRCSession.GetParancsElojel());
+					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rangot kapó nevének eltávolítása ahol tartozkodsz.");
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sautofunkcio mode del <nev>", sIRCSession.GetParancsElojel());
 				}
 				else if(res[3] == "info")
 				{
-					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a rangot kapók állapotát.", sIRCSession.GetParancsElojel());
+					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a rangot kapók állapotát.");
 				}
 				else if(res[3] == "channel")
 				{
@@ -364,17 +364,17 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 					if(res[4] == "add")
 					{
-						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rangot kapó nevének hozzáadása megadott channelen.", sIRCSession.GetParancsElojel());
+						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rangot kapó nevének hozzáadása megadott channelen.");
 						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sautofunkcio mode channel add <nev> <channel> <rang>", sIRCSession.GetParancsElojel());
 					}
 					else if(res[4] == "del")
 					{
-						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rangot kapó nevének eltávolítása megadott channelen.", sIRCSession.GetParancsElojel());
+						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rangot kapó nevének eltávolítása megadott channelen.");
 						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sautofunkcio mode channel del <nev>", sIRCSession.GetParancsElojel());
 					}
 					else if(res[4] == "info")
 					{
-						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a rangot kapók állapotát.", sIRCSession.GetParancsElojel());
+						sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a rangot kapók állapotát.");
 					}
 				}
 			}
@@ -391,16 +391,16 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 				if(res[3] == "funkcio")
 				{
-					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ezzel a parancsal állitható a hl állapota.", sIRCSession.GetParancsElojel());
+					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ezzel a parancsal állitható a hl állapota.");
 					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %shluzenet funkcio <állapot>", sIRCSession.GetParancsElojel());
 				}
 				else if(res[3] == "update")
 				{
-					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nem üzemel!", sIRCSession.GetParancsElojel());
+					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nem üzemel!");
 				}
 				else if(res[3] == "info")
 				{
-					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a hl-ek állapotát.", sIRCSession.GetParancsElojel());
+					sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja a hl-ek állapotát.");
 				}
 			}
 		}
@@ -454,30 +454,30 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 			if(res[2] == "add")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új channel hozzáadása az rss-hez.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új channel hozzáadása az rss-hez.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %ssvn add <rss neve> <channel>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "del")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nem használatos channel eltávolítása az rss-ből.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nem használatos channel eltávolítása az rss-ből.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %ssvn del <rss neve> <channel>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "info")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja az rss-ek állapotát.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja az rss-ek állapotát.");
 			}
 			else if(res[2] == "lista")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Választható rss-ek listája.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Választható rss-ek listája.");
 			}
 			else if(res[2] == "new")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új rss betöltése.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új rss betöltése.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %ssvn new <rss neve>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "stop")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rss leállítása.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rss leállítása.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %ssvn stop <rss neve>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "reload")
@@ -509,30 +509,30 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 			if(res[2] == "add")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új channel hozzáadása az rss-hez.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új channel hozzáadása az rss-hez.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sgit add <rss neve> <tipus> <channel>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "del")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nem használatos channel eltávolítása az rss-ből.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nem használatos channel eltávolítása az rss-ből.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sgit del <rss neve> <channel>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "info")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja az rss-ek állapotát.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja az rss-ek állapotát.");
 			}
 			else if(res[2] == "lista")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Választható rss-ek listája.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Választható rss-ek listája.");
 			}
 			else if(res[2] == "new")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új rss betöltése.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új rss betöltése.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sgit new <rss neve> <tipus>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "stop")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rss leállítása.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rss leállítása.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %sgit stop <rss neve> <tipus>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "reload")
@@ -564,30 +564,30 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 			if(res[2] == "add")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új channel hozzáadása az rss-hez.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új channel hozzáadása az rss-hez.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %shg add <rss neve> <channel>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "del")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nem használatos channel eltávolítása az rss-ből.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nem használatos channel eltávolítása az rss-ből.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %shg del <rss neve> <channel>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "info")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja az rss-ek állapotát.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Kiirja az rss-ek állapotát.");
 			}
 			else if(res[2] == "lista")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Választható rss-ek listája.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Választható rss-ek listája.");
 			}
 			else if(res[2] == "new")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új rss betöltése.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Új rss betöltése.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %shg new <rss neve>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "stop")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rss leállítása.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Rss leállítása.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %shg stop <rss neve>", sIRCSession.GetParancsElojel());
 			}
 			else if(res[2] == "reload")
@@ -629,7 +629,7 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 			if(res[2] == "info")
 			{
-				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Jelenleg újrainditható részekről infó.", sIRCSession.GetParancsElojel());
+				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Jelenleg újrainditható részekről infó.");
 				sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Használata: %shg add <rss neve> <channel>", sIRCSession.GetParancsElojel());
 			}
 		}

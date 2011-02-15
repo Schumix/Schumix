@@ -807,8 +807,18 @@ void CommandMgr::HandleMode(CommandMessage& recvData)
 
 	string rang = res[1];
 	string nev = res[2];
+	string fnev = res[2];
+	string Nick = sIRCSession.m_NickTarolo;
 	string nevek;
 	int resAdat = res.size();
+	transform(Nick.begin(), Nick.end(), Nick.begin(), ::tolower);
+	transform(fnev.begin(), fnev.end(), fnev.begin(), ::tolower);
+
+	if(fnev.find(Nick) != string::npos)
+	{
+		res.clear();
+		return;
+	}
 
 	for(int i = 2; i < resAdat; i++)
 		nevek += " " + res[i];
