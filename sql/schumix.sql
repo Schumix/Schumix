@@ -11,7 +11,7 @@ CREATE TABLE `adminok` (
 DROP TABLE IF EXISTS `channel`;
 CREATE TABLE `channel` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `funkciok` varchar(255) NOT NULL default ',koszones:be,log:be,rejoin:be,parancsok:be,hl:be,kick:be,mode:be',
+  `funkciok` varchar(255) NOT NULL default ',koszones:ki,log:be,rejoin:be,parancsok:be,hl:ki,kick:ki,mode:ki',
   `szoba` text NOT NULL default '',
   `jelszo` text NOT NULL default '',
   `aktivitas` text NOT NULL default '',

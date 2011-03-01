@@ -425,7 +425,7 @@ void CommandMgr::HandleFunkciok(CommandMessage& recvData)
 		if(res.size() < 3)
 		{
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Sikeresen frissitve %s channel funkciók.", recvData.GetChannel());
-			sVezerlo.GetSQLConn()->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, KICK, MODE, recvData.GetChannel());
+			sVezerlo.GetSQLConn()->Query("UPDATE channel SET funkciok = ',%s:ki,%s:be,%s:be,%s:be,%s:be,%s:ki,%s:ki' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, KICK, MODE, recvData.GetChannel());
 			sIRCSession.ChannelFunkcioReload();
 
 			res.clear();
@@ -438,7 +438,7 @@ void CommandMgr::HandleFunkciok(CommandMessage& recvData)
 			for(; itr != sIRCSession.GetChannelLista().end(); itr++)
 			{
 				string szoba = itr->first;
-				sVezerlo.GetSQLConn()->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, KICK, MODE, sVezerlo.GetSQLConn()->EscapeString(szoba).c_str());
+				sVezerlo.GetSQLConn()->Query("UPDATE channel SET funkciok = ',%s:ki,%s:be,%s:be,%s:be,%s:be,%s:ki,%s:ki' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, KICK, MODE, sVezerlo.GetSQLConn()->EscapeString(szoba).c_str());
 			}
 
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Sikeresen frissitve minden channelen a funkciók.");
@@ -447,7 +447,7 @@ void CommandMgr::HandleFunkciok(CommandMessage& recvData)
 		else
 		{
 			sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Sikeresen frissitve %s channel funkciók.", res[2].c_str());
-			sVezerlo.GetSQLConn()->Query("UPDATE channel SET funkciok = ',%s:be,%s:be,%s:be,%s:be,%s:be,%s:be,%s:be' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, KICK, MODE, sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
+			sVezerlo.GetSQLConn()->Query("UPDATE channel SET funkciok = ',%s:ki,%s:be,%s:be,%s:be,%s:be,%s:ki,%s:ki' WHERE szoba = '%s'", KOSZONES, LOG, REJOIN, HL, PARANCSOK, KICK, MODE, sVezerlo.GetSQLConn()->EscapeString(res[2]).c_str());
 			sIRCSession.ChannelFunkcioReload();
 		}
 	}

@@ -25,7 +25,7 @@ void CommandMgr::HandleHelp(CommandMessage& recvData)
 
 	if(recvData.Args.length() <= recvData.firstSpace+1)
 	{
-		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ha a aparancs mögé irod a megadott parancs nevét vagy a nevet és egy alparancsát információt add a használatáról.");
+		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Ha a parancs mögé irod a megadott parancs nevét vagy a nevet és egy alparancsát információt add a használatáról.");
 		sIRCSession.SendChatMessage(PRIVMSG, recvData.GetChannel(), "Fő parancsom: %sxbot", sIRCSession.GetParancsElojel());
 		return;
 	}
