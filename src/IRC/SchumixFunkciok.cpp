@@ -38,7 +38,7 @@ void IRCSession::Schumix(IRCMessage& recvData)
 
 		if(recvData.Args.length() <= elsoszokoz+1)
 		{
-			SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs paramÈter!");
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "Nincs param√©ter!");
 			return;
 		}
 
@@ -53,14 +53,7 @@ void IRCSession::Schumix(IRCMessage& recvData)
 
 		string iras = res[1];
 
-		if(iras == "info")
-		{
-			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3VerziÛ: 10%s", revision);
-			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Platform: %s", PLATFORM_TEXT);
-			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Programnyelv: c++");
-			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Uptime: %s", sVezerlo.GetUptimeString().c_str());
-		}
-		else if(iras == "nick")
+		if(iras == "nick")
 		{
 			if(!m_Commands->Admin(recvData.Nick, recvData.Host, Operator))
 				return;
@@ -89,17 +82,21 @@ void IRCSession::Schumix(IRCMessage& recvData)
 		}
 		else if(iras == "sys")
 		{
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Verzi√≥: 10%s", revision);
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Platform: %s", PLATFORM_TEXT);
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Programnyelv: c++");
 #if PLATFORM == PLATFORM_WINDOWS
-			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Memoria haszn·lat: %f MB", ((sVezerlo.MemoryInfo(GetCurrentProcessId())/1024)/1024));
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Mem√≥ria haszn√°lat: %f MB", ((sVezerlo.MemoryInfo(GetCurrentProcessId())/1024)/1024));
 #else
-			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Memoria haszn·lat: %f MB", ((sVezerlo.MemoryInfo()/1000)*0.3762));
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Mem√≥ria haszn√°lat: %f MB", ((sVezerlo.MemoryInfo()/1000)*0.3762));
 #endif
+			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3M≈±k√∂d√©si id≈ë: %s", sVezerlo.GetUptimeString().c_str());
 		}
 		else if(iras == "help")
 			SendChatMessage(PRIVMSG, recvData.GetChannel(), "3Parancsok: info | nick | sys");
 		else
 		{
-			//sz·mol·s
+			//sz√°mol√°s
 			setConsts();
 			makepolishform(recvData.Args.substr(elsoszokoz+1));
 			calculate(recvData.Channel);
@@ -291,7 +288,7 @@ void IRCSession::SvnSandshroud(int rev, string channel)
 	if(commit == "" && author == "")
 		SendChatMessage(PRIVMSG, channel.c_str(), "Nincs ilyen rev.");
 	else
-		SendChatMessage(PRIVMSG, channel.c_str(), "3Sandshroud rev 10%i. Fejlesztı: 12%s. Commit:%s", rev, author.c_str(), commit.c_str());
+		SendChatMessage(PRIVMSG, channel.c_str(), "3Sandshroud rev 10%i. Fejleszt√µ: 12%s. Commit:%s", rev, author.c_str(), commit.c_str());
 }
 
 void IRCSession::ChannelFunkcioReload()
