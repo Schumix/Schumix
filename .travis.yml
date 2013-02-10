@@ -1,0 +1,23 @@
+#
+# Schumix Hook
+#
+
+# Travis language: cpp
+language: cpp
+
+install:
+ - sudo apt-get install g++ libssl-dev mysql-client mysql-server libmysql++-dev libmysqlclient15-dev libcurl4-gnutls-dev
+
+script:
+ - ./build.sh
+
+# Only watch the master branch
+branches:
+  only:
+    - master
+
+# Notify if needed
+notifications:
+  irc:
+    channels:
+      - "irc.rizon.net#schumix2"
