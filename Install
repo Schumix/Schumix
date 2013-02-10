@@ -1,0 +1,32 @@
+===============================
+Schumix forditása Windows alatt
+===============================
+
+Hozzunk létre bárhol a gépünkön egy mappát. Pl legyen a neve schumix.
+
+1. Visual Studio 2010
+A kodunkban találunk a /dep/DLL Files -en bellül dll-eket. Ezeket másoljuk a botunk mappályába amit létrehoztunk.
+Fontos az amd64 tartalma csak akkor kell ha x64-ben forgatunk majd. Ehez még töltsük le errõl a linkrõl: [link potolva lesz] a maradék dll fájlokat.
+Ezeket helyezük el a botunk mappályába amit létrehoztunk.
+Ha ezekkel megvagyunk nincs más teendönk mint a win mappába benni és a Schumix.sln megnyitani. Majd átálitani Release-ra.
+Ha megvan a /bin/Release mappában lesz a Schumix.exe. Másoljuk abba a mappába amit létrehoztunk neki és az install fájlunk mellet van egy schumix.conf is.
+Azt is másoljuk mellé. Ha ezzel megvagyunk nincs más mint a konfot bekonfigolni.
+
+Ezek után már csak az sql fájlunkat kell betöltenünk az /sql/ mappából aminek neve schumix.sql. Ha van update akkor az /sql/update mappából azt is töltsük be majd inditsuk a bot-ot. :)
+
+
+===============================
+Schumix forditása Linux alatt
+===============================
+
+Terminálba csak bekell irni a sorokat és ezzel feltelepiti a szükséges fájlokat.
+
+sudo apt-get install g++ libssl-dev mysql-client mysql-server libmysql++-dev libmysqlclient15-dev libcurl4-gnutls-dev
+Ha minden igaz ezzel lehet boost-ot telepiteni:
+aptitude install libboost
+
+Ezután csak a build.sh-t kell inditani.
+chmod +x build.sh
+./build.sh
+
+[folytatás következik]
