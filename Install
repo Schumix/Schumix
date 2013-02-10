@@ -21,7 +21,7 @@ Schumix forditása Linux alatt
 
 Terminálba csak bekell irni a sorokat és ezzel feltelepiti a szükséges fájlokat.
 
-sudo apt-get install g++ libssl-dev mysql-client mysql-server libmysql++-dev libmysqlclient15-dev libcurl4-gnutls-dev
+sudo apt-get install g++ libssl-dev mysql-client mysql-server libmysql++-dev libmysqlclient-dev libcurl4-gnutls-dev
 Ha minden igaz ezzel lehet boost-ot telepíteni:
 sudo apt-get install libboost-all-dev
 
