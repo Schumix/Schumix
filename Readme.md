@@ -1,4 +1,4 @@
-A Schumix egy több funkciós IRC Bot. [![Build Status](https://travis-ci.org/Schumix/Schumix.png?branch=master)](https://travis-ci.org/Schumix/Schumix)
+A Schumix egy tï¿½bb funkciï¿½s IRC Bot. [![Build Status](https://travis-ci.org/Schumix/Schumix.png?branch=master)](https://travis-ci.org/Schumix/Schumix)
 
-Sok dolog van beleépítve, és ha bármi praktikus dolog kellene még bele, akkor kérésre belekerül.
-Remélem aki használja az nem fogja leszólni :)
+Sok dolog van beleï¿½pï¿½tve, ï¿½s ha bï¿½rmi praktikus dolog kellene mï¿½g bele, akkor kï¿½rï¿½sre belekerï¿½l.
+Remï¿½lem aki hasznï¿½lja az nem fogja leszï¿½lni :)
