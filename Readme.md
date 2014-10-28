@@ -1,6 +1,6 @@
-#Schumix [![Build Status](https://travis-ci.org/Schumix/Schumix.png?branch=master)](https://travis-ci.org/Schumix/Schumix) [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Schumix/schumix/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+#Schumix [![Build Status](https://travis-ci.org/Schumix/Schumix.svg?branch=master)](https://travis-ci.org/Schumix/Schumix) [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Schumix/schumix/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
-A Schumix egy több funkciós IRC Bot.
+A Schumix egy tÃ¶bb funkciÃ³s IRC Bot.
 
-Sok dolog van beleépítve, és ha bármi praktikus dolog kellene még bele, akkor kérésre belekerül.
-Remélem aki használja az nem fogja leszólni :)
+Sok dolog van beleÃ©pÃ­tve, Ã©s ha bÃ¡rmi praktikus dolog kellene mÃ©g bele, akkor kÃ©rÃ©sre belekerÃ¼l.
+RemÃ©lem aki hasznÃ¡lja az nem fogja leszÃ³lni :)
