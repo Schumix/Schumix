@@ -6,7 +6,8 @@
 language: cpp
 
 install:
- - sudo apt-get install g++ libssl-dev mysql-client mysql-server libmysql++-dev libmysqlclient-dev libcurl4-gnutls-dev libboost-all-dev
+ - sudo apt-get update -qq > /dev/null
+ - sudo apt-get install g++ libssl-dev mysql-client mysql-server libmysql++-dev libmysqlclient-dev libcurl4-gnutls-dev libboost-all-dev  > /dev/null
 
 script:
  - ./build.sh
